@@ -111,3 +111,43 @@ function run_once(process, cmd)
    return awful.util.spawn(cmd or process)
 end
 -- }}}
+
+
+-- {{{ Offer functions to get screens in their right order
+-- 		and not in by their index number
+
+local screen_order = {}
+
+-- Sort screens by their x coordinates
+-- and store them in screen_order
+table.insert(screen_order, screen[1])
+for s = 2, screen.count() do
+	local inserted = false
+	for i,sc in pairs(screen_order) do
+		if screen[s].geometry.x < sc.geometry.x then
+			table.insert(screen_order, i, screen[s])
+			inserted = true
+			break
+		end
+	end
+	if not inserted then
+		table.insert(screen_order, screen[s])
+	end
+end
+
+-- Returns the x-coordinate sorted position of the screen
+-- by its screen index 
+function screen_position(index)
+	for i,s in pairs(screen_order) do
+		if s.index == index then
+			return i
+		end
+	end
+end
+
+-- Returns the screen index (index in screen table) by 
+-- its position
+function screen_index(position)
+	return screen_order[position].index
+end
+-- }}}

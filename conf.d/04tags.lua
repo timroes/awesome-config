@@ -1,40 +1,11 @@
 local awful = require("awful")
 
-local screen_order = {}
-
--- Sort screens by their x coordinates
--- and store them in screen_order
-table.insert(screen_order, screen[1])
-for s = 2, screen.count() do
-	local inserted = false
-	for i,sc in pairs(screen_order) do
-		if screen[s].geometry.x < sc.geometry.x then
-			table.insert(screen_order, i, screen[s])
-			inserted = true
-			break
-		end
-	end
-	if not inserted then
-		table.insert(screen_order, screen[s])
-	end
-end
-
--- Returns the x-coordinate sorted position of the screen
--- by its screen index
-local screen_name = function(index)
-	for i,s in pairs(screen_order) do
-		if s.index == index then
-			return i
-		end
-	end
-end
-
 tags = {}
 tag_keys = root.keys()
 
 for s = 1, screen.count() do
 	-- Get name for screen tag (horizontal position of screen)
-	local tagname = screen_name(s)
+	local tagname = screen_position(s)
 	-- Create tag for that name and select it
 	local tag = awful.tag.add(tagname, { screen = s, layout = awful.layout.suit.max })
 	tag.selected = true
