@@ -55,7 +55,6 @@ local xrandr = awful.util.pread("xrandr | grep ' connected primary' | cut -f1 -d
 if #xrandr > 0 then
 	-- if a primary screen has been configured via xrandr, use this as primary
 	xrandr = xrandr:gsub("%s+$", "") -- remove newline at end of string
-	debug(xrandr)
 	PRIMARY = screen[xrandr].index
 end
 -- If xrandr has not been set (or the screen couldn't be detected)
