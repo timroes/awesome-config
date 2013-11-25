@@ -1,0 +1,83 @@
+-- Standard awesome library
+awful = require("awful")
+awful.rules = require("awful.rules")
+require("awful.autofocus")
+-- Notification library
+local naughty = require("naughty")
+
+-- {{{ Error handling
+-- Check if awesome encountered an error during startup and fell back to
+-- another config (This code will only ever execute for the fallback config)
+if awesome.startup_errors then
+	naughty.notify({ preset = naughty.config.presets.critical,
+			title = "Oops, there were errors during startup!",
+			text = awesome.startup_errors })
+end
+
+-- Handle runtime errors after startup
+do
+	local in_error = false
+	awesome.connect_signal("debug::error", function (err)
+		-- Make sure we don't go into an endless error loop
+		if in_error then return end
+		in_error = true
+
+		naughty.notify({ preset = naughty.config.presets.critical,
+				title = "Oops, an error happened!",
+				text = err })
+		in_error = false
+	end)
+end
+-- }}}
+
+
+-- {{{ DEBUG function
+function debug(msg)
+	naughty.notify({ title = "Debug Message", text = msg })
+end
+-- }}}
+
+
+-- Set path configuration
+configpath = os.getenv("HOME") .. "/.config/awesome/"
+themepath = configpath .. "theme/"
+scriptpath = configpath .. "scripts/"
+package.path = package.path .. ";" .. configpath .. "widgets/?.lua"
+
+-- Include functions
+dofile(configpath .. "functions.lua")
+
+-- Set constants
+MOD = "Mod4"
+PRIMARY = 1
+
+-- Clear all shortcuts before including any config files
+root.keys({ })
+
+-- {{{ Load custom scripts from custom.d directory
+local lfs = require('lfs')
+local confs = {}
+local customdir = configpath .. 'conf.d/'
+for s in lfs.dir(customdir) do
+	local f = lfs.attributes(customdir .. s)
+	if s:sub(-4) == ".lua" and f.mode == "file" then
+		table.insert(confs, customdir .. s)
+	end
+end
+-- Load conf files in alphabetical order
+table.sort(confs)
+for i,conf in pairs(confs) do
+	dofile(conf)
+end
+-- }}}
+
+-- {{{ Auto start all execuables from autostart dir
+local startdir = configpath .. 'autostart/'
+for s in lfs.dir(startdir) do
+	local f = lfs.attributes(startdir .. s)
+	-- Exclude README file
+	if s ~= "README" and f.mode == "file" then
+		run_once(startdir .. s)
+	end
+end
+-- }}}

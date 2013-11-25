@@ -1,0 +1,35 @@
+#!/bin/bash
+# 
+# Requires: Imagemagick
+#
+# Script to make a screenshot of the whole screen, a window or a region.
+# Execute this script with one of the folloing parameters:
+#   scr - Makes a screenshot of the whole screen
+#	win	- You get a crosscursor and have the following options:
+#			(a) click on a specific window -> screenshot of that window
+#			(b) drag a region on the screen -> screenshot of that region
+
+DIR="/tmp"
+DATE="$(date +%Y%m%d-%H%M%S)"
+NAME="${DIR}/screenshot-${DATE}.png"
+
+# Check if the dir to store the screenshots exists, else create it: 
+if [ ! -d "${DIR}" ]; then mkdir -p "${DIR}"; fi 
+
+# Screenshot a selected window
+if [ "$1" = "win" ]; then import +repage "${NAME}"; fi
+
+# Screenshot the entire screen
+if [ "$1" = "scr" ]; then import -window root "${NAME}"; fi
+
+chown $USER:$(id -gn $USER) "${NAME}"
+
+function to_clipboard() {
+	# Copy to clipboard and wait 10 minutes for someone to pick it up
+	imgclip "${NAME}" &> /dev/null &
+	clip=$!
+	sleep 600
+	kill $clip
+}
+
+to_clipboard &
