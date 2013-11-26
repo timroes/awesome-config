@@ -16,6 +16,6 @@ end)
 awful.rules.rules = awful.util.table.join(awful.rules.rules, {
 	{
 		rule = { class = "Tilda" },
-		properties = { floating = true, border_width = 0 }
+		properties = { floating = true, border_width = 0, opacity = 0.9 }
 	}
 })
