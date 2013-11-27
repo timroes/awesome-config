@@ -49,7 +49,12 @@ awful.rules.rules = {
 		except = { type = "normal" },
 		properties = {
 			floating = true,
-		}	
+		}
+	},{
+		rule = { type = "dialog" },
+		callback = function(c)
+			awful.placement.centered(c,nil)
+		end
 	}
 }
 
