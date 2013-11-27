@@ -1,9 +1,14 @@
 local awful = require("awful")
 
 local move_client = function(c, direction)
-	local new_screen = ((c.screen - 1 + direction) % screen.count()) + 1
-	local new_tag = default_tag_for_screen(new_screen)
-	awful.client.movetotag(new_tag, c)
+	local cur_tag = awful.tag.selected(c.screen)
+
+	-- Only allow window move for windows on not named tags
+	if #cur_tag.name <= 1 then
+		local new_screen = ((c.screen - 1 + direction) % screen.count()) + 1
+		local new_tag = default_tag_for_screen(new_screen)
+		awful.client.movetotag(new_tag, c)
+	end
 end
 
 -- Define buttons for every client
