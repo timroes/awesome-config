@@ -55,5 +55,11 @@ awful.rules.rules = awful.util.table.join(awful.rules.rules, {
 		properties = {
 			tag = mail_tag
 		}
+	},{
+		rule = { class = "Thunderbird", instance = "Calendar" },
+		properties = {
+			ontop = true,
+			sticky = true
+		}
 	}
 })
