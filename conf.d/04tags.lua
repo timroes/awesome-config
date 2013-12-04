@@ -12,10 +12,16 @@ for s = 1, screen.count() do
 
 	-- Switch to tag
 	local tagFocus = function() 
-		awful.tag.viewmore({ tag }, s) 
-		-- Focus last focused client on this tag
-		local focus = awful.client.focus.history.get(s, 0)
-		if focus then client.focus = focus end
+		if client.focus and client.focus.screen == s and awful.tag.selected(s) == tag then
+			-- If screen is already focused switch to next client
+			awful.client.focus.byidx(1)
+			if client.focus then client.focus:raise() end
+		else
+			awful.tag.viewmore({ tag }, s) 
+			-- Focus last focused client on this tag
+			local focus = awful.client.focus.history.get(s, 0)
+			if focus then client.focus = focus end
+		end
 	end
 	-- Move to tag
 	local moveToTag = function() 
@@ -28,7 +34,7 @@ for s = 1, screen.count() do
 		-- Switch to tag
 		awful.key({ MOD }, "#" .. tagname + 9, tagFocus), -- Numbers
 		awful.key({ MOD }, "#" .. tagname + 86, tagFocus), -- Numpad keys
-		-- Move screen to tag
+		-- Move client to tag
 		awful.key({ MOD, "Control" }, "#" .. tagname + 9, moveToTag),
 		awful.key({ MOD, "Control" }, "#" .. tagname + 86, moveToTag)
 	)
