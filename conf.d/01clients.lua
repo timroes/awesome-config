@@ -72,4 +72,14 @@ end)
 client.connect_signal("manage", function(c, startup)
 	client.focus = c
 	c:raise()
+
+	-- Check if the client has a program set minimum and maximum size, that are equal
+	-- If so, treat this client as a dialog window (center it and make it floating)
+	if c.size_hints then
+		local sh = c.size_hints
+		if sh.max_height and sh.max_width and sh.max_height == sh.min_height and sh.min_width == sh.max_width then
+			awful.client.floating.set(c, true)
+			awful.placement.centered(c, nil)
+		end
+	end
 end)
