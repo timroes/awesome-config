@@ -8,8 +8,7 @@ taglist = {}
 tasklist = {}
 
 taglist.buttons = awful.util.table.join(
-	awful.button({ }, 1, awful.tag.viewonly),
-	awful.button({ }, 3, awful.tag.viewtoggle)
+	awful.button({ }, 1, awful.tag.viewonly)
 )
 
 tasklist.buttons = awful.util.table.join(
