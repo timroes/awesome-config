@@ -19,6 +19,12 @@ theme.border_normal = "#333333"
 theme.border_focus  = "#33B5E5"
 theme.border_marked = "#339933"
 
+-- Notifications
+theme.notify_normal_bg = "#444444"
+theme.notify_normal_fg = "#FFFFFF"
+theme.notify_border_width = "0"
+theme.notify_opacity = 0.9
+
 -- Titlebar
 theme.titlebar_bg_normal = "#666666"
 
