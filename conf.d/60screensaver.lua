@@ -6,7 +6,10 @@ local lock_cmd = "i3lock -c BBBBBB -d"
 local screensaver_timeout = 10
 
 -- Use lock_cmd as a screensaver (requires x11-misc/xautolock)
-awful.util.spawn("xautolock -time " .. screensaver_timeout .. " -locker '" .. lock_cmd .. "'")
+local pid = tonumber(awful.util.pread("pidof xautolock"))
+if not pid then
+	awful.util.spawn("xautolock -time " .. screensaver_timeout .. " -locker '" .. lock_cmd .. "'")
+end
 
 -- Add shortcut for MOD + l to lock the screen
 add_key({ MOD }, "l", function() awful.util.spawn(lock_cmd) end)
