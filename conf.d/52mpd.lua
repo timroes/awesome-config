@@ -1,10 +1,19 @@
 local awful = require("awful")
+local naughty = require('naughty')
 
 shortcuts = awful.util.table.join(root.keys(),
 	-- Set shortcuts to control music (mpc [and most likely a running mpd] required)
 	awful.key({ }, "XF86AudioPlay", function() awful.util.spawn("mpc toggle -q") end),
 	awful.key({ }, "XF86AudioNext", function() awful.util.spawn("mpc next -q") end),
 	awful.key({ }, "XF86AudioPrev", function() awful.util.spawn("mpc prev -q") end),
+
+	awful.key({ MOD }, "XF86AudioPlay", function()
+		local song = awful.util.pread("mpc current"):sub(1,-2)
+		if song:len() == 0 then
+			song = "- Nothing is playing -"
+		end
+		naughty.notify({ text = song, title = "Currently playing:", timeout = 3})
+	end),
 
 	-- Delete song from playlist
 	awful.key({ MOD }, "Delete", function() awful.util.spawn("mpc del 0") end),
