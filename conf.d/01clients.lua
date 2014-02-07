@@ -36,7 +36,9 @@ keys = awful.util.table.join(
 	awful.key({ MOD }, "Left", function(c) move_client(c, -1) end),
 
 	-- toggle client floating state
-	awful.key({ MOD }, "Return", function(c) awful.client.floating.toggle(c) end)
+	awful.key({ MOD }, "Return", function(c) awful.client.floating.toggle(c) end),
+	-- toggle client always on top
+	awful.key({ MOD }, "t", function(c) c.ontop = not c.ontop end)
 )
 
 awful.rules.rules = {
