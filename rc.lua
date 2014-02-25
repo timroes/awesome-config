@@ -32,7 +32,7 @@ end
 
 
 -- {{{ DEBUG function
-function debug(msg)
+function dbg(msg)
 	naughty.notify({ title = "Debug Message", text = msg })
 end
 -- }}}
