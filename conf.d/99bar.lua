@@ -72,7 +72,6 @@ for s = 1, screen.count() do
 		right_layout:add(clock)
 		right_layout:add(spacer(2))
 	end
-	right_layout:add(layoutbox)
 
 	local layout = wibox.layout.align.horizontal()
 	layout:set_left(left_layout)
