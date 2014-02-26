@@ -76,7 +76,7 @@ for s = 1, screen.count() do
 	layout:set_middle(tasklist[s])
 	layout:set_right(right_layout)
 
-	bars[s] = awful.wibox({ position = "top", screen = s, height = "24" })
+	bars[s] = awful.wibox({ position = "top", screen = s, height = "28" })
 	bars[s]:set_widget(layout)
 
 end

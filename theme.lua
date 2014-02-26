@@ -4,12 +4,12 @@ theme = {}
 
 theme.font          = "Roboto Light 11"
 
-theme.bg_normal     = "#111111"
-theme.bg_focus      = "#CCCCCC"
-theme.bg_urgent     = "#99CC00"
+theme.bg_normal     = "linear:0,0:0,28:0,#3A3A3A:1,#202020"
+theme.bg_focus      = "linear:0,0:0,28:0,#BEBEBE:1,#EEEEE"
+theme.bg_urgent     = "linear:0,0:0,28:0,#99CC00:1,#739900"
 theme.bg_minimize   = "#111111"
 
-theme.fg_normal     = "#BBBBBB"
+theme.fg_normal     = "#DDDDDD"
 theme.fg_focus      = "#000000"
 theme.fg_urgent     = "#000000"
 theme.fg_minimize   = "#666666"
