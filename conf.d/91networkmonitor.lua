@@ -100,7 +100,7 @@ local function create(_, dev)
 	refresh:connect_signal('timeout', function(self)
 		local dev = get_device(dev)
 		if dev then
-			widget:set_markup(string.format('<span color="#CCFF33">↓ %s</span>  <span color="#F53D00">↑ %s</span>', readableSize(dev.down), readableSize(dev.up)))
+			widget:set_markup(string.format('<span color="#CCFF33">↓ %s</span>  <span color="#F57B00">↑ %s</span>', readableSize(dev.down), readableSize(dev.up)))
 		end
 	end)
 	refresh:start()
