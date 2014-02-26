@@ -12,7 +12,7 @@ keys = awful.util.table.join(
 	awful.key({ MOD }, "z", function() awful.util.spawn_with_shell("xdg-open $HOME") end),
 
 	-- Screenshots
-	awful.key({  }, "Print", function() awful.util.spawn(scriptpath .. "screenshot win") end),
+	awful.key({ 'Mod1' }, "Print", function() awful.util.spawn(scriptpath .. "screenshot win") end),
 	awful.key({ MOD }, "Print", function() awful.util.spawn(scriptpath .. "screenshot scr") end),
 
 	-- MOD + PageUp/PageDown switches through clients on current tag and screen
