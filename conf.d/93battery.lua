@@ -16,7 +16,6 @@ local alarmlevel = 5
 local batdev = 'BAT0'
 local widget
 local label
-local tooltip
 
 local function read(file)
 	local f = io.open(file)
@@ -75,13 +74,6 @@ local function create(_)
 
 	layout:add(mlayout)
 	layout:add(label)
-
-	local tt = awful.tooltip({
-		objects = { layout },
-		timer_function = function()
-			return tooltip
-		end
-	})
 
 	local refresh = timer({ timeout = 10 })
 	refresh:connect_signal('timeout', function(self)
