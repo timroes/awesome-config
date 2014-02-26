@@ -12,7 +12,6 @@ local string = string
 
 module('widgets.battery')
 
-local alarmlevel = 5
 local batdev = 'BAT0'
 local widget
 local label
@@ -32,28 +31,31 @@ end
 
 local function update()
 	local cap = tonumber(read('/sys/class/power_supply/' .. batdev .. '/capacity'))
-	local charging = read('/sys/class/power_supply/' .. batdev .. '/status') == 'Charging'
+	local status = read('/sys/class/power_supply/' .. batdev .. '/status')
+	local chargin = status == 'Charging'
+	local full = status == 'Full'
 	local power_now = tonumber(read('/sys/class/power_supply/' .. batdev .. '/power_now'))
 	local power_remain = tonumber(read('/sys/class/power_supply/' .. batdev .. '/energy_now'))
 	local last_full = tonumber(read('/sys/class/power_supply/' .. batdev .. '/energy_full'))
 
 	local src
-	if cap <= alarmlevel then
-		src = 'battery-000'
+	if full then
+		src = 'battery-100-charging'
+		label:set_text('')
 	else
 		-- Round charge to the next 20 points (for the image)
 		local charge = string.format('%03d', math.floor(cap / 20 + 0.5) * 20)
 		src = 'battery-' .. charge
-	end
-	
-	tooltip = tostring(cap) .. '%'
+		
+		tooltip = tostring(cap) .. '%'
 
-	if charging then
-		src = src .. '-charging'
-		-- SHow percentage (since remaining time is not predictable (since it's not linear at all)
-		label:set_text(' ' .. math.floor((power_remain / last_full) * 100) .. '%')
-	else
-		label:set_text(' ' .. to_time_string((power_remain / power_now) * 3600))
+		if charging then
+			src = src .. '-charging'
+			-- SHow percentage (since remaining time is not predictable (since it's not linear at all)
+			label:set_text(' ' .. math.floor((power_remain / last_full) * 100) .. '%')
+		else
+			label:set_text(' ' .. to_time_string((power_remain / power_now) * 3600))
+		end
 	end
 
 	widget:set_image(configpath .. '/images/' .. src .. '.png')
