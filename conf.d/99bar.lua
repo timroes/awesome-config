@@ -3,6 +3,7 @@ local wibox = require("wibox")
 local networkmonitor = require("widgets.networkmonitor")
 local orglendar = require("widgets.orglendar")
 local battery = require('widgets.battery')
+local displayswitcher = require('widgets.displayswitcher')
 
 bars = {}
 taglist = {}
@@ -61,6 +62,9 @@ for s = 1, screen.count() do
 
 	local right_layout = wibox.layout.fixed.horizontal()
 	if s == PRIMARY then 
+		right_layout:add(spacer(2))
+		right_layout:add(displayswitcher())
+		right_layout:add(spacer(1))
 		right_layout:add(battery())
 		right_layout:add(spacer(3))
 		right_layout:add(networkmonitor())

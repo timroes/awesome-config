@@ -96,6 +96,10 @@ local function create(_, dev)
 		dev = route:gsub(".* dev ([A-Za-z0-9]+) .*", "%1")
 	end
 
+	if not dev then
+		return nil
+	end
+
 	local refresh = timer({ timeout = 1 })
 	refresh:connect_signal('timeout', function(self)
 		local dev = get_device(dev)
