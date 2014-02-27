@@ -32,7 +32,7 @@ end
 local function update()
 	local cap = tonumber(read('/sys/class/power_supply/' .. batdev .. '/capacity'))
 	local status = read('/sys/class/power_supply/' .. batdev .. '/status')
-	local chargin = status == 'Charging'
+	local charging = status == 'Charging'
 	local full = status == 'Full'
 	local power_now = tonumber(read('/sys/class/power_supply/' .. batdev .. '/power_now'))
 	local power_remain = tonumber(read('/sys/class/power_supply/' .. batdev .. '/energy_now'))
@@ -56,6 +56,10 @@ local function update()
 		else
 			label:set_text(' ' .. to_time_string((power_remain / power_now) * 3600))
 		end
+	end
+
+	if status == 'Unknown' then
+		label:set_text(' ?')
 	end
 
 	widget:set_image(configpath .. '/images/' .. src .. '.png')
