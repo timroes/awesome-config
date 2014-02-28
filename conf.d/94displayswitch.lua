@@ -4,8 +4,12 @@ local w = require('wibox')
 local scriptpath = scriptpath
 local configpath = configpath
 local dbus = dbus
+local tonumber = tonumber
+local tostring = tostring
 
 module('widgets.displayswitcher')
+
+local ICON = scriptpath .. '/images/display.png'
 
 local function read(file)
 	local f = io.open(file)
@@ -20,7 +24,6 @@ local function create(_)
 	widget = w.widget.imagebox()
 	widget:fit(24, 24)
 	widget:set_resize(false)
-	widget:set_image(configpath .. '/images/display.png')
 
 	mlayout:set_widget(widget)
 	mlayout:set_top(2)
@@ -48,12 +51,19 @@ local function create(_)
 	dbus.add_match('system', "interface='de.timroes.displaywidget'")
 	dbus.connect_signal('de.timroes.displaywidget', function(msg)
 		if msg.member == "Plugged" then
-			widget:set_image(configpath .. '/images/display.png')
+			widget:set_image(ICON)
 		else
-			awful.util.pread(scriptpath .. '/screenlayout.sh disconnect')
 			widget:set_image(nil)
+			awful.util.pread(scriptpath .. '/screenlayout.sh disconnect')
 		end
 	end)
+
+	local monitors = tonumber(awful.util.pread('/usr/bin/xrandr | grep " connected" | wc -l'))
+	if monitors < 2 then
+		widget:set_image(nil)
+	else
+		widget:set_image(ICON)
+	end
 
 	return mlayout
 end
