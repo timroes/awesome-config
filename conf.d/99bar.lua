@@ -64,7 +64,7 @@ for s = 1, screen.count() do
 	if s == PRIMARY then 
 		right_layout:add(spacer(2))
 		right_layout:add(displayswitcher())
-		right_layout:add(spacer(1))
+		right_layout:add(spacer(2))
 		right_layout:add(battery())
 		right_layout:add(spacer(3))
 		right_layout:add(networkmonitor())

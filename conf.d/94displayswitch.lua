@@ -9,7 +9,7 @@ local tostring = tostring
 
 module('widgets.displayswitcher')
 
-local ICON = scriptpath .. '/images/display.png'
+local ICON = configpath .. '/images/display.png'
 
 local function read(file)
 	local f = io.open(file)
