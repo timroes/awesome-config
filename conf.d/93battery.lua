@@ -39,7 +39,7 @@ local function update()
 	local last_full = tonumber(read('/sys/class/power_supply/' .. batdev .. '/energy_full'))
 
 	local src
-	if full then
+	if full or status == 'Unknown' then
 		src = 'battery-100-charging'
 		label:set_text('')
 	else
@@ -56,10 +56,6 @@ local function update()
 		else
 			label:set_text(' ' .. to_time_string((power_remain / power_now) * 3600))
 		end
-	end
-
-	if status == 'Unknown' then
-		label:set_text(' ?')
 	end
 
 	widget:set_image(configpath .. '/images/' .. src .. '.png')
