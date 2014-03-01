@@ -1,6 +1,8 @@
 local awful = require("awful")
 local naughty = require('naughty')
 
+local last_id = 0
+
 shortcuts = awful.util.table.join(root.keys(),
 	-- Set shortcuts to control music (mpc [and most likely a running mpd] required)
 	awful.key({ }, "XF86AudioPlay", function() awful.util.spawn("mpc toggle -q") end),
@@ -30,9 +32,11 @@ shortcuts = awful.util.table.join(root.keys(),
 		else
 			text = 'Microphone unmuted'
 		end
-		naughty.notify({
-			text = text
+		local n = naughty.notify({
+			text = text,
+			replaces_id = last_id
 		})
+		last_id = n.id
 	end)
 )
 
