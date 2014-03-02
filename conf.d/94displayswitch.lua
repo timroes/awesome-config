@@ -6,10 +6,12 @@ local configpath = configpath
 local dbus = dbus
 local tonumber = tonumber
 local tostring = tostring
+local root = root
 
 module('widgets.displayswitcher')
 
 local ICON = configpath .. '/images/display.png'
+local is_active
 
 local function read(file)
 	local f = io.open(file)
@@ -51,17 +53,31 @@ local function create(_)
 	dbus.add_match('system', "interface='de.timroes.displaywidget'")
 	dbus.connect_signal('de.timroes.displaywidget', function(msg)
 		if msg.member == "Plugged" then
+			is_active = true
 			widget:set_image(ICON)
 		else
+			is_active = false
+			menu:hide()
 			widget:set_image(nil)
 			awful.util.pread(scriptpath .. '/screenlayout.sh disconnect')
 		end
 	end)
 
+	-- Show screen menu on XF86Display
+	root.keys(awful.util.table.join(root.keys(),
+		awful.key({ }, "XF86Display", function()
+			if is_active then
+				menu:toggle()
+			end
+		end)
+	))
+
 	local monitors = tonumber(awful.util.pread('/usr/bin/xrandr | grep " connected" | wc -l'))
 	if monitors < 2 then
+		is_active = false
 		widget:set_image(nil)
 	else
+		is_active = true
 		widget:set_image(ICON)
 	end
 
