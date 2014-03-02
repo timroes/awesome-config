@@ -62,19 +62,27 @@ for s = 1, screen.count() do
 
 	local right_layout = wibox.layout.fixed.horizontal()
 	if s == PRIMARY then 
-		right_layout:add(spacer(2))
-		right_layout:add(displayswitcher())
-		right_layout:add(spacer(2))
-		right_layout:add(battery())
-		right_layout:add(spacer(3))
-		right_layout:add(networkmonitor())
-		right_layout:add(spacer(3))
-		right_layout:add(wibox.widget.systray())
-		right_layout:add(spacer(3))
-		local clock = awful.widget.textclock("%a, %e. %b  %H:%M", 1)
-		orglendar(clock)
-		right_layout:add(clock)
-		right_layout:add(spacer(2))
+
+		-- load widgets from config file
+		local widgets = split(settings['widgets'], ',')
+		for i,w in pairs(widgets) do
+			if tonumber(w) ~= nil and tonumber(w) > 0 then
+				right_layout:add(spacer(tonumber(w)))
+			elseif w == 'displayswitcher' then
+				right_layout:add(displayswitcher())
+			elseif w == 'battery' then
+				right_layout:add(battery())
+			elseif w == 'network' then
+				right_layout:add(networkmonitor())
+			elseif w == 'systray' then
+				right_layout:add(wibox.widget.systray())
+			elseif w == 'clock' then
+				local clock = awful.widget.textclock("%a, %e. %b  %H:%M", 1)
+				orglendar(clock)
+				right_layout:add(clock)
+			end
+		end
+
 	end
 
 	local layout = wibox.layout.align.horizontal()

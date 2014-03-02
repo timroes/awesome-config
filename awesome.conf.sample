@@ -1,0 +1,12 @@
+# This file is used to configure awesome for this computer.
+# Rename it to awesome.conf and change the settings.
+
+# This key configures the list of widgets shown in the right side
+# of the system bar.
+# Possible values ares:
+#   <a positive integer> - Spacer with the given width in pixels
+#   displayswitcher - Display switcher widget for external monitors
+#   battery - Battery icon
+#   systray - the default systray
+#   clock - The clock with calendar
+widgets=

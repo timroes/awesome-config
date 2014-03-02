@@ -66,6 +66,23 @@ end
 -- Clear all shortcuts before including any config files
 root.keys({ })
 
+
+-- {{{ Read config
+local io = require('io')
+settings = {}
+local file = io.open(configpath .. '/awesome.conf', 'r')
+if file then
+	for line in io.lines(configpath .. '/awesome.conf') do
+		if line:find('#') ~= 1 then
+			-- Parse non comment into settings
+			local l = split(line, '=')
+			settings[l[1]] = l[2]
+		end
+	end
+end
+
+-- }}}
+
 -- {{{ Load custom scripts from custom.d directory
 local lfs = require('lfs')
 local confs = {}

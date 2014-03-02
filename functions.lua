@@ -1,3 +1,12 @@
+-- Split strings
+function split(str, sep)
+	local sep, fields = sep or ":", {}
+   local pattern = string.format("([^%s]+)", sep)
+	str:gsub(pattern, function(c) fields[#fields+1] = c end)
+	return fields
+end
+
+
 -- Adds a shortcuts to the root element. The method takes the same parameter
 -- as the awful.key constructor.
 function add_key(mod, key, press, release)

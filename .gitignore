@@ -1,2 +1,3 @@
 autostart/*
 !autostart/README
+*.conf
