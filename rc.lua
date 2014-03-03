@@ -73,7 +73,7 @@ settings = {}
 local file = io.open(configpath .. '/awesome.conf', 'r')
 if file then
 	for line in io.lines(configpath .. '/awesome.conf') do
-		if line:find('#') ~= 1 then
+		if line:find('#') ~= 1 and #line > 0 then
 			-- Parse non comment into settings
 			local l = split(line, '=')
 			settings[l[1]] = l[2]
