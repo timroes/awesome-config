@@ -9,4 +9,5 @@
 #   battery - Battery icon
 #   systray - the default systray
 #   clock - The clock with calendar
+#   network - Stats about incoming and outgoing traffic
 widgets=
