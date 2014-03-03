@@ -20,8 +20,8 @@ module("widgets.orglendar")
 
 local orglendar = { files = {},
                     char_width = nil,
-                    text_color = theme.fg_normal or "#FFFFFF",
-                    today_color = theme.bg_urgent or "#00FF00",
+                    text_color = theme.cal_fg or theme.fg_normal or "#FFFFFF",
+                    today_color = theme.cal_today or theme.bg_urgent or "#00FF00",
                     font = 'Source Code Pro 11',
                     calendar_width = 19 }
 

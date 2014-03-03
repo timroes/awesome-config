@@ -25,6 +25,9 @@ theme.notify_normal_fg = "#FFFFFF"
 theme.notify_border_width = "0"
 theme.notify_opacity = 0.9
 
+-- Calendar
+theme.cal_today = '#99CC00'
+
 -- Titlebar
 theme.titlebar_bg_normal = "#666666"
 
