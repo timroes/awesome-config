@@ -9,6 +9,7 @@ local configpath = configpath
 local tostring = tostring
 local math = math
 local string = string
+local dbus = dbus
 
 module('widgets.battery')
 
@@ -84,6 +85,12 @@ local function create(_)
 	refresh:start()
 
 	update()
+
+	dbus.request_name('system', 'de.timroes.batterywidget')
+	dbus.add_match('system', "interface='de.timroes.batterywidget'")
+	dbus.connect_signal('de.timroes.batterywidget', function(msg)
+		update()
+	end)
 
 	return layout
 end
