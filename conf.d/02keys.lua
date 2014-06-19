@@ -8,7 +8,7 @@ keys = awful.util.table.join(
 	end),
 
 	-- Start programs
-	awful.key({ MOD }, "space", function() awful.util.spawn("java -jar /home/timroes/code/start-plz/dist/start-plz.jar") end),
+	awful.key({ MOD }, "space", function() awful.util.spawn("applepy") end),
 	awful.key({ MOD }, "z", function() awful.util.spawn_with_shell("xdg-open $HOME") end),
 
 	-- Screenshots
