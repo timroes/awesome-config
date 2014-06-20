@@ -30,3 +30,6 @@ add_key({ MOD }, "Tab", function()
 	})
 	last_id = notif.id
 end)
+
+-- Enable X-server kill
+awful.util.spawn(setkeymap .. " -option terminate:ctrl_alt_bksp")
