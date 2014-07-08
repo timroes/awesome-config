@@ -75,11 +75,18 @@ client.connect_signal("manage", function(c, startup)
 	client.focus = c
 	c:raise()
 
-	-- Check if the client has a program set minimum and maximum size, that are equal
-	-- If so, treat this client as a dialog window (center it and make it floating)
 	if c.size_hints then
 		local sh = c.size_hints
-		if sh.max_height and sh.max_width and sh.max_height == sh.min_height and sh.min_width == sh.max_width then
+		local wa = screen[c.screen].workarea
+		if sh.user_size and sh.user_size.width ~= wa.width and sh.user_size.height ~= wa.height then
+			-- If the user size hint is set, make the window floating and give it the specific size
+			-- unless the size matches exactly the size of the workarea, in this case leave it fullscreen.
+			awful.client.floating.set(c, true)
+			c:geometry(sh.user_size)
+			awful.placement.centered(c, nil)
+		elseif sh.max_height and sh.max_width and sh.max_height == sh.min_height and sh.min_width == sh.max_width then
+			-- Check if the client has a program set minimum and maximum size, that are equal
+			-- If so, treat this client as a dialog window (center it and make it floating)
 			awful.client.floating.set(c, true)
 			awful.placement.centered(c, nil)
 		end
