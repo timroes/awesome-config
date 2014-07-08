@@ -4,7 +4,7 @@ outputs=($(/usr/bin/xrandr | grep -oE '^(.*) connected' | cut -f1 -d' '))
 prefInternal=$(/usr/bin/xrandr | grep -E '^ .*\+' | head -n 1 | cut -d' ' -f4)
 
 function resetInternal() {
-	/usr/bin/xrandr --output ${outputs[0]} --mode $prefInternal --scale-from $prefInternal --scale $prefInternal
+	/usr/bin/xrandr --output ${outputs[0]} --primary --mode $prefInternal --scale-from $prefInternal --scale $prefInternal
 }
 
 case "$1" in
@@ -20,6 +20,10 @@ case "$1" in
 	"extend")
 		resetInternal
 		/usr/bin/xrandr --output ${outputs[1]} --auto --output ${outputs[0]} --auto --left-of ${outputs[1]}
+		;;
+	"extend_external")
+		resetInternal
+		/usr/bin/xrandr --output ${outputs[1]} --auto --primary --output ${outputs[0]} --auto --left-of ${outputs[1]}
 		;;
 	"external")
 		/usr/bin/xrandr --output ${outputs[1]} --auto --output ${outputs[0]} --off

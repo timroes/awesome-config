@@ -51,7 +51,7 @@ dofile(configpath .. "functions.lua")
 MOD = "Mod4"
 
 -- Find primary screen
-local xrandr = awful.util.pread("xrandr | grep ' connected primary' | cut -f1 -d' '")
+local xrandr = awful.util.pread("xrandr | grep -E ' connected primary [0-9]' | cut -f1 -d' '")
 if #xrandr > 0 then
 	-- if a primary screen has been configured via xrandr, use this as primary
 	xrandr = xrandr:gsub("%s+$", "") -- remove newline at end of string

@@ -39,10 +39,11 @@ local function create(_)
 		bg_focus = '#33B5E5'
 	},
 	items = { 
-		{ 'Notebook only', scriptpath .. '/screenlayout.sh notebook' },
-		{ 'Both Cloned', scriptpath .. '/screenlayout.sh clone' },
-		{ 'Both Extended', scriptpath .. '/screenlayout.sh extend' },
-		{ 'External only', scriptpath .. '/screenlayout.sh external' }
+		{ 'Notebook', scriptpath .. '/screenlayout.sh notebook' },
+		{ 'Cloned', scriptpath .. '/screenlayout.sh clone' },
+		{ 'Extended', scriptpath .. '/screenlayout.sh extend' },
+		{ '└ External primary', scriptpath .. '/screenlayout.sh extend_external' },
+		{ 'External', scriptpath .. '/screenlayout.sh external' }
 	} })
 
 	mlayout:buttons(awful.button({ }, 1, function() 
