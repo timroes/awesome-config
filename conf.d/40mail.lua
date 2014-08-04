@@ -1,13 +1,22 @@
 local awful = require("awful")
 local MAIL_SCREEN = PRIMARY
 
+local is_bin = awful.util.file_readable('/usr/share/pixmaps/thunderbird-bin-icon.png')
+
+if not is_bin then
+	if not awful.util.file_readable('/usr/share/pixmaps/thunderbird-icon.png') then
+		-- Neither thunderbird-bin nor thunderbird is installed
+		return
+	end
+end
+
 local mail_tag = awful.tag.add("Mail", { })
-awful.tag.seticon("/usr/share/pixmaps/thunderbird-icon.png", mail_tag)
+awful.tag.seticon("/usr/share/pixmaps/thunderbird" .. (is_bin and "-bin" or "") .. "-icon.png", mail_tag)
 awful.tag.setscreen(mail_tag, MAIL_SCREEN)
 -- Limit tag to thunderbird windows
 limit_tag(mail_tag, { class = "Thunderbird" })
 -- start thunderbird on that tag
-start_on_tag(mail_tag, "thunderbird")
+start_on_tag(mail_tag, "thunderbird" .. (is_bin and "-bin" or ""))
 
 awful.layout.set(awful.layout.suit.max, mail_tag)
 
