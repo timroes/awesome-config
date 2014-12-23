@@ -4,6 +4,7 @@ local networkmonitor = require("widgets.networkmonitor")
 local orglendar = require("widgets.orglendar")
 local battery = require('widgets.battery')
 local displayswitcher = require('widgets.displayswitcher')
+local screensaver = require('widgets.screensaver')
 
 bars = {}
 taglist = {}
@@ -148,6 +149,8 @@ for s = 1, screen.count() do
 				right_layout:add(displayswitcher())
 			elseif w == 'battery' then
 				right_layout:add(battery())
+			elseif w == 'screensaver' then
+				right_layout:add(screensaver())
 			elseif w == 'network' then
 				right_layout:add(networkmonitor())
 			elseif w == 'systray' then
