@@ -17,7 +17,9 @@ for s = 1, screen.count() do
 			awful.client.focus.byidx(1)
 			if client.focus then client.focus:raise() end
 		else
-			awful.tag.viewmore({ tag }, s) 
+			if not tag.selected then
+				awful.tag.viewmore({ tag }, s) 
+			end
 			-- Focus last focused client on this tag
 			local focus = awful.client.focus.history.get(s, 0)
 			if focus then client.focus = focus end
