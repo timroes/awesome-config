@@ -1,6 +1,11 @@
 local awful = require("awful")
 
 local move_client = function(c, direction)
+	-- If client is unmoveable don't do anything
+	if awful.client.property.get(c, "client::unmoveable") then
+		return
+	end
+
 	local cur_tag = awful.tag.selected(c.screen)
 
 	-- Only allow window move for windows on not named tags
@@ -17,7 +22,10 @@ buttons = awful.util.table.join(
 	awful.button({ MOD }, 1, function(c)
 		client.focus = c
 		c:raise()
-		awful.mouse.client.move(c)
+		-- Only start moving client, when it's not unmoveable
+		if not awful.client.property.get(c, "client::unmoveable") then
+			awful.mouse.client.move(c)
+		end
 	end),
 	awful.button({ MOD }, 2, function(c) c:kill() end),
 	awful.button({ MOD }, 3, awful.mouse.client.resize)
