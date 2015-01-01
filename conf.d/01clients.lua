@@ -24,11 +24,15 @@ buttons = awful.util.table.join(
 		c:raise()
 		-- Only start moving client, when it's not unmoveable
 		if not awful.client.property.get(c, "client::unmoveable") then
+			awful.client.floating.set(c, true)
 			awful.mouse.client.move(c)
 		end
 	end),
 	awful.button({ MOD }, 2, function(c) c:kill() end),
-	awful.button({ MOD }, 3, awful.mouse.client.resize)
+	awful.button({ MOD }, 3, function(c)
+		awful.client.floating.set(c, true)
+		awful.mouse.client.resize(c)
+	end)
 )
 
 -- Define keys for every client
