@@ -6,6 +6,7 @@ local theme = beautiful.get()
 naughty.config.spacing = 10
 naughty.config.padding = 10
 
+naughty.config.defaults.icon_size = 48
 naughty.config.defaults.position = 'top_right'
 naughty.config.defaults.border_width = theme.notify_border_width
 naughty.config.defaults.opacity = theme.notify_opacity or 1.0
