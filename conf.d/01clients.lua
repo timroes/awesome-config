@@ -30,8 +30,27 @@ buttons = awful.util.table.join(
 	end),
 	awful.button({ MOD }, 2, function(c) c:kill() end),
 	awful.button({ MOD }, 3, function(c)
-		awful.client.floating.set(c, true)
-		awful.mouse.client.resize(c)
+		-- Resizing of clients on modifier + right mouse button
+		if string.starts(awful.layout.get(c.screen).name, "tile") then
+			-- If client on a split screen is tried to rescale we modify the split factor instead
+			mousegrabber.run(function(ev)
+				local s = screen[c.screen] -- current screen
+				local mouse_on_screen = ev.x - s.geometry.x -- mouse coordinate on screen
+				if mouse_on_screen >= 0 and mouse_on_screen <= s.geometry.width then
+					-- Calculate on which percentage of the screen we are
+					-- and set the split factor of the tag to that value
+					-- but only if we are not ouside of the current screen
+					local mouseper_on_screen = (mouse_on_screen / s.geometry.width)
+					awful.tag.setmwfact(mouseper_on_screen)
+				end
+				-- Continue while mouse button is pressed
+				return ev.buttons[3]
+			end, "sb_h_double_arrow")
+		else
+			-- On any non tiling screen we make the client floating and start resize mode
+			awful.client.floating.set(c, true)
+			awful.mouse.client.resize(c)
+		end
 	end)
 )
 
@@ -46,6 +65,12 @@ keys = awful.util.table.join(
 	-- move client to other screen/tag
 	awful.key({ MOD }, "Right", function(c) move_client(c, 1) end),
 	awful.key({ MOD }, "Left", function(c) move_client(c, -1) end),
+
+	-- swap clients into direction (only works in split mode (see tags.lua))
+	awful.key({ MOD, "Control" }, "Right", function(c) awful.client.swap.bydirection("right") end),
+	awful.key({ MOD, "Control" }, "Left", function(c) awful.client.swap.bydirection("left") end),
+	awful.key({ MOD, "Control" }, "Down", function(c) awful.client.swap.bydirection("down") end),
+	awful.key({ MOD, "Control" }, "Up", function(c) awful.client.swap.bydirection("up") end),
 
 	-- toggle client floating state
 	awful.key({ MOD }, "Return", function(c) awful.client.floating.toggle(c) end),

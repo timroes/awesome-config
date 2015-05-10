@@ -160,3 +160,7 @@ function screen_index(position)
 	return screen_order[position].index
 end
 -- }}}
+
+function string.starts(str, start)
+	return string.sub(str, 1, string.len(start)) == start
+end
