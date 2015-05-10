@@ -173,3 +173,14 @@ for s = 1, screen.count() do
 	bars[s]:set_widget(layout)
 
 end
+
+local bars_visible = true
+
+root.keys(awful.util.table.join(root.keys(),
+	awful.key({ MOD }, "b", function()
+		bars_visible = not bars_visible
+		for i,bar in pairs(bars) do
+			bar.visible = bars_visible
+		end
+	end)
+))
