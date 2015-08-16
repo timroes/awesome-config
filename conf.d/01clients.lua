@@ -112,6 +112,10 @@ client.connect_signal("manage", function(c, startup)
 	client.focus = c
 	c:raise()
 
+	if c.role == "pop-up" then
+		awful.client.floating.set(c, true)
+	end
+
 	if c.size_hints then
 		local sh = c.size_hints
 		local wa = screen[c.screen].workarea
