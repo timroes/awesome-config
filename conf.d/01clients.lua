@@ -66,6 +66,9 @@ keys = awful.util.table.join(
 	awful.key({ MOD }, "Right", function(c) move_client(c, 1) end),
 	awful.key({ MOD }, "Left", function(c) move_client(c, -1) end),
 
+	-- Minimize current window
+	awful.key({ MOD }, "Down", function(c) c.minimized = true end),
+
 	-- swap clients into direction (only works in split mode (see tags.lua))
 	awful.key({ MOD, "Control" }, "Right", function(c) awful.client.swap.bydirection("right") end),
 	awful.key({ MOD, "Control" }, "Left", function(c) awful.client.swap.bydirection("left") end),
