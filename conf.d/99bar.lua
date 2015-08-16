@@ -24,6 +24,12 @@ tasklist.buttons = awful.util.table.join(
 			c:raise()
 		end
 	end),
+	awful.button({ MOD }, 1, function(c)
+		awful.layout.set(awful.layout.suit.max)
+		c.minimized = false
+		client.focus = c
+		c:raise()
+	end),
 	awful.button({ }, 2, function(c) c:kill() end),
 	awful.button({ }, 4, function()
 		awful.client.focus.byidx(1)
