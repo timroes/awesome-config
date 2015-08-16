@@ -1,5 +1,6 @@
 local awful = require("awful")
 local PIDGIN_SCREEN = PRIMARY;
+local config = require("lunaconf.config")
 
 -- Create own tag for pidgin
 local pidgin_tag = awful.tag.add("Pidgin", { })
@@ -63,7 +64,7 @@ end)
 
 -- Shortcut to switch to pidgin tag
 keys = awful.util.table.join(root.keys(),
-	awful.key({ MOD }, "p", function() 
+	awful.key({ config.MOD }, "p", function() 
 		if pidgin_tag.selected then
 			if not client.focus or client.focus.class ~= "Pidgin" then
 				-- If we press the shortcut while the tag is open, but not focues,

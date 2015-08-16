@@ -1,4 +1,5 @@
 local awful = require("awful")
+local config = require("lunaconf.config")
 
 local layouts = {
 	awful.layout.suit.max,
@@ -39,17 +40,17 @@ for s = 1, screen.count() do
 	-- Assign key shortcuts for every tag
 	tag_keys = awful.util.table.join(tag_keys, 
 		-- Switch to tag
-		awful.key({ MOD }, "#" .. tagname + 9, tagFocus), -- Numbers
-		awful.key({ MOD }, "#" .. tagname + 86, tagFocus), -- Numpad keys
+		awful.key({ config.MOD }, "#" .. tagname + 9, tagFocus), -- Numbers
+		awful.key({ config.MOD }, "#" .. tagname + 86, tagFocus), -- Numpad keys
 		-- Move client to tag
-		awful.key({ MOD, "Control" }, "#" .. tagname + 9, moveToTag),
-		awful.key({ MOD, "Control" }, "#" .. tagname + 86, moveToTag)
+		awful.key({ config.MOD, "Control" }, "#" .. tagname + 9, moveToTag),
+		awful.key({ config.MOD, "Control" }, "#" .. tagname + 86, moveToTag)
 	)
 end
 
 tag_keys = awful.util.table.join(tag_keys,
 	-- Switch layouts for the current screen
-	awful.key({ MOD }, "s", function()
+	awful.key({ config.MOD }, "s", function()
 		-- Only allow split screen on regular (screen) tags
 		local cur_tag = awful.tag.selected(client.focus.screen)
 		if #cur_tag.name <= 1 then

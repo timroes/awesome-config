@@ -1,5 +1,6 @@
 local awful = require("awful")
 local naughty = require('naughty')
+local config = require("lunaconf.config")
 
 local last_id = 0
 
@@ -9,7 +10,7 @@ shortcuts = awful.util.table.join(root.keys(),
 	awful.key({ }, "XF86AudioNext", function() awful.util.spawn("mpc next -q") end),
 	awful.key({ }, "XF86AudioPrev", function() awful.util.spawn("mpc prev -q") end),
 
-	awful.key({ MOD }, "XF86AudioPlay", function()
+	awful.key({ config.MOD }, "XF86AudioPlay", function()
 		local song = awful.util.pread("mpc current"):sub(1,-2)
 		if song:len() == 0 then
 			song = "- Nothing is playing -"
@@ -18,7 +19,7 @@ shortcuts = awful.util.table.join(root.keys(),
 	end),
 
 	-- Delete song from playlist
-	awful.key({ MOD }, "Delete", function() awful.util.spawn("mpc del 0") end),
+	awful.key({ config.MOD }, "Delete", function() awful.util.spawn("mpc del 0") end),
 
 	-- Set shortcuts to control volume (amixer (alsamixer) required)
 	awful.key({ }, "XF86AudioRaiseVolume", function() awful.util.spawn("amixer -q set Master 2%+") end),

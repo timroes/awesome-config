@@ -1,7 +1,8 @@
 local naughty = require('naughty')
 local beautiful = require('beautiful')
+local lntheme = require("lunaconf.theme")
 
-local theme = beautiful.get()
+local theme = lntheme.get()
 
 naughty.config.spacing = 10
 naughty.config.padding = 10

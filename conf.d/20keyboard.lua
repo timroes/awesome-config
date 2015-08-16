@@ -1,6 +1,7 @@
 local awful = require('awful')
 local naughty = require('naughty')
 local gears = require('gears')
+local config = require("lunaconf.config")
 
 -- Requires setxkbmap to be installed
 
@@ -20,7 +21,7 @@ end
 -- Initialize with porimary keyboard layout
 set_current_layout()
 
-add_key({ MOD }, "Tab", function() 
+add_key({ config.MOD }, "Tab", function() 
 	current_layout = ((current_layout) % #keyboard_layouts) + 1
 	set_current_layout()
 	local notif = naughty.notify({

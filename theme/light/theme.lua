@@ -1,8 +1,7 @@
 -- The style of the interface
+local theme = {}
 
-theme = {}
-
-theme.font          = "Roboto Light 11"
+theme.font          = "Roboto Thin 11"
 
 theme.bg_normal     = "linear:0,0:0,28:0,#3A3A3A:1,#202020"
 theme.bg_focus      = "linear:0,0:0,28:0,#BEBEBE:1,#EEEEE"
@@ -31,7 +30,12 @@ theme.bg_systray = '#2F2F2F'
 theme.cal_today = '#99CC00'
 
 -- Titlebar
-theme.titlebar_bg_normal = "#666666"
+theme.titlebar_bg_normal = "#FFFFFFFF"
+--theme.titlebar_bg_focus = "linear:0,0:0,28,0,#5eb942:1,#429b2e"
+-- theme.titlebar_bg_focus = "linear:0,0:0,28,0,#a6d897:1,#97c88c"
+theme.titlebar_bg_focus = "#FFFFFFAA"
+theme.titlebar_fg_normal = "#AAAAAA"
+theme.titlebar_fg_focus = "#555555"
 
 -- There are other variable sets
 -- overriding the default one when
@@ -44,7 +48,7 @@ theme.titlebar_bg_normal = "#666666"
 --theme.taglist_bg_focus = "#ff0000"o
 
 -- You can use your own command to set your wallpaper
-theme.wallpaper =  themepath .. "images/background.jpg" 
+theme.wallpaper = "wallpaper.jpg" 
 
 -- You can use your own layout icons like this:
 theme.layout_fairh = "/usr/share/awesome/themes/default/layouts/fairhw.png"

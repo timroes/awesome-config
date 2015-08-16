@@ -32,23 +32,20 @@ end
 
 
 -- {{{ DEBUG function
+local inspect = require("inspect")
 function dbg(msg)
-	naughty.notify({ title = "Debug Message", text = msg })
+	naughty.notify({ title = "Debug Message", text = inspect(msg), timeout = 0 })
 end
 -- }}}
 
-
 -- Set path configuration
 configpath = os.getenv("HOME") .. "/.config/awesome/"
-themepath = configpath .. "theme/"
+CONFIG_PATH = configpath
 scriptpath = configpath .. "scripts/"
-package.path = package.path .. ";" .. configpath .. "widgets/?.lua"
+package.path = configpath .. "lib/?.lua;" .. package.path 
 
 -- Include functions
 dofile(configpath .. "functions.lua")
-
--- Set constants
-MOD = "Mod4"
 
 -- Find primary screen
 local xrandr = awful.util.pread("xrandr | grep -E ' connected primary [0-9]' | cut -f1 -d' '")
@@ -66,23 +63,6 @@ end
 -- Clear all shortcuts before including any config files
 root.keys({ })
 
-
--- {{{ Read config
-local io = require('io')
-settings = {}
-local file = io.open(configpath .. '/awesome.conf', 'r')
-if file then
-	for line in io.lines(configpath .. '/awesome.conf') do
-		if line:find('#') ~= 1 and #line > 0 then
-			-- Parse non comment into settings
-			local l = split(line, '=')
-			settings[l[1]] = l[2]
-		end
-	end
-end
-
--- }}}
-
 -- {{{ Load custom scripts from custom.d directory
 local lfs = require('lfs')
 local confs = {}
@@ -96,8 +76,12 @@ end
 -- Load conf files in alphabetical order
 table.sort(confs)
 for i,conf in pairs(confs) do
-	dofile(conf)
+	 dofile(conf)
 end
+-- }}}
+
+-- {{{ Start compositor
+run_once("compton --config " .. configpath .. "/compton.conf -b")
 -- }}}
 
 -- {{{ Auto start all execuables from autostart dir

@@ -12,3 +12,7 @@
 #   network - Stats about incoming and outgoing traffic
 #   screensaver - Button to temporary disable all screensavers (presentation mode)
 widgets=
+
+# Specify the modifier key which should be used as primary modifier (e.g. for moving windows, etc.)
+# Will default to Mod4
+modkey=

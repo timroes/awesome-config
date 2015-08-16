@@ -5,6 +5,7 @@ local orglendar = require("widgets.orglendar")
 local battery = require('widgets.battery')
 local displayswitcher = require('widgets.displayswitcher')
 local screensaver = require('widgets.screensaver')
+local config = require('lunaconf.config')
 
 bars = {}
 taglist = {}
@@ -24,7 +25,7 @@ tasklist.buttons = awful.util.table.join(
 			c:raise()
 		end
 	end),
-	awful.button({ MOD }, 1, function(c)
+	awful.button({ config.MOD }, 1, function(c)
 		awful.layout.set(awful.layout.suit.max)
 		c.minimized = false
 		client.focus = c
@@ -147,7 +148,7 @@ for s = 1, screen.count() do
 	if s == PRIMARY then 
 
 		-- load widgets from config file
-		local widgets = split(settings['widgets'], ',')
+		local widgets = split(config.get('widgets', ''), ',')
 		for i,w in pairs(widgets) do
 			if tonumber(w) ~= nil and tonumber(w) > 0 then
 				right_layout:add(spacer(tonumber(w)))
@@ -183,7 +184,7 @@ end
 local bars_visible = true
 
 root.keys(awful.util.table.join(root.keys(),
-	awful.key({ MOD }, "b", function()
+	awful.key({ config.MOD }, "b", function()
 		bars_visible = not bars_visible
 		for i,bar in pairs(bars) do
 			bar.visible = bars_visible
