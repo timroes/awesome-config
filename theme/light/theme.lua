@@ -3,12 +3,13 @@ local theme = {}
 
 theme.font          = "Roboto Thin 11"
 
-theme.bg_normal     = "linear:0,0:0,28:0,#3A3A3A:1,#202020"
+-- theme.bg_normal     = "linear:0,0:0,28:0,#3A3A3A:1,#202020"
+theme.bg_normal = "#F5F5F555"
 theme.bg_focus      = "linear:0,0:0,28:0,#BEBEBE:1,#EEEEE"
 theme.bg_urgent     = "linear:0,0:0,28:0,#99CC00:1,#739900"
 theme.bg_minimize   = "#111111"
 
-theme.fg_normal     = "#DDDDDD"
+theme.fg_normal     = "#555555"
 theme.fg_focus      = "#000000"
 theme.fg_urgent     = "#000000"
 theme.fg_minimize   = "#666666"
@@ -30,10 +31,12 @@ theme.bg_systray = '#2F2F2F'
 theme.cal_today = '#99CC00'
 
 -- Titlebar
-theme.titlebar_bg_normal = "#FFFFFFFF"
+theme.titlebar_bg_normal = "#F5F5F5AA"
+
 --theme.titlebar_bg_focus = "linear:0,0:0,28,0,#5eb942:1,#429b2e"
 -- theme.titlebar_bg_focus = "linear:0,0:0,28,0,#a6d897:1,#97c88c"
-theme.titlebar_bg_focus = "#FFFFFFAA"
+
+theme.titlebar_bg_focus = "#F5F5F5AA"
 theme.titlebar_fg_normal = "#AAAAAA"
 theme.titlebar_fg_focus = "#555555"
 

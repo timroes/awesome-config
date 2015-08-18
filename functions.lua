@@ -1,3 +1,5 @@
+local lfs = require('lfs')
+
 -- Split strings
 function split(str, sep)
 	local sep, fields = sep or ":", {}

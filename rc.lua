@@ -47,6 +47,10 @@ package.path = configpath .. "lib/?.lua;" .. package.path
 -- Include functions
 dofile(configpath .. "functions.lua")
 
+-- {{{ Start compositor
+run_once("compton --config " .. configpath .. "/compton.conf -b")
+-- }}}
+
 -- Find primary screen
 local xrandr = awful.util.pread("xrandr | grep -E ' connected primary [0-9]' | cut -f1 -d' '")
 if #xrandr > 0 then
@@ -80,9 +84,6 @@ for i,conf in pairs(confs) do
 end
 -- }}}
 
--- {{{ Start compositor
-run_once("compton --config " .. configpath .. "/compton.conf -b")
--- }}}
 
 -- {{{ Auto start all execuables from autostart dir
 local startdir = configpath .. 'autostart/'

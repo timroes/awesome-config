@@ -6,6 +6,7 @@ local battery = require('widgets.battery')
 local displayswitcher = require('widgets.displayswitcher')
 local screensaver = require('widgets.screensaver')
 local config = require('lunaconf.config')
+local gears = require('gears')
 
 bars = {}
 taglist = {}
@@ -176,7 +177,7 @@ for s = 1, screen.count() do
 	layout:set_middle(tasklist[s])
 	layout:set_right(right_layout)
 
-	bars[s] = awful.wibox({ position = "top", screen = s, height = "28" })
+	bars[s] = awful.wibox({ position = "top", screen = s, height = "48" })
 	bars[s]:set_widget(layout)
 
 end
