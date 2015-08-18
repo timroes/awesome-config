@@ -20,7 +20,6 @@ client.connect_signal("manage", function(c, startup)
 	--titlebar:set_left(margin_icon)
 	titlebar:set_middle(center_layout)
 	titlebar:set_right(actions)
-	titlebar.opacity = 0.5
 
 	local bar = awful.titlebar(c, { size = 30 })
 	bar:set_widget(titlebar)

@@ -31,12 +31,12 @@ theme.bg_systray = '#2F2F2F'
 theme.cal_today = '#99CC00'
 
 -- Titlebar
-theme.titlebar_bg_normal = "#F5F5F5AA"
+theme.titlebar_bg_normal = "#F5F5F599"
 
 --theme.titlebar_bg_focus = "linear:0,0:0,28,0,#5eb942:1,#429b2e"
 -- theme.titlebar_bg_focus = "linear:0,0:0,28,0,#a6d897:1,#97c88c"
 
-theme.titlebar_bg_focus = "#F5F5F5AA"
+theme.titlebar_bg_focus = "#F5F5F599"
 theme.titlebar_fg_normal = "#AAAAAA"
 theme.titlebar_fg_focus = "#555555"
 
