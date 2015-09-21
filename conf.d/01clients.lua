@@ -1,5 +1,7 @@
 local awful = require("awful")
-local config = require("lunaconf.config")
+local lunaconf = require("lunaconf")
+
+local MOD = lunaconf.config.MOD
 
 local move_client = function(c, direction)
 	-- If client is unmoveable don't do anything
@@ -20,17 +22,11 @@ end
 -- Define buttons for every client
 buttons = awful.util.table.join(
 	awful.button({ }, 1, function(c) client.focus = c; c:raise() end),
-	awful.button({ config.MOD }, 1, function(c)
-		client.focus = c
-		c:raise()
-		-- Only start moving client, when it's not unmoveable
-		if not awful.client.property.get(c, "client::unmoveable") then
-			awful.client.floating.set(c, true)
-			awful.mouse.client.move(c)
-		end
+	awful.button({ MOD }, 1, function(c)
+		lunaconf.clients.smart_move(c)
 	end),
-	awful.button({ config.MOD }, 2, function(c) c:kill() end),
-	awful.button({ config.MOD }, 3, function(c)
+	awful.button({ MOD }, 2, function(c) c:kill() end),
+	awful.button({ MOD }, 3, function(c)
 		-- Resizing of clients on modifier + right mouse button
 		if string.starts(awful.layout.get(c.screen).name, "tile") then
 			-- If client on a split screen is tried to rescale we modify the split factor instead
@@ -60,26 +56,26 @@ buttons = awful.util.table.join(
 -- defined in the tags configuration file
 keys = awful.util.table.join(
 	-- close client
-	awful.key({ config.MOD }, "q", function(c) c:kill() end),
+	awful.key({ MOD }, "q", function(c) c:kill() end),
 	awful.key({ "Mod1" }, "F4", function(c) c:kill() end),
 
 	-- move client to other screen/tag
-	awful.key({ config.MOD }, "Right", function(c) move_client(c, 1) end),
-	awful.key({ config.MOD }, "Left", function(c) move_client(c, -1) end),
+	awful.key({ MOD }, "Right", function(c) move_client(c, 1) end),
+	awful.key({ MOD }, "Left", function(c) move_client(c, -1) end),
 
 	-- Minimize current window
-	awful.key({ config.MOD }, "Down", function(c) c.minimized = true end),
+	awful.key({ MOD }, "Down", function(c) c.minimized = true end),
 
 	-- swap clients into direction (only works in split mode (see tags.lua))
-	awful.key({ config.MOD, "Control" }, "Right", function(c) awful.client.swap.bydirection("right") end),
-	awful.key({ config.MOD, "Control" }, "Left", function(c) awful.client.swap.bydirection("left") end),
-	awful.key({ config.MOD, "Control" }, "Down", function(c) awful.client.swap.bydirection("down") end),
-	awful.key({ config.MOD, "Control" }, "Up", function(c) awful.client.swap.bydirection("up") end),
+	awful.key({ MOD, "Control" }, "Right", function(c) awful.client.swap.bydirection("right") end),
+	awful.key({ MOD, "Control" }, "Left", function(c) awful.client.swap.bydirection("left") end),
+	awful.key({ MOD, "Control" }, "Down", function(c) awful.client.swap.bydirection("down") end),
+	awful.key({ MOD, "Control" }, "Up", function(c) awful.client.swap.bydirection("up") end),
 
 	-- toggle client floating state
-	awful.key({ config.MOD }, "Return", function(c) awful.client.floating.toggle(c) end),
+	awful.key({ MOD }, "Return", function(c) awful.client.floating.toggle(c) end),
 	-- toggle client always on top
-	awful.key({ config.MOD }, "t", function(c) c.ontop = not c.ontop end)
+	awful.key({ MOD }, "t", function(c) c.ontop = not c.ontop end)
 )
 
 awful.rules.rules = {
@@ -115,6 +111,8 @@ end)
 client.connect_signal("manage", function(c, startup)
 	client.focus = c
 	c:raise()
+
+	-- dbg("[" .. c.window .. "] " .. c.name .. " // " .. c.group_window .. " // " .. c.leader_window)
 
 	if c.role == "pop-up" then
 		awful.client.floating.set(c, true)

@@ -9,7 +9,7 @@ local string = string
 local math = math
 local setmetatable = setmetatable
 
-module("widgets.screensaver")
+local screensaver = {}
 
 local textbox
 local widget
@@ -17,7 +17,7 @@ local is_off = false
 local button_text = '<span color="%s">☀</span>'
 
 local active_color = '#FF5722'
-local disabled_color = '#777777'
+local disabled_color = '#CCCCCC'
 
 local function create(_, dev)
 
@@ -44,4 +44,4 @@ local function create(_, dev)
 	return widget
 end
 
-setmetatable(_M, { __call = create })
+return setmetatable(screensaver, { __call = create })

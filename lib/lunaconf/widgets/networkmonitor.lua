@@ -8,7 +8,7 @@ local string = string
 local math = math
 local setmetatable = setmetatable
 
-module("widgets.networkmonitor")
+local networkmonitor = {}
 
 local function trim(s)
 	return s:find'^%s*$' and '' or s:match'^%s*(.*%S)'
@@ -104,7 +104,7 @@ local function create(_, dev)
 	refresh:connect_signal('timeout', function(self)
 		local dev = get_device(dev)
 		if dev then
-			widget:set_markup(string.format('<span color="#CCFF33">↓ %s</span>  <span color="#F57B00">↑ %s</span>', readableSize(dev.down), readableSize(dev.up)))
+			widget:set_markup(string.format('<span color="#0D47A1">↓ %s</span>  <span color="#FFD54F">↑ %s</span>', readableSize(dev.down), readableSize(dev.up)))
 		end
 	end)
 	refresh:start()
@@ -113,4 +113,4 @@ local function create(_, dev)
 	return widget
 end
 
-setmetatable(_M, { __call = create })
+return setmetatable(networkmonitor, { __call = create })

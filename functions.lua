@@ -8,17 +8,6 @@ function split(str, sep)
 	return fields
 end
 
-
--- Adds a shortcuts to the root element. The method takes the same parameter
--- as the awful.key constructor.
-function add_key(mod, key, press, release)
-	keys = awful.util.table.join(
-		root.keys(),
-		awful.key(mod, key, press, release)
-	)
-	root.keys(keys)
-end
-
 -- Return the default tag for a specific screen index.
 -- The default tag is the first tag object on that screen.
 function default_tag_for_screen(screenindex)

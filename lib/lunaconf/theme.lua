@@ -1,6 +1,5 @@
 local CONFIG_PATH = CONFIG_PATH
 local beautiful = require("beautiful")
-local dbg = dbg
 
 local theme = {}
 

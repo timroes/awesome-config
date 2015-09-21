@@ -1,7 +1,8 @@
 local awful = require('awful')
 local naughty = require('naughty')
 local gears = require('gears')
-local config = require("lunaconf.config")
+local lunaconf = require('lunaconf')
+local MOD = lunaconf.config.MOD
 
 -- Requires setxkbmap to be installed
 
@@ -21,7 +22,7 @@ end
 -- Initialize with porimary keyboard layout
 set_current_layout()
 
-add_key({ config.MOD }, "Tab", function() 
+lunaconf.keys.globals(awful.key({ MOD }, "Tab", function() 
 	current_layout = ((current_layout) % #keyboard_layouts) + 1
 	set_current_layout()
 	local notif = naughty.notify({
@@ -30,7 +31,7 @@ add_key({ config.MOD }, "Tab", function()
 		replaces_id = last_id
 	})
 	last_id = notif.id
-end)
+end))
 
 -- Enable X-server kill
 awful.util.spawn(setkeymap .. " -option terminate:ctrl_alt_bksp")

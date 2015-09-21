@@ -16,3 +16,6 @@ widgets=
 # Specify the modifier key which should be used as primary modifier (e.g. for moving windows, etc.)
 # Will default to Mod4
 modkey=
+
+# Specify the height of the screen bars (i.e. the bars on top of the screen)
+screenbar_height=

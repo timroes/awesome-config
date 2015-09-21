@@ -13,7 +13,7 @@ for s = 1, screen.count() do
 	-- Get name for screen tag (horizontal position of screen)
 	local tagname = screen_position(s)
 	-- Create tag for that name and select it
-	local tag = awful.tag.add(tagname, { screen = s, layout = layouts[1] })
+	local tag = awful.tag.add(tagname, { screen = s, layout = layouts[1], screen_tag = true })
 	tag.selected = true
 
 	-- Switch to tag

@@ -16,9 +16,7 @@ if file then
 end
 
 function config.get(key, default)
-	local value = settings[key]
-	value = value or default
-	return value
+	return settings[key] or default
 end
 
 config.MOD = config.get('modkey', 'Mod4')

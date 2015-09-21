@@ -30,7 +30,6 @@ do
 end
 -- }}}
 
-
 -- {{{ DEBUG function
 local inspect = require("inspect")
 function dbg(msg)
@@ -42,13 +41,14 @@ end
 configpath = os.getenv("HOME") .. "/.config/awesome/"
 CONFIG_PATH = configpath
 scriptpath = configpath .. "scripts/"
-package.path = configpath .. "lib/?.lua;" .. package.path 
+package.path = configpath .. "lib/?.lua;" .. configpath .. "lib/?/init.lua;" .. package.path 
 
 -- Include functions
 dofile(configpath .. "functions.lua")
 
 -- {{{ Start compositor
-run_once("compton --config " .. configpath .. "/compton.conf -b")
+-- awful.util.spawn("killall compton")
+-- run_once("compton --config " .. configpath .. "/compton.conf -b")
 -- }}}
 
 -- Find primary screen

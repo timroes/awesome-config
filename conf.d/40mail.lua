@@ -1,5 +1,6 @@
 local awful = require("awful")
 local config = require("lunaconf.config")
+local icons = require("lunaconf.icons")
 local MAIL_SCREEN = PRIMARY
 
 local is_bin = awful.util.file_readable('/usr/share/pixmaps/thunderbird-bin-icon.png')
@@ -11,8 +12,8 @@ if not is_bin then
 	end
 end
 
-local mail_tag = awful.tag.add("Mail", { })
-awful.tag.seticon("/usr/share/pixmaps/thunderbird" .. (is_bin and "-bin" or "") .. "-icon.png", mail_tag)
+local mail_tag = awful.tag.add("Mail", { hotkey = "m" })
+awful.tag.seticon(icons.lookup_icon('thunderbird'), mail_tag)
 awful.tag.setscreen(mail_tag, MAIL_SCREEN)
 -- Limit tag to thunderbird windows
 limit_tag(mail_tag, { class = "Thunderbird" })
