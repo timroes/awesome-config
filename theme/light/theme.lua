@@ -5,7 +5,7 @@ theme.font          = "Roboto Thin 11"
 
 -- theme.bg_normal     = "linear:0,0:0,28:0,#3A3A3A:1,#202020"
 theme.bg_normal = "#F5F5F5AA"
-theme.bg_focus      = "linear:0,0:0,28:0,#BEBEBE:1,#EEEEE"
+theme.bg_focus      = "linear:0,0:0,28:0,#BEBEBE:1,#EEEEEE"
 theme.bg_urgent     = "linear:0,0:0,28:0,#99CC00:1,#739900"
 theme.bg_minimize   = "#111111"
 
