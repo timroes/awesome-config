@@ -25,7 +25,6 @@ end
 --- Will return nil if the user cannot be found.
 function utils.user_of_pid(pid)
 	if not pid then return nil end
-	dbg('pid: ' .. tostring(math.floor(pid)))
 	return strings.trim(awful.util.pread('ps -o user ' .. math.floor(pid) .. ' | sed 1d'))
 end
 
