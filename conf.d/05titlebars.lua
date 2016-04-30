@@ -1,7 +1,6 @@
 local wibox = require("wibox")
 local gears = require("gears")
 local awful = require("awful")
-local t = require("timer")
 local lunaconf = require("lunaconf")
 local colorbox = require("lunaconf.widgets.colorbox")
 
