@@ -12,8 +12,9 @@ if [ "$touchpad" ]; then
 	logger -t $TAG "Setting properties for input device $touchpad"
 	# Enable Palm detection to prevent moving mouse when whole palm is on the touchpda
 	xinput set-prop $touchpad 'Synaptics Palm Detection' 1
-	# Set
+	# Set the dimensions and pressures of the palm detection
 	xinput set-prop $touchpad 'Synaptics Palm Dimensions' 5 40
+	# Enable two finger scrolling on both axises
 	xinput set-prop $touchpad 'Synaptics Two-Finger Scrolling' 1 1
 	# Disable tabing unless two and three finger tabs
 	# Values are tab into: RT, RB, LT, LB, 1finger, 2finger, 3finger
