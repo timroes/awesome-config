@@ -10,10 +10,11 @@ local tostring = tostring
 local math = math
 local string = string
 local dbus = dbus
+local config = require('lunaconf.config')
 
 module('widgets.battery')
 
-local batdev = 'BAT0'
+local batdev = config.get('battery_device', 'BAT0')
 local widget
 local label
 
@@ -47,7 +48,7 @@ local function update()
 		-- Round charge to the next 20 points (for the image)
 		local charge = string.format('%03d', math.floor(cap / 20 + 0.5) * 20)
 		src = 'battery-' .. charge
-		
+
 		tooltip = tostring(cap) .. '%'
 
 		if charging then

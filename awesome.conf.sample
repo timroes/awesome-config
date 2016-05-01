@@ -19,3 +19,6 @@ modkey=
 
 # Specify the height of the screen bars (i.e. the bars on top of the screen)
 screenbar_height=
+
+# Specify which is the battery device to check for the battery widget (by default BAT0)
+battery_device=
