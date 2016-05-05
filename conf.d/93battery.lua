@@ -10,20 +10,16 @@ local tostring = tostring
 local math = math
 local string = string
 local dbus = dbus
+local Gio = require('lgi').Gio
+local GLib = require('lgi').GLib
 local config = require('lunaconf.config')
+local icons = require('lunaconf.icons')
 
 module('widgets.battery')
 
-local batdev = config.get('battery_device', 'BAT0')
+local bus = Gio.bus_get_sync(Gio.BusType.SYSTEM)
 local widget
 local label
-
-local function read(file)
-	local f = io.open(file)
-	local ret = f:read()
-	f:close()
-	return ret
-end
 
 local function to_time_string(time)
 	local hours = math.floor(time / 3600)
@@ -31,36 +27,45 @@ local function to_time_string(time)
 	return tostring(hours) .. ':' .. string.format('%02d', minutes)
 end
 
-local function update()
-	local cap = tonumber(read('/sys/class/power_supply/' .. batdev .. '/capacity'))
-	local status = read('/sys/class/power_supply/' .. batdev .. '/status')
-	local charging = status == 'Charging'
-	local full = status == 'Full'
-	local power_now = tonumber(read('/sys/class/power_supply/' .. batdev .. '/power_now'))
-	local power_remain = tonumber(read('/sys/class/power_supply/' .. batdev .. '/energy_now'))
-	local last_full = tonumber(read('/sys/class/power_supply/' .. batdev .. '/energy_full'))
+-- Query UPower over the dbus for information to show.
+local function get_battery_status()
+	local status, err = bus:call_sync('org.freedesktop.UPower',
+		-- DisplayDevice is a meta device that holds information about
+		-- all batteries in the system aggregated together.
+		'/org/freedesktop/UPower/devices/DisplayDevice',
+		-- Call the GetAll interface to load all properties
+		'org.freedesktop.DBus.Properties',
+		'GetAll',
+		GLib.Variant.new_tuple({
+			GLib.Variant('s', 'org.freedesktop.UPower.Device')
+		}, 1),
+		nil,
+		Gio.DBusConnectionFlags.NONE,
+		-1
+	)
 
-	local src
-	if full or status == 'Unknown' then
-		src = 'battery-100-charging'
-		label:set_text('')
-	else
-		-- Round charge to the next 20 points (for the image)
-		local charge = string.format('%03d', math.floor(cap / 20 + 0.5) * 20)
-		src = 'battery-' .. charge
-
-		tooltip = tostring(cap) .. '%'
-
-		if charging then
-			src = src .. '-charging'
-			-- SHow percentage (since remaining time is not predictable (since it's not linear at all)
-			label:set_text(' ' .. math.floor((power_remain / last_full) * 100) .. '%')
-		else
-			label:set_text(' ' .. to_time_string((power_remain / power_now) * 3600))
-		end
+	if err then
+		return nil
 	end
 
-	widget:set_image(configpath .. '/images/' .. src .. '.png')
+	return status[1]
+end
+
+local function update()
+	local batteryStatus = get_battery_status()
+
+	if batteryStatus == nil then
+		label:set_text('Install upower!')
+		return
+	end
+
+	if batteryStatus.State == 1 or batteryStatus == 4 then
+		label:set_text(string.format('%.0f%% (%s)', batteryStatus.Percentage, to_time_string(batteryStatus.TimeToFull)))
+	else
+		label:set_text(string.format('%s (%.0f%%)', to_time_string(batteryStatus.TimeToEmpty), batteryStatus.Percentage))
+	end
+
+	widget:set_image(icons.lookup_icon(batteryStatus.IconName))
 end
 
 local function create(_)
@@ -68,8 +73,7 @@ local function create(_)
 	local mlayout = w.layout.margin()
 
 	widget = w.widget.imagebox()
-	widget:fit(24, 24)
-	widget:set_resize(false)
+	widget:set_resize(true)
 
 	label = w.widget.textbox()
 
@@ -79,19 +83,12 @@ local function create(_)
 	layout:add(mlayout)
 	layout:add(label)
 
-	local refresh = timer({ timeout = 10 })
-	refresh:connect_signal('timeout', function(self)
+	dbus.add_match('system', "interface='org.freedesktop.DBus.Properties',member='PropertiesChanged',path='/org/freedesktop/UPower/devices/DisplayDevice'")
+	dbus.connect_signal('org.freedesktop.DBus.Properties', function()
 		update()
 	end)
-	refresh:start()
 
 	update()
-
-	dbus.request_name('system', 'de.timroes.batterywidget')
-	dbus.add_match('system', "interface='de.timroes.batterywidget'")
-	dbus.connect_signal('de.timroes.batterywidget', function(msg)
-		update()
-	end)
 
 	return layout
 end
