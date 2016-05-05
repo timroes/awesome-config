@@ -24,7 +24,7 @@ local all_icon_sizes = {
 }
 
 --- List of supported icon formats.
-local icon_formats = { "png", "xpm", "svg" }
+local icon_formats = { "svg", "png", "xpm" }
 
 --- Check whether the icon format is supported.
 -- @param icon_file Filename of the icon.
@@ -60,6 +60,7 @@ local function get_icon_lookup_path()
 				table.insert(icon_lookup_path, icon_theme_directory .. size .. '/categories/')
 				table.insert(icon_lookup_path, icon_theme_directory .. size .. '/devices/')
 				table.insert(icon_lookup_path, icon_theme_directory .. size .. '/mimetypes/')
+				table.insert(icon_lookup_path, icon_theme_directory .. size .. '/panel/')
 				table.insert(icon_lookup_path, icon_theme_directory .. size .. '/places/')
 				table.insert(icon_lookup_path, icon_theme_directory .. size .. '/status/')
 			end
