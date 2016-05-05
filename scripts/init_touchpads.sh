@@ -40,5 +40,5 @@ if [ "$trackpoint" ]; then
 	# Use middle mouse button for wheel emulation
 	xinput set-prop $trackpoint 'Evdev Wheel Emulation Button' 2
 	# Emulate all 4 scroll axises
-	xinput set-prop $trackpoint 'Evdev Wheel Emulation Axed' 6 7 4 5
+	xinput set-prop $trackpoint 'Evdev Wheel Emulation Axes' 6 7 4 5
 fi
