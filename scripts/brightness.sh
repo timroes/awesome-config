@@ -26,7 +26,11 @@ if [ -z "$device" ]; then
 fi
 
 max=`cat $device/max_brightness`
-step=$(($max/15))
+if [ "$2" == "small" ]; then
+	step=$(($max/150))
+else
+	step=$(($max/15))
+fi
 current=`cat $device/brightness`
 
 case "$1" in
