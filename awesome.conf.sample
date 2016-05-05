@@ -22,3 +22,6 @@ screenbar_height=
 
 # Specify which is the battery device to check for the battery widget (by default BAT0)
 battery_device=
+
+# Specify the path of a wallpaper to use
+wallpaper=
