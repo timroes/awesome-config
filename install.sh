@@ -11,5 +11,11 @@ for dep in "${dependencies[@]}"
 do
 	echo "Install dependency $dep..."
 	luarocks --local install $dep
-	echo "[done]"
+	if [ $? -eq 0 ]; then
+		echo "[done]"
+	else
+		echo "[failed]"
+		echo "See build output above, fix the problem and then run this script again."
+		exit 1
+	fi
 done
