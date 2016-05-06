@@ -37,11 +37,16 @@ function dbg(msg)
 end
 -- }}}
 
+-- Add luarocks pathes to package pathes
+local luarockPath = awful.util.pread('luarocks path --lr-path')
+local luarockCpath = awful.util.pread('luarocks path --lr-cpath')
+
 -- Set path configuration
 configpath = os.getenv("HOME") .. "/.config/awesome/"
 CONFIG_PATH = configpath
 scriptpath = configpath .. "scripts/"
-package.path = configpath .. "lib/?.lua;" .. configpath .. "lib/?/init.lua;" .. package.path 
+package.path = configpath .. "lib/?.lua;" .. configpath .. "lib/?/init.lua;" .. luarockPath .. ";" .. package.path
+package.cpath = luarockCpath .. ";" .. package.cpath
 
 -- Include functions
 dofile(configpath .. "functions.lua")
