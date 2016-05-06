@@ -9,8 +9,6 @@ local configFile = io.open(awful.util.getdir('config') .. '/config.yml', 'r')
 if configFile then
 	local configYaml = configFile:read('*all')
 	configFile:close()
-
-
 	settings = yaml.load(configYaml)
 end
 
