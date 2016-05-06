@@ -5,7 +5,6 @@ local io = io
 local timer = timer
 local dbg = dbg
 local tonumber = tonumber
-local configpath = configpath
 local tostring = tostring
 local math = math
 local string = string

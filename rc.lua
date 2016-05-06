@@ -42,19 +42,13 @@ local luarockPath = awful.util.pread('luarocks path --lr-path')
 local luarockCpath = awful.util.pread('luarocks path --lr-cpath')
 
 -- Set path configuration
-configpath = os.getenv("HOME") .. "/.config/awesome/"
-CONFIG_PATH = configpath
+local configpath = awful.util.getdir('config')
 scriptpath = configpath .. "scripts/"
 package.path = configpath .. "lib/?.lua;" .. configpath .. "lib/?/init.lua;" .. luarockPath .. ";" .. package.path
 package.cpath = luarockCpath .. ";" .. package.cpath
 
 -- Include functions
 dofile(configpath .. "functions.lua")
-
--- {{{ Start compositor
--- awful.util.spawn("killall compton")
--- run_once("compton --config " .. configpath .. "/compton.conf -b")
--- }}}
 
 -- Find primary screen
 local xrandr = awful.util.pread("xrandr | grep -E ' connected primary [0-9]' | cut -f1 -d' '")

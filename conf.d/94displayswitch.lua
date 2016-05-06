@@ -2,7 +2,6 @@ local setmetatable = setmetatable
 local awful = require('awful')
 local w = require('wibox')
 local scriptpath = scriptpath
-local configpath = configpath
 local dbus = dbus
 local tonumber = tonumber
 local tostring = tostring
@@ -10,7 +9,7 @@ local root = root
 
 module('widgets.displayswitcher')
 
-local ICON = configpath .. '/images/display.png'
+local ICON = awful.util.getdir('config') .. '/images/display.png'
 local is_active
 
 local function read(file)
@@ -30,7 +29,7 @@ local function create(_)
 	mlayout:set_widget(widget)
 	mlayout:set_top(2)
 
-	local menu = awful.menu({ 
+	local menu = awful.menu({
 	theme = {
 		height = 26,
 		width = 170,
@@ -38,7 +37,7 @@ local function create(_)
 		fg_normal = '#FFFFFF',
 		bg_focus = '#33B5E5'
 	},
-	items = { 
+	items = {
 		{ 'Notebook', scriptpath .. '/screenlayout.sh notebook' },
 		{ 'Cloned', scriptpath .. '/screenlayout.sh clone' },
 		{ 'Extended', scriptpath .. '/screenlayout.sh extend' },
@@ -46,7 +45,7 @@ local function create(_)
 		{ 'External', scriptpath .. '/screenlayout.sh external' }
 	} })
 
-	mlayout:buttons(awful.button({ }, 1, function() 
+	mlayout:buttons(awful.button({ }, 1, function()
 		menu:toggle()
 	end))
 
