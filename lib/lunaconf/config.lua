@@ -1,22 +1,26 @@
 local io = require('io')
+local yaml = require('lyaml')
 
 local config = {}
 
 local settings = {}
 
-local file = io.open(awful.util.getdir('config') .. '/awesome.conf', 'r')
-if file then
-	for line in io.lines(awful.util.getdir('config') .. '/awesome.conf') do
-		if line:find('#') ~= 1 and #line > 0 then
-			-- Parse non comment into settings
-			local l = split(line, '=')
-			settings[l[1]] = l[2]
-		end
-	end
+local configFile = io.open(awful.util.getdir('config') .. '/config.yml', 'r')
+if configFile then
+	local configYaml = configFile:read('*all')
+	configFile:close()
+
+
+	settings = yaml.load(configYaml)
 end
 
 function config.get(key, default)
-	return settings[key] or default
+	local level = settings
+	for i,k in pairs(split(key, '.')) do
+		if not level then return default end
+		level = level[k]
+	end
+	return level or default
 end
 
 config.MOD = config.get('modkey', 'Mod4')

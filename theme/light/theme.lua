@@ -70,7 +70,7 @@ theme.tooltip_font = "Roboto Thin 14"
 --theme.taglist_bg_focus = "#ff0000"
 
 -- You can use your own command to set your wallpaper
-theme.wallpaper = "wallpaper.jpg"
+theme.wallpaper = '#333333'
 
 theme.icon_theme = "Paper"
 

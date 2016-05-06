@@ -1,0 +1,23 @@
+# Specify the modifier key which should be used as primary modifier (e.g. for moving
+# windows, etc.)
+# Default: Mod4
+modkey: Mod4
+# Configuration for the bar at the top of the screen
+bar:
+  # Set the height in pixel of the bar. Default: 52
+  height: 52
+  # Set the widgets to show in the bar on the main display. This should be a
+  # comma separated list with the following possibilities:
+  # <positive integer> - add spacing of that width
+  # displayswitcher: A simple menu to switch which displays to use
+  # battery: Battery widget
+  # screensaver: A simple button to disable screensaver with one click
+  # network: A network monitor showing up and down traffic
+  # systray: The systray
+  # clock: Clock widget
+  # The default value is empty.
+  widgets:
+# Style different theme settings
+theme:
+  # A path to a wallpaper to use.
+  wallpaper:

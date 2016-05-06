@@ -66,10 +66,10 @@ for s = 1, screen.count() do
 	left_layout:add(spacer(5))
 
 	local right_layout = wibox.layout.fixed.horizontal()
-	if s == PRIMARY then 
+	if s == PRIMARY then
 
 		-- load widgets from config file
-		local widgets = split(config.get('widgets', ''), ',')
+		local widgets = split(config.get('bar.widgets', ''), ',')
 		for i,w in pairs(widgets) do
 			if tonumber(w) ~= nil and tonumber(w) > 0 then
 				right_layout:add(spacer(tonumber(w)))
@@ -97,7 +97,7 @@ for s = 1, screen.count() do
 	layout:set_middle(tasklists[s])
 	layout:set_right(right_layout)
 
-	bars[s] = awful.wibox({ position = "top", screen = s, height = config.get("screenbar_height", 52), bg = lunaconf.theme.get().screenbar_bg })
+	bars[s] = awful.wibox({ position = "top", screen = s, height = config.get("bar.height", 52), bg = lunaconf.theme.get().screenbar_bg })
 	bars[s]:set_widget(layout)
 
 end
