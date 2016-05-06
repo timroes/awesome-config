@@ -43,12 +43,12 @@ local luarockCpath = awful.util.pread('luarocks path --lr-cpath')
 
 -- Set path configuration
 local configpath = awful.util.getdir('config')
-scriptpath = configpath .. "scripts/"
-package.path = configpath .. "lib/?.lua;" .. configpath .. "lib/?/init.lua;" .. luarockPath .. ";" .. package.path
+scriptpath = configpath .. "/scripts/"
+package.path = configpath .. "/lib/?.lua;" .. configpath .. "/lib/?/init.lua;" .. luarockPath .. ";" .. package.path
 package.cpath = luarockCpath .. ";" .. package.cpath
 
 -- Include functions
-dofile(configpath .. "functions.lua")
+dofile(configpath .. "/functions.lua")
 
 -- Find primary screen
 local xrandr = awful.util.pread("xrandr | grep -E ' connected primary [0-9]' | cut -f1 -d' '")
@@ -69,7 +69,7 @@ root.keys({ })
 -- {{{ Load custom scripts from custom.d directory
 local lfs = require('lfs')
 local confs = {}
-local customdir = configpath .. 'conf.d/'
+local customdir = configpath .. '/conf.d/'
 for s in lfs.dir(customdir) do
 	local f = lfs.attributes(customdir .. s)
 	if s:sub(-4) == ".lua" and f.mode == "file" then
@@ -85,7 +85,7 @@ end
 
 
 -- {{{ Auto start all execuables from autostart dir
-local startdir = configpath .. 'autostart/'
+local startdir = configpath .. '/autostart/'
 for s in lfs.dir(startdir) do
 	local f = lfs.attributes(startdir .. s)
 	-- Exclude README file

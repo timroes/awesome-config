@@ -1,11 +1,11 @@
-local CONFIG_PATH = CONFIG_PATH
 local beautiful = require("beautiful")
+local awful = require('awful')
 
 local theme = {}
 
-local themepath = CONFIG_PATH .. "theme/light/"
+local themepath = awful.util.getdir('config') .. "/theme/light/"
 
-beautiful.init(CONFIG_PATH .. "theme/light/theme.lua")
+beautiful.init(awful.util.getdir('config') .. "/theme/light/theme.lua")
 
 function theme.get()
 	return beautiful.get()

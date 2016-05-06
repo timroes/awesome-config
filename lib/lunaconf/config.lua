@@ -4,9 +4,9 @@ local config = {}
 
 local settings = {}
 
-local file = io.open(CONFIG_PATH .. '/awesome.conf', 'r')
+local file = io.open(awful.util.getdir('config') .. '/awesome.conf', 'r')
 if file then
-	for line in io.lines(CONFIG_PATH .. '/awesome.conf') do
+	for line in io.lines(awful.util.getdir('config') .. '/awesome.conf') do
 		if line:find('#') ~= 1 and #line > 0 then
 			-- Parse non comment into settings
 			local l = split(line, '=')
