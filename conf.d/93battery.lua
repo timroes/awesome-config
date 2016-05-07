@@ -58,13 +58,26 @@ local function update()
 		return
 	end
 
-	if batteryStatus.State == 1 or batteryStatus == 4 then
+	widget:set_image(icons.lookup_icon(batteryStatus.IconName))
+
+	-- Battery states:
+	-- 0: Unknown
+	-- 1: Charging
+	-- 2: Discharging
+	-- 3: Empty
+	-- 4: Fully charged
+	-- 5: Pending charge
+	-- 6: Pending discharge
+	if batteryStatus.State == 1 then
 		label:set_text(string.format('%.0f%% (%s)', batteryStatus.Percentage, to_time_string(batteryStatus.TimeToFull)))
+	elseif batteryStatus.State == 4 then
+		-- If battery is fully charged, don't output any information, just show the battery_plugged icon.
+		label:set_text('')
+		widget:set_image(icons.lookup_icon('battery_plugged'))
 	else
 		label:set_text(string.format('%s (%.0f%%)', to_time_string(batteryStatus.TimeToEmpty), batteryStatus.Percentage))
 	end
 
-	widget:set_image(icons.lookup_icon(batteryStatus.IconName))
 end
 
 local function create(_)
@@ -72,6 +85,7 @@ local function create(_)
 	local mlayout = w.layout.margin()
 
 	widget = w.widget.imagebox()
+	widget:fit(64, 64)
 	widget:set_resize(true)
 
 	label = w.widget.textbox()
