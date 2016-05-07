@@ -17,6 +17,10 @@ bar:
   # clock: Clock widget
   # The default value is empty.
   widgets:
+# Define some applications, that will be used across the config
+applications:
+  # Define the launcher, that will be opened on modkey + space. Default: no launcher
+  launcher:
 # Style different theme settings
 theme:
   # A path to a wallpaper to use.
