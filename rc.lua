@@ -73,7 +73,13 @@ end
 -- Load conf files in alphabetical order
 table.sort(confs)
 for i,conf in pairs(confs) do
-	 dofile(conf)
+	local config = awful.util.checkfile(conf)
+	if type(config) == 'function' then
+		log.info('Loading config file %s', conf)
+		config()
+	else
+		log.err('Skipping %s due to error: %s', conf, config)
+	end
 end
 -- }}}
 
