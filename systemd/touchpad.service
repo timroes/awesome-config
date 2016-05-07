@@ -1,0 +1,13 @@
+# Copy this systemd file to your user systemd folder (~/.config/systemd/user/)
+# and enable it (systemctl --user enable touchpad.service) to initiate touchpad
+# and trackpoint after sleep again if they lose their values.
+[Unit]
+Description=Reset the touchpad/trackpoint config after suspend
+After=suspend.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c '$HOME/.config/awesome/scripts/init_touchpads.sh'
+
+[Install]
+WantedBy=suspend.target
