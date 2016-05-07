@@ -1,3 +1,7 @@
+-- Logging via the log functions here will log to syslog.
+-- If you use systemd you can easily follow the log with:
+-- $ journalctl -t awesome -f
+
 local log = {}
 
 function log.log(level, message, ...)
