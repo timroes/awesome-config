@@ -1,7 +1,7 @@
 -- The style of the interface
 local theme = {}
 
-theme.font          = "Roboto Thin 11"
+theme.font          = "Roboto Light 11"
 
 -- theme.bg_normal     = "linear:0,0:0,28:0,#3A3A3A:1,#202020"
 theme.bg_normal = "#F5F5F5AA"
