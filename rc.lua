@@ -22,13 +22,6 @@ do
 end
 -- }}}
 
--- {{{ DEBUG function
-local inspect = require("inspect")
-function dbg(msg)
-	naughty.notify({ title = "Debug Message", text = inspect(msg), timeout = 0 })
-end
--- }}}
-
 -- Add luarocks pathes to package pathes
 local luarockPath = awful.util.pread('luarocks path --lr-path')
 local luarockCpath = awful.util.pread('luarocks path --lr-cpath')

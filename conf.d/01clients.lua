@@ -112,8 +112,6 @@ client.connect_signal("manage", function(c, startup)
 	client.focus = c
 	c:raise()
 
-	-- dbg("[" .. c.window .. "] " .. c.name .. " // " .. c.group_window .. " // " .. c.leader_window)
-
 	if c.role == "pop-up" then
 		awful.client.floating.set(c, true)
 	end

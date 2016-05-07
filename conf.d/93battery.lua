@@ -3,7 +3,6 @@ local awful = require('awful')
 local w = require('wibox')
 local io = io
 local timer = timer
-local dbg = dbg
 local tonumber = tonumber
 local tostring = tostring
 local math = math
