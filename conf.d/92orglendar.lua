@@ -15,6 +15,8 @@ local tonumber = tonumber
 local mouse = mouse
 local os = os
 local string = string
+local math = math
+local lunaconf = require('lunaconf')
 
 module("widgets.orglendar")
 
@@ -22,7 +24,7 @@ local orglendar = { files = {},
                     char_width = nil,
                     text_color = theme.cal_fg or theme.fg_normal or "#FFFFFF",
                     today_color = theme.cal_today or theme.bg_urgent or "#00FF00",
-                    font = 'Source Code Pro 11',
+                    font = 'Source Code Pro ' .. tostring(math.floor(lunaconf.dpi.toScale(11))),
                     calendar_width = 19 }
 
 local freq_table =

@@ -12,6 +12,7 @@ local Gio = require('lgi').Gio
 local GLib = require('lgi').GLib
 local config = require('lunaconf.config')
 local icons = require('lunaconf.icons')
+local dpi = require('lunaconf.dpi')
 
 module('widgets.battery')
 
@@ -88,6 +89,7 @@ local function create(_)
 	widget:set_resize(true)
 
 	label = w.widget.textbox()
+	dpi.textbox(label)
 
 	mlayout:set_widget(widget)
 	mlayout:set_top(2)

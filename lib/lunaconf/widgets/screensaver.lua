@@ -8,6 +8,7 @@ local awful = require('awful')
 local string = string
 local math = math
 local setmetatable = setmetatable
+local dpi = require('lunaconf.dpi')
 
 local screensaver = {}
 
@@ -22,6 +23,7 @@ local disabled_color = '#CCCCCC'
 local function create(_, dev)
 
 	textbox = w.widget.textbox()
+	dpi.textbox(textbox)
 	textbox:set_align("center")
 	textbox:set_markup(string.format(button_text, disabled_color))
 

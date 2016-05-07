@@ -7,6 +7,7 @@ local awful = require('awful')
 local string = string
 local math = math
 local setmetatable = setmetatable
+local dpi = require('lunaconf.dpi')
 
 local networkmonitor = {}
 
@@ -85,8 +86,9 @@ local function readableSize(bytes)
 end
 
 local function create(_, dev)
-	
+
 	widget = w.widget.textbox()
+	dpi.textbox(widget)
 	widget.fit = function(widget, w, h) return 150, h end
 	widget:set_align("center")
 

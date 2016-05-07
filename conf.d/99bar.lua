@@ -44,7 +44,7 @@ tasklists.buttons = awful.util.table.join(
 )
 
 local spacer = function(width)
-	return wibox.widget.textbox(string.rep(" ",width))
+	return wibox.widget.textbox(string.rep(" ", math.floor(lunaconf.dpi.toScale(width))))
 end
 
 local filter_named_tags = function(t)
@@ -85,6 +85,7 @@ for s = 1, screen.count() do
 				right_layout:add(wibox.widget.systray())
 			elseif w == 'clock' then
 				local clock = awful.widget.textclock("%a, %e. %b  %H:%M", 1)
+				lunaconf.dpi.textbox(clock)
 				orglendar(clock)
 				right_layout:add(clock)
 			end
@@ -97,7 +98,7 @@ for s = 1, screen.count() do
 	layout:set_middle(tasklists[s])
 	layout:set_right(right_layout)
 
-	bars[s] = awful.wibox({ position = "top", screen = s, height = config.get("bar.height", 52), bg = lunaconf.theme.get().screenbar_bg })
+	bars[s] = awful.wibox({ position = "top", screen = s, height = lunaconf.dpi.toScale(config.get("bar.height", 52)), bg = lunaconf.theme.get().screenbar_bg })
 	bars[s]:set_widget(layout)
 
 end

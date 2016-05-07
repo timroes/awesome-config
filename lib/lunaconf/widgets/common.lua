@@ -4,6 +4,7 @@ local layout_badge = require('lunaconf.layouts.badge')
 local utils = require('lunaconf.utils')
 local icons = require('lunaconf.icons')
 local theme = require('lunaconf.theme')
+local dpi = require('lunaconf.dpi')
 
 local common = {}
 
@@ -32,6 +33,7 @@ end
 
 local function screen_tag(screen)
 	local label = wibox.widget.textbox(screen)
+	dpi.textbox(label)
 	label:set_align('center')
 	label:set_valign('center')
 	label.fit = function (wibox, w, h)
@@ -45,6 +47,7 @@ end
 
 local function hotkey_badge(hotkey)
 	local hk_label = wibox.widget.textbox(hotkey:upper())
+	dpi.textbox(hk_label)
 	hk_label:set_align('center')
 	hk_label:set_valign('center')
 	hk_label.fit = function (wibox, w, h) return 40, 40 end
@@ -77,11 +80,13 @@ function common.icon_widget(w, buttons, label, data, objects)
 			ib = wibox.widget.imagebox()
 			bgb = wibox.widget.background()
 			main = layout_badge(bgb)
-			im = wibox.layout.margin(ib, 4, 4, 4, 4)
+			local margin = dpi.toScale(4)
+			im = wibox.layout.margin(ib, margin, margin, margin, margin)
 			tooltip = awful.tooltip({
 				margin_topbottom = 400, -- does not work yet
 				margin_leftright = 50
 			})
+			dpi.textbox(tooltip.textbox)
 
 			-- And all of this gets a background
 			bgb:set_widget(im)
