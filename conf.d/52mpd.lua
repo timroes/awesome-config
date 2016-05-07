@@ -25,11 +25,11 @@ shortcuts = awful.util.table.join(root.keys(),
 	awful.key({ }, "XF86AudioRaiseVolume", function() awful.util.spawn("amixer -q set Master 2%+") end),
 	awful.key({ }, "XF86AudioLowerVolume", function() awful.util.spawn("amixer -q set Master 2%-") end),
 	awful.key({ }, "XF86AudioMute", function() awful.util.spawn("amixer -q set Master toggle") end),
-	awful.key({ }, "XF86AudioMicMute", function() 
+	awful.key({ }, "XF86AudioMicMute", function()
 		local state = awful.util.pread("amixer set Capture toggle | tail -c 5")
 		local text
 		if state:find('on') == nil then
-			text = 'Microphone muted' 
+			text = 'Microphone muted'
 		else
 			text = 'Microphone unmuted'
 		end
