@@ -6,14 +6,6 @@ require("awful.autofocus")
 local naughty = require("naughty")
 
 -- {{{ Error handling
--- Check if awesome encountered an error during startup and fell back to
--- another config (This code will only ever execute for the fallback config)
-if awesome.startup_errors then
-	naughty.notify({ preset = naughty.config.presets.critical,
-			title = "Oops, there were errors during startup!",
-			text = awesome.startup_errors })
-end
-
 -- Handle runtime errors after startup
 do
 	local in_error = false
@@ -46,6 +38,8 @@ local configpath = awful.util.getdir('config')
 scriptpath = configpath .. "/scripts/"
 package.path = configpath .. "/lib/?.lua;" .. configpath .. "/lib/?/init.lua;" .. luarockPath .. ";" .. package.path
 package.cpath = luarockCpath .. ";" .. package.cpath
+
+local log = require('lunaconf.log')
 
 -- Include functions
 dofile(configpath .. "/functions.lua")
@@ -90,7 +84,12 @@ for s in lfs.dir(startdir) do
 	local f = lfs.attributes(startdir .. s)
 	-- Exclude README file
 	if s ~= "README" and f.mode == "file" then
-		run_once(startdir .. s)
+		local pid = run_once(startdir .. s)
+		if pid then
+			log.info('autostart: started %s with pid %d', s, pid)
+		else
+			log.info('autostart: %s was already running.', s)
+		end
 	end
 end
 -- }}}
