@@ -109,6 +109,19 @@ end)
 
 -- Focus and raise window when created
 client.connect_signal("manage", function(c, startup)
+
+	-- Special behavior for chromium browser, so you can pull out tabs easily
+	if c.class == 'chromium-browser-chromium' then
+		local under_mouse = awful.mouse.client_under_pointer()
+		-- If the new window is a chromium browser and the window currently under
+		-- the mouse cursor is from the same process it is likely we just pulled
+		-- out a tab, so make it floating, so chromium can control its position
+		-- while we drag it to its final position
+		if under_mouse and under_mouse.pid == c.pid then
+			awful.client.floating.set(c, true)
+		end
+	end
+
 	client.focus = c
 	c:raise()
 
