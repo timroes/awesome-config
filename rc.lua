@@ -82,7 +82,7 @@ local startdir = configpath .. '/autostart/'
 for s in lfs.dir(startdir) do
 	local f = lfs.attributes(startdir .. s)
 	-- Exclude README file
-	if s ~= "README" and f.mode == "file" then
+	if s ~= "README" and f and f.mode == "file" then
 		local pid = run_once(startdir .. s)
 		if pid then
 			log.info('autostart: started %s with pid %d', s, pid)
