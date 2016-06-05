@@ -28,6 +28,11 @@ lunaconf.keys.globals(
 
 client.connect_signal("manage", function(c, startup)
 
+	-- Don't draw a titlebar for windows, that don't want to be in the taskbar
+	if c.skip_taskbar then
+		return
+	end
+
 	local client_status = colorbox.rect(color_indicator_size, color_indicator_size, {
 		margin = (titlebar_height - color_indicator_size) / 2
 	})
