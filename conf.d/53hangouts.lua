@@ -63,7 +63,8 @@ local manage_hangout = function(c)
 		-- Find the position for any message window
 		local all_x = {}
 		for c in awful.client.iterate(function(c) return is_hangout(c) and c.name ~= "Hangouts" end) do
-			table.insert(all_x, c:geometry().x, c)
+			-- TODO: With newer lua versions that doesn't work anymore. We need to fix this.
+			--table.insert(all_x, math.floor(c:geometry().x), c)
 		end
 		-- Find the first free slot after the contact list
 		win_x = s.workarea.x + (2 * window_spacing) + window_width
