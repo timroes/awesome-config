@@ -8,10 +8,7 @@ local lock_cmd = scriptpath .. "lockscreen.sh"
 local screensaver_timeout = 10
 
 -- Use lock_cmd as a screensaver (requires x11-misc/xautolock)
-local pid = tonumber(awful.util.pread("pidof xautolock"))
-if not pid then
-	awful.util.spawn("xautolock -time " .. screensaver_timeout .. " -locker '" .. lock_cmd .. "'")
-end
+lunaconf.utils.run_once("xautounlock -time " .. screensaver_timeout .. " -locker '" .. lock_cmd .. "'")
 
 -- Add shortcut for config.MOD + l to lock the screen
 lunaconf.keys.globals(awful.key({ config.MOD }, "l", function() awful.util.spawn(lock_cmd) end))
