@@ -5,10 +5,12 @@ return {
 	dpi = require('lunaconf.dpi'),
 	icons = require('lunaconf.icons'),
 	keys = require('lunaconf.keys'),
+	launcher = require('lunaconf.launcher'),
 	layouts = require('lunaconf.layouts'),
 	log = require('lunaconf.log'),
 	strings = require('lunaconf.strings'),
 	theme = require('lunaconf.theme'),
 	widgets = require('lunaconf.widgets'),
-	utils = require('lunaconf.utils')
+	utils = require('lunaconf.utils'),
+	xdg = require('lunaconf.xdg')
 }

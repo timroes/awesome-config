@@ -34,9 +34,9 @@ lunaconf.keys.globals(
 )
 
 -- Bin dlauncher to MOD + space if a launcher has been defined in the configuration
-local launcher = lunaconf.config.get('applications.launcher', nil)
-if launcher then
-	lunaconf.keys.globals(
-		awful.key({ MOD }, "space", function() awful.util.spawn(launcher) end)
-	)
-end
+-- local launcher = lunaconf.config.get('applications.launcher', nil)
+-- if launcher then
+-- 	lunaconf.keys.globals(
+-- 		awful.key({ MOD }, "space", function() awful.util.spawn(launcher) end)
+-- 	)
+-- end
