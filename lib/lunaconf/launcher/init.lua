@@ -5,6 +5,7 @@ local icons = require('lunaconf.icons')
 local xdg = require('lunaconf.xdg')
 local strings = require('lunaconf.strings')
 local theme = require('lunaconf.theme')
+local dpi = require('lunaconf.dpi')
 local badge = require('lunaconf.layouts.badge')
 local tostring = tostring
 
@@ -18,8 +19,8 @@ local launcher = {}
 
 local hotkeys = {}
 
-local height = 360
-local width = 450
+local height = dpi.toScale(360)
+local width = dpi.toScale(450)
 
 local max_results_shown = 4
 
@@ -27,7 +28,8 @@ local default_icon = icons.lookup_icon('image-missing')
 local default_search_placeholder = "or search ..."
 
 local ui
-local inputbox = wibox.widget.textbox()
+local inputbox = dpi.textbox()
+
 local split_container = wibox.layout.align.vertical()
 local hotkey_panel = wibox.layout.flex.vertical()
 local search_results = wibox.layout.fixed.vertical()
@@ -41,7 +43,7 @@ local current_shown_results = {}
 local current_selected_result = nil
 
 local function hotkey_badge(text)
-	local hk_label = wibox.widget.textbox(text:upper())
+	local hk_label = dpi.textbox(text:upper())
 	-- dpi.textbox(hk_label)
 	hk_label:set_align('center')
 	hk_label:set_valign('center')
@@ -225,7 +227,7 @@ local function setup_result_list_ui()
 	end
 
 	-- setup "and x more" label
-	more_results_label = wibox.widget.textbox(' ')
+	more_results_label = dpi.textbox(' ')
 	more_results_label:set_align('right')
 	more_results_label:set_valign('center')
 	search_results:add(wibox.layout.margin(more_results_label, 20, 20, 5, 5))
@@ -265,22 +267,23 @@ local function setup_ui()
 
 			local icon_w = wibox.widget.imagebox()
 			icon_w:set_image(icon_for_desktop_entry(desktop))
-			icon_w:set_resize(false)
-			icon_w.width = 48
-			icon_w.height = 48
+			icon_w:set_resize(true)
+			icon_w.width = dpi.toScale(48)
+			icon_w.height = dpi.toScale(48)
 			local bad = badge(icon_w)
 			bad:add_badge('sw', hotkey_badge(tostring(key)), 3, 0.4, 0.4)
 
 			widget = wibox.layout.align.horizontal()
 			widget:set_second(bad)
 		else
-			widget = wibox.widget.textbox()
+			widget = dpi.textbox()
 			widget:set_text(key)
 			widget:set_align('center')
 			widget:set_valign('center')
 		end
 
-		local margin = wibox.layout.margin(widget, 15, 15, 15, 15)
+		local margin = wibox.layout.margin(widget)
+		margin:set_margins(dpi.toScale(15))
 		rows[row]:add(margin)
 	end
 

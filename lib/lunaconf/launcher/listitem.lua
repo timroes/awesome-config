@@ -1,4 +1,5 @@
 local wibox = require('wibox')
+local dpi = require('lunaconf.dpi')
 local widget_base = require("wibox.widget.base")
 
 local tostring = tostring
@@ -43,27 +44,27 @@ end
 
 local function create_ui(self)
 	local item = wibox.layout.fixed.horizontal()
-	item.fit = function(wi, w, h) return 48, 48 end
+	item.fit = function(wi, w, h) return dpi.toScale(48), dpi.toScale(48) end
 	self._icon = wibox.widget.imagebox()
 
 	-- icon:set_image(icon_for_desktop_entry(desktop_entry) or default_icon)
-	self._icon.fit = function(widget, w, h) return 48, 48 end
+	self._icon.fit = function(widget, w, h) return dpi.toScale(48), dpi.toScale(48) end
 	self._icon:set_resize(true)
-	self._icon.width = 48
-	self._icon.height = 48
+	self._icon.width = dpi.toScale(48)
+	self._icon.height = dpi.toScale(48)
 
-	self._title = wibox.widget.textbox()
+	self._title = dpi.textbox()
 	self._title:set_align('left')
 	self._title:set_valign('bottom')
 
-	self._description = wibox.widget.textbox()
+	self._description = dpi.textbox()
 	self._description:set_valign('top')
 
-	local shortcut = wibox.widget.textbox()
+	local shortcut = dpi.textbox()
 	shortcut:set_text(tostring(self._index))
 	shortcut:set_align('center')
 	shortcut:set_valign('center')
-	shortcut.fit = function(wid, w, h) return 30, 30 end
+	shortcut.fit = function(wid, w, h) return dpi.toScale(30), dpi.toScale(30) end
 
 	self._shortcut_bg = wibox.widget.background(shortcut)
 
@@ -72,11 +73,11 @@ local function create_ui(self)
 	text:add(self._description)
 
 	item:add(self._shortcut_bg)
-	item:add(wibox.layout.margin(self._icon, 8, 8, 0, 0))
+	item:add(wibox.layout.margin(self._icon, dpi.toScale(8), dpi.toScale(8), 0, 0))
 	item:add(text)
 
 	self._placeholder = wibox.widget.background()
-	self._placeholder.fit = function(wi, w, h) return 48, 48 end
+	self._placeholder.fit = function(wi, w, h) return dpi.toScale(48), dpi.toScale(48) end
 
 	return item
 end
@@ -94,9 +95,9 @@ function new(_, index)
 	self._visible = true
 	self._ui = create_ui(self)
 	self:set_widget(self._ui)
-	self:set_top(8)
-	self:set_bottom(8)
-	self.fit = function(wi, w, h) return 1000, 68 end
+	self:set_top(dpi.toScale(8))
+	self:set_bottom(dpi.toScale(8))
+	self.fit = function(wi, w, h) return dpi.toScale(1000), dpi.toScale(68) end
 	return self
 end
 
