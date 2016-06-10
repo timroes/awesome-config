@@ -28,4 +28,10 @@ function utils.user_of_pid(pid)
 	return strings.trim(awful.util.pread('ps -o user ' .. math.floor(pid) .. ' | sed 1d'))
 end
 
+function utils.merge_into_table(table_to_merge_into, merging_table)
+	for i,v in ipairs(merging_table) do
+		table.insert(table_to_merge_into, v)
+	end
+end
+
 return utils
