@@ -137,7 +137,7 @@ function common.icon_widget(w, buttons, label, data, objects)
 		end
 		bgb:set_bgimage(bg_image)
 		-- TODO: for tag only do it once and with another default icon
-		ib:set_image(icon or default_icon)
+		ib:set_image(icon or icons.lookup_icon(o.instance) or icons.lookup_icon(o.class) or default_icon)
 
 		-- TODO: make minimized window less opaque (requires #405)
 
