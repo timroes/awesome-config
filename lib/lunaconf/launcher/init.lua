@@ -3,21 +3,27 @@ local wibox = require('wibox')
 local config = require('lunaconf.config')
 local icons = require('lunaconf.icons')
 local xdg = require('lunaconf.xdg')
+local strings = require('lunaconf.strings')
 local theme = require('lunaconf.theme')
 local badge = require('lunaconf.layouts.badge')
 local tostring = tostring
 
+local listitem = require('lunaconf.launcher.listitem')
+
 local log = require('lunaconf.log')
-local inspect = require('inspect')
 local menubar = require('menubar')
 
+-- Start module
 local launcher = {}
 
 local hotkeys = {}
 
-local height = 350
+local height = 360
 local width = 450
 
+local max_results_shown = 4
+
+local default_icon = icons.lookup_icon('image-missing')
 local default_search_placeholder = "or search ..."
 
 local ui
@@ -25,8 +31,14 @@ local inputbox = wibox.widget.textbox()
 local split_container = wibox.layout.align.vertical()
 local hotkey_panel = wibox.layout.flex.vertical()
 local search_results = wibox.layout.fixed.vertical()
+local result_items = {}
+local more_results_label
+
+local active_keygrabber
 
 local current_search = ""
+local current_shown_results = {}
+local current_selected_result = nil
 
 local function hotkey_badge(text)
 	local hk_label = wibox.widget.textbox(text:upper())
@@ -42,33 +54,6 @@ end
 
 local function icon_for_desktop_entry(desktop)
 	return icons.lookup_icon(desktop.Icon) or desktop.icon_path
-end
-
-local function application_item(desktop_entry)
-	local item = wibox.layout.align.horizontal()
-	local icon = wibox.widget.imagebox()
-	icon:set_image(icon_for_desktop_entry(desktop_entry))
-	icon.fit = function(widget, w, h) return 48, 48 end
-	icon:set_resize(true)
-	icon.width = 48
-	icon.height = 48
-
-	local text = wibox.layout.fixed.vertical()
-	local title = wibox.widget.textbox()
-	title:set_align('left')
-	title:set_valign('center')
-	title:set_text(desktop_entry.Name)
-
-	local description = wibox.widget.textbox()
-	description:set_text(desktop_entry.Exec or "")
-
-	text:add(title)
-	text:add(description)
-
-	item:set_left(icon)
-	item:set_middle(text)
-
-	return item
 end
 
 local function get_matching_apps()
@@ -87,20 +72,61 @@ local function get_matching_apps()
 	return result
 end
 
-local function update_result_list()
-	local result = get_matching_apps()
-	search_results:reset()
+local function change_selected_item(index)
+	-- check that new index is within boundaries
+	index = math.max(index, 1)
+	index = math.min(index, math.min(#current_shown_results, max_results_shown))
 
-	for k,v in pairs(result) do
-		-- log.info("Results! %s", inspect(result))
-		search_results:add(application_item(v))
+	-- If the index has changed (and we have any results to highlight)
+	if index ~= current_selected_result and #current_shown_results > 0 then
+		-- Clear the highlight of the previously highlighted item (if any)
+		if current_selected_result then
+			result_items[current_selected_result]:set_highlight(false)
+		end
+		-- Highlight the new index
+		result_items[index]:set_highlight(true)
+		current_selected_result = index
 	end
 end
 
-local function update()
+local function update_result_list()
+	-- Load all matching results
+	current_shown_results = get_matching_apps()
+
+	-- Reset the result list
+	-- search_results:reset()
+	change_selected_item(1)
+
+	-- Add the results to the result list
+	for k,v in pairs(result_items) do
+		if current_shown_results[k] then
+			local desktop = current_shown_results[k]
+			result_items[k]:set_visible(true)
+			result_items[k]:set_icon(icon_for_desktop_entry(desktop) or default_icon)
+			result_items[k]:set_title(desktop.Name)
+			result_items[k]:set_description(desktop.Comment or desktop.Exec or '')
+		else
+			result_items[k]:set_visible(false)
+		end
+		-- search_results:add(application_item(v, k))
+	end
+
+	local unshown_results = #current_shown_results - 4
+	if unshown_results > 0 then
+		more_results_label:set_markup('<span color="#BBBBBB">and ' .. tostring(unshown_results) .. ' more</span>')
+	else
+		more_results_label:set_text(' ')
+	end
+
+	-- search_results:add(wibox.layout.margin(more_results, 20, 20, 5, 5))
+end
+
+local function on_query_changed()
 	if current_search and #current_search > 0 then
-		inputbox:set_text(current_search)
-		split_container:set_middle(search_results)
+		-- The user entered a search term so show a result list
+		inputbox:set_markup('<b>' .. current_search .. '</b>')
+		local bg = wibox.widget.background(search_results)
+		split_container:set_middle(bg)
 		update_result_list()
 	else
 		-- No search anymore so show hotkey panel again
@@ -109,27 +135,48 @@ local function update()
 	end
 end
 
+-- Starts a specific desktop file. It requires the parsed desktop file as a table
+-- passed to the function.
+-- @return a boolean whether the desktop entry could be started (true) or not (false)
+local function start_desktop_entry(desktop_entry)
+	if not desktop_entry or not desktop_entry.file then
+		return false
+	end
+
+	log.info("Starting %s via desktop file: %s", desktop_entry.Name, desktop_entry.file)
+	awful.util.spawn("dex " .. desktop_entry.file)
+	return true
+end
+
 local function close()
 	ui.visible = false
 	current_search = ""
-	update()
-	keygrabber.stop()
+	on_query_changed()
+	awful.keygrabber.stop(active_keygrabber)
 end
 
-local function start_hotkey(key)
-	if hotkeys[key] ~= nil then
-		local desktop = hotkeys[key]
-		awful.util.spawn("dex " .. desktop.file)
+local function start_from_search_results(key)
+	local desktop_entry = current_shown_results[tonumber(key)]
+	if start_desktop_entry(desktop_entry) then
 		close()
 	end
 end
 
-local function keyhandler(mod, key, event)
-	-- Only handle release events
-	if event ~= "release" then
-		return
+local function start_hotkey(key)
+	if start_desktop_entry(hotkeys[key]) then
+		close()
 	end
+end
 
+local function keyhandler(modifiers, key, event)
+	-- Rewrite the modifiers map to a proper table you can lookup modifiers in
+	local mod = {}
+	for k, v in ipairs(modifiers) do mod[v] = true end
+
+	-- Only handle release events while the main modifier key isn't pressed
+	if event ~= "release" or mod[config.MOD] then
+		return false
+	end
 
 	if key == "Escape" then
 		-- on Escape close the launcher
@@ -137,26 +184,51 @@ local function keyhandler(mod, key, event)
 	elseif #current_search == 0 and hotkeys[key] ~= nil then
 		-- If its a hotkey (and we haven't searched for anything) start that program
 		start_hotkey(key)
+	elseif #current_search > 0 and (key == "1" or key == "2" or key == "3" or key == "4") then
+		start_from_search_results(key)
 	elseif key == "BackSpace" then
 		-- Backspace just deletes one letter (as one would expect)
 		current_search = current_search:sub(0, -2)
-		update()
+		on_query_changed()
 	elseif key == "Delete" then
 		-- Delete will delete the whole input (as one would not expect)
 		current_search = ""
-		update()
+		on_query_changed()
 	elseif key:wlen() == 1 then
 		-- If the key is just one letter it is most likely a character key so append it
-		current_search = current_search .. key
-		update()
+		current_search = strings.trim(current_search .. key)
+		on_query_changed()
+	elseif #current_search > 0 and key == "Up" then
+		change_selected_item(current_selected_result - 1)
+	elseif #current_search > 0 and key == "Down" then
+		change_selected_item(current_selected_result + 1)
+	elseif #current_search > 0 and (key == "Return" or key == "KP_Enter") then
+		start_from_search_results(current_selected_result)
 	end
+
+	return false
 end
 
 function launcher.toggle()
 	ui.visible = not ui.visible
 	if ui.visible then
-		keygrabber.run(keyhandler)
+		active_keygrabber = awful.keygrabber.run(keyhandler)
 	end
+end
+
+local function setup_result_list_ui()
+	-- Setup the right amount of listitems
+	for i = 1, max_results_shown do
+		local item = listitem(i)
+		table.insert(result_items, item)
+		search_results:add(item)
+	end
+
+	-- setup "and x more" label
+	more_results_label = wibox.widget.textbox(' ')
+	more_results_label:set_align('right')
+	more_results_label:set_valign('center')
+	search_results:add(wibox.layout.margin(more_results_label, 20, 20, 5, 5))
 end
 
 local function setup_ui()
@@ -190,7 +262,6 @@ local function setup_ui()
 		if awful.util.file_readable(hotkeyDesktopPath) then
 			local desktop = menubar.utils.parse(hotkeyDesktopPath)
 			hotkeys[tostring(key)] = desktop
-			-- log.info('Part: %s, %s', i, inspect(desktop))
 
 			local icon_w = wibox.widget.imagebox()
 			icon_w:set_image(icon_for_desktop_entry(desktop))
@@ -227,6 +298,8 @@ local function setup_ui()
 	split_container:set_bottom(inputbox_margin)
 
 	box:set_widget(split_container)
+
+	setup_result_list_ui()
 end
 
 local function new(self)
