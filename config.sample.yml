@@ -5,6 +5,8 @@ modkey: Mod4
 # Configuration for the bar at the top of the screen
 bar:
   # Set the height in pixel of the bar. Default: 52
+  # This value isn't physical pixel, but dependency independant pixel i.e. pixel
+  # on a 96 dpi screen, which will be automatically increased, if you have a hidpi screen
   height: 52
   # Set the widgets to show in the bar on the main display. This should be a
   # comma separated list with the following possibilities:
