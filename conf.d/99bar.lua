@@ -84,7 +84,7 @@ for s = 1, screen.count() do
 			elseif w == 'systray' then
 				right_layout:add(wibox.widget.systray())
 			elseif w == 'clock' then
-				local clock = awful.widget.textclock("%a, %e. %b  %H:%M", 1)
+				local clock = awful.widget.textclock("%a, %e. %b  %H:%M", 30)
 				lunaconf.dpi.textbox(clock)
 				orglendar(clock)
 				right_layout:add(clock)
