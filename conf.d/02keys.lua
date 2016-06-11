@@ -32,11 +32,3 @@ lunaconf.keys.globals(
 		if client.focus then client.focus:raise() end
 	end)
 )
-
--- Bin dlauncher to MOD + space if a launcher has been defined in the configuration
--- local launcher = lunaconf.config.get('applications.launcher', nil)
--- if launcher then
--- 	lunaconf.keys.globals(
--- 		awful.key({ MOD }, "space", function() awful.util.spawn(launcher) end)
--- 	)
--- end
