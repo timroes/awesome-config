@@ -5,5 +5,6 @@ return {
 	screensaver = require('lunaconf.widgets.screensaver'),
 	taglist = require('lunaconf.widgets.taglist'),
 	tasklist = require('lunaconf.widgets.tasklist'),
+	textclock = require('lunaconf.widgets.textclock'),
 	titlebar = require('lunaconf.widgets.titlebar')
 }
