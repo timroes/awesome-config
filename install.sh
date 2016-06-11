@@ -5,6 +5,7 @@ command -v luarocks >/dev/null 2>&1 || { echo "Please install luarocks on your s
 dependencies=(
 	'luafilesystem'
 	'lyaml'
+	'inifile'
 	# 'lgi' # not required since awesome depends on it
 )
 
