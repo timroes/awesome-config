@@ -3,13 +3,9 @@ local config = require("lunaconf.config")
 local icons = require("lunaconf.icons")
 local MAIL_SCREEN = PRIMARY
 
-local is_bin = awful.util.file_readable('/usr/share/pixmaps/thunderbird-bin-icon.png')
-
+local is_bin = awful.util.file_readable('/usr/bin/thunderbird')
 if not is_bin then
-	if not awful.util.file_readable('/usr/share/pixmaps/thunderbird-icon.png') then
-		-- Neither thunderbird-bin nor thunderbird is installed
-		return
-	end
+	return
 end
 
 local mail_tag = awful.tag.add("Mail", { hotkey = "m" })
@@ -34,7 +30,7 @@ end
 
 -- Shortcut to switch to mail tag
 keys = awful.util.table.join(root.keys(),
-	awful.key({ config.MOD }, "m", function() 
+	awful.key({ config.MOD }, "m", function()
 		if mail_tag.selected then
 			if not client.focus or client.focus.class ~= "Thunderbird" then
 				-- If we press the shortcut while the tag is open, but not focues,
