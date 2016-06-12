@@ -65,7 +65,7 @@ local function get_matching_apps()
 
 	-- This is the actual search logic to find matching applications.
 	-- Here is a lot of potential to improve this logic.
-	for k,v in pairs(xdg.all()) do
+	for k,v in pairs(xdg.apps()) do
 		if (v.Name and v.Name:lower():find(search)) then
 			table.insert(result, v)
 		end

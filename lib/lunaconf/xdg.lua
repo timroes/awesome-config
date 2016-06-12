@@ -18,7 +18,7 @@ function xdg.refresh()
 	end
 end
 
-function xdg.all()
+function xdg.apps()
 	return apps
 end
 
