@@ -6,7 +6,7 @@
 local glib = require("lgi").GLib
 local theme = require("lunaconf.theme")
 local awful_util = require("awful.util")
-local inifile = require('inifile')
+local inifile = require('lunaconf.inifile')
 local strings = require('lunaconf.strings')
 local utils = require('lunaconf.utils')
 
