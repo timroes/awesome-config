@@ -281,7 +281,7 @@ local function keyhandler(modifiers, key, event)
 		on_query_changed()
 	elseif key:wlen() == 1 then
 		-- If the key is just one letter it is most likely a character key so append it
-		current_search = strings.trim(current_search .. key)
+		current_search = strings.trim_start(current_search .. key)
 		on_query_changed()
 	elseif #current_search > 0 and key == "Up" then
 		change_selected_item(current_selected_result - 1)

@@ -4,6 +4,10 @@ function strings.trim(str)
 	return str:gsub("^%s*(.-)%s*$", "%1")
 end
 
+function strings.trim_start(str)
+	return str:gsub("^%s*(.-)$", "%1")
+end
+
 function strings.split(str, sep)
 	local sep, fields = sep or ":", {}
 	local pattern = string.format("([^%s]+)", sep)
