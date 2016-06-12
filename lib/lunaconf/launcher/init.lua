@@ -152,8 +152,10 @@ end
 
 local function close()
 	ui.visible = false
-	current_search = ""
-	on_query_changed()
+	if #current_search > 0 then
+		current_search = ""
+		on_query_changed()
+	end
 	awful.keygrabber.stop(active_keygrabber)
 end
 
