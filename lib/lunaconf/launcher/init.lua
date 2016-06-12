@@ -7,6 +7,7 @@ local strings = require('lunaconf.strings')
 local theme = require('lunaconf.theme')
 local dpi = require('lunaconf.dpi')
 local badge = require('lunaconf.layouts.badge')
+local inifile = require('lunaconf.inifile')
 local tostring = tostring
 
 local listitem = require('lunaconf.launcher.listitem')
@@ -24,11 +25,14 @@ local width = dpi.toScale(450)
 
 local max_results_shown = 4
 
+local config_file = awful.util.getdir('cache') .. '/lunaconf.launcher.ini'
+
 local default_icon = icons.lookup_icon('image-missing')
 local default_search_placeholder = "or search ..."
 
 local ui
 local inputbox = dpi.textbox()
+local hotkey_rows
 
 local split_container = wibox.layout.align.vertical()
 local hotkey_panel = wibox.layout.flex.vertical()
@@ -137,6 +141,80 @@ local function on_query_changed()
 	end
 end
 
+local function reload_hotkeys()
+	local ini = {}
+	if awful.util.file_readable(config_file) then
+		ini = inifile.parse(config_file)
+	end
+
+	ini['Hotkeys'] = ini['Hotkeys'] or {}
+
+	for i,v in ipairs(hotkey_rows) do
+		v:reset()
+	end
+
+	for i=0,8 do
+		local row = math.floor(i / 3) + 1
+		local key = i + 1
+
+		local widget
+
+		local hotkeyDesktopPath = ini['Hotkeys'][tostring(key)]
+		if hotkeyDesktopPath and awful.util.file_readable(hotkeyDesktopPath) then
+			local desktop = menubar.utils.parse(hotkeyDesktopPath)
+			hotkeys[tostring(key)] = desktop
+
+			local icon_w = wibox.widget.imagebox()
+			icon_w:set_image(icon_for_desktop_entry(desktop))
+			icon_w:set_resize(true)
+			icon_w.width = dpi.toScale(48)
+			icon_w.height = dpi.toScale(48)
+			local bad = badge(icon_w)
+			bad:add_badge('sw', hotkey_badge(tostring(key)), 3, 0.4, 0.4)
+
+			widget = wibox.layout.align.horizontal()
+			widget:set_second(bad)
+		else
+			widget = dpi.textbox()
+			widget:set_text(key)
+			widget:set_align('center')
+			widget:set_valign('center')
+		end
+
+		local margin = wibox.layout.margin(widget)
+		margin:set_margins(dpi.toScale(15))
+		hotkey_rows[row]:add(margin)
+	end
+
+	split_container:emit_signal("widget::updated")
+
+end
+
+-- This function stores the specified desktop_entry on the hotkey with the
+-- specified key. Key should be between 1 and 9. This method won't validate
+-- this.
+-- The method will update the config file for this hotkey and reload the panel.
+local function save_hotkey(key, desktop_entry)
+	local ini = {}
+	if awful.util.file_readable(config_file) then
+		ini = inifile.parse(config_file)
+	end
+	ini['Hotkeys'] = ini['Hotkeys'] or {}
+	ini['Hotkeys'][tostring(key)] = desktop_entry.file
+	inifile.save(config_file, ini, 'io')
+	reload_hotkeys()
+	current_search = ""
+	on_query_changed()
+end
+
+local function store_currently_highlighted_to_hotkey(key)
+	local desktop_entry = current_shown_results[current_selected_result]
+	if desktop_entry then
+		log.info("Store %s to hotkey %s", desktop_entry.Name, key)
+		save_hotkey(key, desktop_entry)
+	end
+end
+
 -- Starts a specific desktop file. It requires the parsed desktop file as a table
 -- passed to the function.
 -- @return a boolean whether the desktop entry could be started (true) or not (false)
@@ -188,6 +266,9 @@ local function keyhandler(modifiers, key, event)
 	elseif #current_search == 0 and hotkeys[key] ~= nil then
 		-- If its a hotkey (and we haven't searched for anything) start that program
 		start_hotkey(key)
+	elseif #current_search > 0 and mod['Control'] and key:match("[1-9]") then
+		-- If the user presses Ctrl + hotkey button while in search results store a hotkey
+		store_currently_highlighted_to_hotkey(key)
 	elseif #current_search > 0 and (key == "1" or key == "2" or key == "3" or key == "4") then
 		start_from_search_results(key)
 	elseif key == "BackSpace" then
@@ -250,52 +331,19 @@ local function setup_ui()
 
 	ui = box
 
-	local rows = {
+	hotkey_rows = {
 		wibox.layout.flex.horizontal(),
 		wibox.layout.flex.horizontal(),
 		wibox.layout.flex.horizontal()
 	}
 
-	for i=0,8 do
-		local row = math.floor(i / 3) + 1
-		local key = i + 1
-
-		local widget
-
-		local hotkeyDesktopPath = config.get('launcher.hotkeys.h' .. (key), '')
-		if awful.util.file_readable(hotkeyDesktopPath) then
-			local desktop = menubar.utils.parse(hotkeyDesktopPath)
-			hotkeys[tostring(key)] = desktop
-
-			local icon_w = wibox.widget.imagebox()
-			icon_w:set_image(icon_for_desktop_entry(desktop))
-			icon_w:set_resize(true)
-			icon_w.width = dpi.toScale(48)
-			icon_w.height = dpi.toScale(48)
-			local bad = badge(icon_w)
-			bad:add_badge('sw', hotkey_badge(tostring(key)), 3, 0.4, 0.4)
-
-			widget = wibox.layout.align.horizontal()
-			widget:set_second(bad)
-		else
-			widget = dpi.textbox()
-			widget:set_text(key)
-			widget:set_align('center')
-			widget:set_valign('center')
-		end
-
-		local margin = wibox.layout.margin(widget)
-		margin:set_margins(dpi.toScale(15))
-		rows[row]:add(margin)
-	end
-
 	inputbox:set_align('center')
 	inputbox:set_valign('center')
 	inputbox:set_text(default_search_placeholder)
 
-	hotkey_panel:add(rows[3])
-	hotkey_panel:add(rows[2])
-	hotkey_panel:add(rows[1])
+	hotkey_panel:add(hotkey_rows[3])
+	hotkey_panel:add(hotkey_rows[2])
+	hotkey_panel:add(hotkey_rows[1])
 
 	local inputbox_margin = wibox.layout.margin(inputbox, 20, 20, 20, 20)
 
@@ -309,6 +357,7 @@ end
 
 local function new(self)
 	setup_ui()
+	reload_hotkeys()
 
 	xdg.refresh()
 
