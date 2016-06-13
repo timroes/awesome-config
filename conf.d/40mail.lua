@@ -14,7 +14,7 @@ awful.tag.setscreen(mail_tag, MAIL_SCREEN)
 -- Limit tag to thunderbird windows
 limit_tag(mail_tag, { class = "Thunderbird" })
 -- start thunderbird on that tag
-start_on_tag(mail_tag, "thunderbird" .. (is_bin and "-bin" or ""))
+start_on_tag(mail_tag, "thunderbird")
 
 awful.layout.set(awful.layout.suit.max, mail_tag)
 
