@@ -34,4 +34,16 @@ function utils.merge_into_table(table_to_merge_into, merging_table)
 	end
 end
 
+--- Checks whether the specified command exists.
+-- @return true if the specific command exists and can be executed.
+function utils.command_exists(command)
+	local result = awful.util.pread("/bin/bash -c 'command -v " .. command .. " >/dev/null 2>&1 && echo true || echo false'")
+	if strings.trim(result) == "true" then
+		return true
+	else
+		return false
+	end
+end
+
+
 return utils

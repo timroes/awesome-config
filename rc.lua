@@ -75,20 +75,3 @@ for i,conf in pairs(confs) do
 	end
 end
 -- }}}
-
-
--- {{{ Auto start all execuables from autostart dir
-local startdir = configpath .. '/autostart/'
-for s in lfs.dir(startdir) do
-	local f = lfs.attributes(startdir .. s)
-	-- Exclude README file
-	if s ~= "README" and f and f.mode == "file" then
-		local pid = run_once(startdir .. s)
-		if pid then
-			log.info('autostart: started %s with pid %d', s, pid)
-		else
-			log.info('autostart: %s was already running.', s)
-		end
-	end
-end
--- }}}
