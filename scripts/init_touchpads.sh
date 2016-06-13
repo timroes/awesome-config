@@ -42,3 +42,7 @@ if [ "$trackpoint" ]; then
 	# Emulate all 4 scroll axises
 	xinput set-prop $trackpoint 'Evdev Wheel Emulation Axes' 6 7 4 5
 fi
+
+# Make external mouse left handed
+# TODO: Maybe there is a better way which also survives plugins/plugouts and can be configured
+xinput set-button-map "USB Optical Mouse" 3 2 1
