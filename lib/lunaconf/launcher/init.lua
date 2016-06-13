@@ -9,6 +9,7 @@ local dpi = require('lunaconf.dpi')
 local badge = require('lunaconf.layouts.badge')
 local inifile = require('lunaconf.inifile')
 local tostring = tostring
+local lfs = require('lfs')
 
 local listitem = require('lunaconf.launcher.listitem')
 
@@ -201,6 +202,8 @@ local function save_hotkey(key, desktop_entry)
 	end
 	ini['Hotkeys'] = ini['Hotkeys'] or {}
 	ini['Hotkeys'][tostring(key)] = desktop_entry.file
+	-- Create cache folder if it doesn't exist yet
+	lfs.mkdir(awful.util.getdir('cache'))
 	inifile.save(config_file, ini, 'io')
 	reload_hotkeys()
 	current_search = ""
