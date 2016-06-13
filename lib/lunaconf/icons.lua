@@ -72,6 +72,10 @@ local function get_icon_lookup_path()
 				for j,dir in ipairs(directories) do
 					table.insert(icon_lookup_path, 1, icon_theme_path .. dir .. '/')
 				end
+			else
+				-- The theme has no index.theme so we just list all folder recursively
+				local all_dirs = utils.list_directories(icon_theme_path)
+				utils.merge_into_table(icon_lookup_path, all_dirs, true)
 			end
 		end
 	end
