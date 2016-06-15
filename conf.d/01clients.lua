@@ -125,6 +125,10 @@ client.connect_signal("manage", function(c, startup)
 	client.focus = c
 	c:raise()
 
+	-- Do not use the maximized feature, since we let maximized windows handle by the layout
+	c.maximized_vertical = false
+	c.maximized_horizontal = false
+
 	if c.role == "pop-up" then
 		awful.client.floating.set(c, true)
 	end
