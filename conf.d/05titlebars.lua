@@ -6,8 +6,8 @@ local colorbox = require("lunaconf.widgets.colorbox")
 
 local theme = lunaconf.theme.get()
 
-local titlebar_height = lunaconf.dpi.toScale(30)
-local color_indicator_size = lunaconf.dpi.toScale(10)
+local titlebar_height = lunaconf.dpi.y(30, lunaconf.screens.primary())
+local color_indicator_size = lunaconf.dpi.y(10, lunaconf.screens.primary())
 
 local titlebars_enabled = true
 

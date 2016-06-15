@@ -44,27 +44,27 @@ end
 
 local function create_ui(self)
 	local item = wibox.layout.fixed.horizontal()
-	item.fit = function(wi, w, h) return dpi.toScale(48), dpi.toScale(48) end
+	item.fit = function(wi, w, h) return dpi.x(48, self._screen), dpi.y(48, self._screen) end
 	self._icon = wibox.widget.imagebox()
 
 	-- icon:set_image(icon_for_desktop_entry(desktop_entry) or default_icon)
-	self._icon.fit = function(widget, w, h) return dpi.toScale(48), dpi.toScale(48) end
+	self._icon.fit = function(widget, w, h) return dpi.x(48, self._screen), dpi.y(48, self._screen) end
 	self._icon:set_resize(true)
-	self._icon.width = dpi.toScale(48)
-	self._icon.height = dpi.toScale(48)
+	self._icon.width = dpi.x(48, self._screen)
+	self._icon.height = dpi.y(48, self._screen)
 
-	self._title = dpi.textbox()
+	self._title = dpi.textbox(nil, self._screen)
 	self._title:set_align('left')
 	self._title:set_valign('bottom')
 
-	self._description = dpi.textbox()
+	self._description = dpi.textbox(nil, self._screen)
 	self._description:set_valign('top')
 
-	local shortcut = dpi.textbox()
+	local shortcut = dpi.textbox(nil, self._screen)
 	shortcut:set_text(tostring(self._index))
 	shortcut:set_align('center')
 	shortcut:set_valign('center')
-	shortcut.fit = function(wid, w, h) return dpi.toScale(30), dpi.toScale(30) end
+	shortcut.fit = function(wid, w, h) return dpi.x(30, self._screen), dpi.y(30, self._screen) end
 
 	self._shortcut_bg = wibox.widget.background(shortcut)
 
@@ -73,17 +73,19 @@ local function create_ui(self)
 	text:add(self._description)
 
 	item:add(self._shortcut_bg)
-	item:add(wibox.layout.margin(self._icon, dpi.toScale(8), dpi.toScale(8), 0, 0))
+	item:add(wibox.layout.margin(self._icon, dpi.x(8, self._screen), dpi.y(8, self._screen), 0, 0))
 	item:add(text)
 
 	self._placeholder = wibox.widget.background()
-	self._placeholder.fit = function(wi, w, h) return dpi.toScale(48), dpi.toScale(48) end
+	self._placeholder.fit = function(wi, w, h) return dpi.x(48, self._screen), dpi.y(48, self._screen) end
 
 	return item
 end
 
-function new(_, index)
+function new(_, index, screen)
 	local self = wibox.layout.margin()
+
+	self._screen = screen
 
 	for k, v in pairs(listitem) do
 		if type(v) == "function" then
@@ -95,9 +97,9 @@ function new(_, index)
 	self._visible = true
 	self._ui = create_ui(self)
 	self:set_widget(self._ui)
-	self:set_top(dpi.toScale(8))
-	self:set_bottom(dpi.toScale(8))
-	self.fit = function(wi, w, h) return dpi.toScale(1000), dpi.toScale(68) end
+	self:set_top(dpi.y(8, self._screen))
+	self:set_bottom(dpi.y(8, self._screen))
+	self.fit = function(wi, w, h) return dpi.x(1000, self._screen), dpi.y(68, self._screen) end
 	return self
 end
 

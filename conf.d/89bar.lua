@@ -7,6 +7,7 @@ local config = require('lunaconf.config')
 local tasklist = require('lunaconf.widgets.tasklist')
 local gears = require('gears')
 local lunaconf = require('lunaconf')
+local primary_screen = lunaconf.screens.primary_index()
 
 bars = {}
 taglist = {}
@@ -43,8 +44,8 @@ tasklists.buttons = awful.util.table.join(
 	end)
 )
 
-local spacer = function(width)
-	return wibox.widget.textbox(string.rep(" ", math.floor(lunaconf.dpi.toScale(width))))
+local spacer = function(width, screen)
+	return wibox.widget.textbox(string.rep(" ", math.floor(lunaconf.dpi.x(width, screen))))
 end
 
 local filter_named_tags = function(t)
@@ -63,16 +64,16 @@ for s = 1, screen.count() do
 
 	local left_layout = wibox.layout.fixed.horizontal()
 	left_layout:add(lunaconf.widgets.taglist(s, awful.widget.taglist.filter.all, taglist.buttons))
-	left_layout:add(spacer(5))
+	left_layout:add(spacer(5, screen[s]))
 
 	local right_layout = wibox.layout.fixed.horizontal()
-	if s == PRIMARY then
+	if s == primary_screen then
 
 		-- load widgets from config file
 		local widgets = split(config.get('bar.widgets', ''), ',')
 		for i,w in pairs(widgets) do
 			if tonumber(w) ~= nil and tonumber(w) > 0 then
-				right_layout:add(spacer(tonumber(w)))
+				right_layout:add(spacer(tonumber(w), screen[s]))
 			elseif w == 'displayswitcher' then
 				right_layout:add(displayswitcher())
 			elseif w == 'battery' then
@@ -85,7 +86,7 @@ for s = 1, screen.count() do
 				right_layout:add(wibox.widget.systray())
 			elseif w == 'clock' then
 				local clock = lunaconf.widgets.textclock("%a, %e. %b  %H:%M", 60)
-				lunaconf.dpi.textbox(clock)
+				lunaconf.dpi.textbox(clock, screen[s])
 				orglendar(clock)
 				right_layout:add(clock)
 			end
@@ -98,7 +99,7 @@ for s = 1, screen.count() do
 	layout:set_middle(tasklists[s])
 	layout:set_right(right_layout)
 
-	bars[s] = awful.wibox({ position = "top", screen = s, height = lunaconf.dpi.toScale(config.get("bar.height", 52)), bg = lunaconf.theme.get().screenbar_bg })
+	bars[s] = awful.wibox({ position = "top", screen = s, height = lunaconf.dpi.y(config.get("bar.height", 52), screen[s]), bg = lunaconf.theme.get().screenbar_bg })
 	bars[s]:set_widget(layout)
 
 end

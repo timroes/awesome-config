@@ -1,6 +1,7 @@
 local awful = require('awful')
 local wibox = require('wibox')
 local config = require("lunaconf.config")
+local lunaconf = require('lunaconf')
 
 local hangout_shortcut_key = "h"
 
@@ -51,7 +52,7 @@ local manage_hangout = function(c)
 	-- Set client to floating
 	awful.client.floating.set(c, true)
 
-	local s = screen[PRIMARY]
+	local s = lunaconf.screens.primary()
 
 	local win_x
 	-- ##

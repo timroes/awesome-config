@@ -57,7 +57,7 @@ local function hotkey_badge(hotkey)
 end
 
 -- Function to render one item in the task list
-function common.icon_widget(w, buttons, label, data, objects)
+function common.icon_widgets(screen, w, buttons, label, data, objects)
 
 	-- TODO: CLEAN THIS METHOD UP!!!
 
@@ -80,13 +80,13 @@ function common.icon_widget(w, buttons, label, data, objects)
 			ib = wibox.widget.imagebox()
 			bgb = wibox.widget.background()
 			main = layout_badge(bgb)
-			local margin = dpi.toScale(4)
-			im = wibox.layout.margin(ib, margin, margin, margin, margin)
+			local x_margin = dpi.x(4, screen)
+			local y_margin = dpi.y(4, screen)
+			im = wibox.layout.margin(ib, x_margin, x_margin, y_margin, y_margin)
 			tooltip = awful.tooltip({
 				margin_topbottom = 400, -- does not work yet
 				margin_leftright = 50
 			})
-			dpi.textbox(tooltip.textbox)
 
 			-- And all of this gets a background
 			bgb:set_widget(im)
@@ -116,6 +116,9 @@ function common.icon_widget(w, buttons, label, data, objects)
 				main = main
 			}
 		end
+
+		-- Fit tooltip to screens dpi
+		dpi.textbox(tooltip.textbox, screen)
 
 		local text, bg, bg_image, icon = label(o)
 

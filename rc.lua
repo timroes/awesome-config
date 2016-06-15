@@ -37,19 +37,6 @@ local log = require('lunaconf.log')
 -- Include functions
 dofile(configpath .. "/functions.lua")
 
--- Find primary screen
-local xrandr = awful.util.pread("xrandr | grep -E ' connected primary [0-9]' | cut -f1 -d' '")
-if #xrandr > 0 then
-	-- if a primary screen has been configured via xrandr, use this as primary
-	xrandr = xrandr:gsub("%s+$", "") -- remove newline at end of string
-	PRIMARY = screen[xrandr].index
-end
--- If xrandr has not been set (or the screen couldn't be detected)
--- use the screen that is the most in the center of all screens
-if not PRIMARY then
-	PRIMARY = screen_index(math.ceil(screen.count() / 2))
-end
-
 -- Clear all shortcuts before including any config files
 root.keys({ })
 

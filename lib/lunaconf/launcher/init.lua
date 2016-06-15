@@ -8,6 +8,7 @@ local theme = require('lunaconf.theme')
 local dpi = require('lunaconf.dpi')
 local badge = require('lunaconf.layouts.badge')
 local inifile = require('lunaconf.inifile')
+local screens = require('lunaconf.screens')
 local tostring = tostring
 local lfs = require('lfs')
 
@@ -21,8 +22,10 @@ local launcher = {}
 
 local hotkeys = {}
 
-local height = dpi.toScale(360)
-local width = dpi.toScale(450)
+local launcher_screen = screens.primary()
+
+local height = dpi.y(360, launcher_screen)
+local width = dpi.x(450, launcher_screen)
 
 local max_results_shown = 4
 
@@ -32,7 +35,7 @@ local default_icon = icons.lookup_icon('image-missing')
 local default_search_placeholder = "or search ..."
 
 local ui
-local inputbox = dpi.textbox()
+local inputbox = dpi.textbox(nil, launcher_screen)
 local hotkey_rows
 
 local split_container = wibox.layout.align.vertical()
@@ -48,7 +51,7 @@ local current_shown_results = {}
 local current_selected_result = nil
 
 local function hotkey_badge(text)
-	local hk_label = dpi.textbox(text:upper())
+	local hk_label = dpi.textbox(text:upper(), launcher_screen)
 	-- dpi.textbox(hk_label)
 	hk_label:set_align('center')
 	hk_label:set_valign('center')
@@ -168,22 +171,27 @@ local function reload_hotkeys()
 			local icon_w = wibox.widget.imagebox()
 			icon_w:set_image(icon_for_desktop_entry(desktop))
 			icon_w:set_resize(true)
-			icon_w.width = dpi.toScale(48)
-			icon_w.height = dpi.toScale(48)
+			icon_w.width = dpi.x(48, launcher_screen)
+			icon_w.height = dpi.y(48, launcher_screen)
 			local bad = badge(icon_w)
 			bad:add_badge('sw', hotkey_badge(tostring(key)), 3, 0.4, 0.4)
 
 			widget = wibox.layout.align.horizontal()
 			widget:set_second(bad)
 		else
-			widget = dpi.textbox()
+			widget = dpi.textbox(nil, launcher_screen)
 			widget:set_text(key)
 			widget:set_align('center')
 			widget:set_valign('center')
 		end
 
 		local margin = wibox.layout.margin(widget)
-		margin:set_margins(dpi.toScale(15))
+		local x_margin = dpi.x(15, launcher_screen)
+		local y_margin = dpi.y(15, launcher_screen)
+		margin:set_left(x_margin)
+		margin:set_right(x_margin)
+		margin:set_top(y_margin)
+		margin:set_bottom(y_margin)
 		hotkey_rows[row]:add(margin)
 	end
 
@@ -307,26 +315,25 @@ end
 local function setup_result_list_ui()
 	-- Setup the right amount of listitems
 	for i = 1, max_results_shown do
-		local item = listitem(i)
+		local item = listitem(i, launcher_screen)
 		table.insert(result_items, item)
 		search_results:add(item)
 	end
 
 	-- setup "and x more" label
-	more_results_label = dpi.textbox(' ')
+	more_results_label = dpi.textbox(' ', launcher_screen)
 	more_results_label:set_align('right')
 	more_results_label:set_valign('center')
 	search_results:add(wibox.layout.margin(more_results_label, 20, 20, 5, 5))
 end
 
 local function setup_ui()
-	local s = screen[PRIMARY]
 	local box = wibox({
 		bg = '#222222',
 		width = width,
 		height = height,
-		x = s.workarea.x + (s.workarea.width / 2) - (width / 2),
-		y = s.workarea.y + s.workarea.height - height,
+		x = launcher_screen.workarea.x + (launcher_screen.workarea.width / 2) - (width / 2),
+		y = launcher_screen.workarea.y + launcher_screen.workarea.height - height,
 		ontop = true,
 		opacity = 0.75,
 		type = 'utility'

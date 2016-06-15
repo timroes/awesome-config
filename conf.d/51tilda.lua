@@ -1,4 +1,5 @@
-local TILDA_SCREEN = PRIMARY
+local lunaconf = require('lunaconf')
+local TILDA_SCREEN = lunaconf.screens.primary_index()
 
 -- Scale window to workspace size (min 15% height)
 client.connect_signal("manage", function(c, startup)

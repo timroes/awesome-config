@@ -9,6 +9,7 @@ return {
 	launcher = require('lunaconf.launcher'),
 	layouts = require('lunaconf.layouts'),
 	log = require('lunaconf.log'),
+	screens = require('lunaconf.screens'),
 	strings = require('lunaconf.strings'),
 	theme = require('lunaconf.theme'),
 	widgets = require('lunaconf.widgets'),

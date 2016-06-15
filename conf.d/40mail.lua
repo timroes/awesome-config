@@ -1,7 +1,8 @@
 local awful = require("awful")
 local config = require("lunaconf.config")
 local icons = require("lunaconf.icons")
-local MAIL_SCREEN = PRIMARY
+local lunaconf = require('lunaconf')
+local MAIL_SCREEN = lunaconf.screens.primary_index()
 
 local is_bin = awful.util.file_readable('/usr/bin/thunderbird')
 if not is_bin then
