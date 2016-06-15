@@ -20,14 +20,14 @@ local button_text = '<span color="%s">☀</span>'
 local active_color = '#FF5722'
 local disabled_color = '#CCCCCC'
 
-local function create(_, dev)
+local function create(_, screen)
 
 	textbox = w.widget.textbox()
-	dpi.textbox(textbox)
+	dpi.textbox(textbox, screen)
 	textbox:set_align("center")
 	textbox:set_markup(string.format(button_text, disabled_color))
 
-	widget = w.layout.margin(textbox, 5, 5, 0, 0)
+	widget = w.layout.margin(textbox, dpi.x(5, screen), dpi.x(5, screen), 0, 0)
 
 	widget:buttons(awful.util.table.join(
 		awful.button({ }, 1, function()

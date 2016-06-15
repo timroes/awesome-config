@@ -79,7 +79,7 @@ for s = 1, screen.count() do
 			elseif w == 'battery' then
 				right_layout:add(battery(screen[s]))
 			elseif w == 'screensaver' then
-				right_layout:add(lunaconf.widgets.screensaver())
+				right_layout:add(lunaconf.widgets.screensaver(screen[s]))
 			elseif w == 'network' then
 				right_layout:add(lunaconf.widgets.networkmonitor())
 			elseif w == 'systray' then
