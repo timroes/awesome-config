@@ -77,7 +77,7 @@ for s = 1, screen.count() do
 			elseif w == 'displayswitcher' then
 				right_layout:add(displayswitcher())
 			elseif w == 'battery' then
-				right_layout:add(battery())
+				right_layout:add(battery(screen[s]))
 			elseif w == 'screensaver' then
 				right_layout:add(lunaconf.widgets.screensaver())
 			elseif w == 'network' then

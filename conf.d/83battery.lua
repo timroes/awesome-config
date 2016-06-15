@@ -80,19 +80,19 @@ local function update()
 
 end
 
-local function create(_)
+local function create(_, screen)
 	local layout = w.layout.fixed.horizontal()
 	local mlayout = w.layout.margin()
 
 	widget = w.widget.imagebox()
-	widget:fit(64, 64)
+	widget:fit(dpi.x(64, screen), dpi.y(64, screen))
 	widget:set_resize(true)
 
 	label = w.widget.textbox()
-	dpi.textbox(label)
+	dpi.textbox(label, screen)
 
 	mlayout:set_widget(widget)
-	mlayout:set_top(2)
+	mlayout:set_top(dpi.y(2, screen))
 
 	layout:add(mlayout)
 	layout:add(label)
