@@ -333,7 +333,7 @@ local function setup_ui()
 		width = width,
 		height = height,
 		x = launcher_screen.workarea.x + (launcher_screen.workarea.width / 2) - (width / 2),
-		y = launcher_screen.workarea.y + launcher_screen.workarea.height - height,
+		y = math.ceil(launcher_screen.workarea.y + launcher_screen.workarea.height - height),
 		ontop = true,
 		opacity = 0.75,
 		type = 'utility'
