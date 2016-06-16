@@ -5,7 +5,7 @@
 local log = {}
 
 function log.log(level, message, ...)
-	awful.util.spawn('logger -t awesome ' .. string.format(message, ...))
+	awful.util.spawn('logger -t awesome "' .. string.format(message, ...) .. '"')
 end
 
 function log.info(message, ...)
