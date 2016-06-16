@@ -26,7 +26,7 @@ theme.notify_border_width = "0"
 theme.notify_opacity = 0.9
 
 -- Systray
-theme.bg_systray = '#F5F5F5'
+theme.bg_systray = '#113A45'
 
 -- Calendar
 theme.cal_today = '#99CC00'
