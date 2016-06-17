@@ -1,13 +1,14 @@
 local wibox = require('wibox')
 local screens = require('lunaconf.screens')
 local dpi = require('lunaconf.dpi')
+local config = require('lunaconf.config')
 local awesome = awesome
 
 local systray = {}
 
 local screen = screens.primary()
 
-local icon_size = 48
+local icon_size = config.get('systray.size', 50)
 local icon_dpi_size_x = dpi.x(icon_size, screen)
 local icon_dpi_size_y = dpi.y(icon_size, screen)
 local padding = dpi.x(10, screen)

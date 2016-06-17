@@ -28,3 +28,8 @@ applications:
 theme:
   # A path to a wallpaper to use.
   wallpaper:
+
+systray:
+  # The pixel density independant size one icon in the systray should get.
+  # The systray usualy won't use thta much size if the value is to high. (Default 50)
+  size:
