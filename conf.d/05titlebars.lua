@@ -6,9 +6,6 @@ local colorbox = require("lunaconf.widgets.colorbox")
 
 local theme = lunaconf.theme.get()
 
-local titlebar_height = lunaconf.dpi.y(30, lunaconf.screens.primary())
-local color_indicator_size = lunaconf.dpi.y(10, lunaconf.screens.primary())
-
 local titlebars_enabled = true
 
 local ontop_color = lunaconf.theme.get().ontop_indicator
@@ -28,6 +25,10 @@ lunaconf.keys.globals(
 
 client.connect_signal("manage", function(c, startup)
 
+	local s = screen[c.screen]
+	local titlebar_height = lunaconf.dpi.y(30, s)
+	local color_indicator_size = lunaconf.dpi.y(10, s)
+
 	-- Don't draw a titlebar for windows, that don't want to be in the taskbar
 	if c.skip_taskbar then
 		return
@@ -39,16 +40,16 @@ client.connect_signal("manage", function(c, startup)
 
 	local icon = awful.titlebar.widget.iconwidget(c)
 	local margin_icon = wibox.layout.margin(icon,
-			lunaconf.dpi.toScale(8),
-			lunaconf.dpi.toScale(12),
-			lunaconf.dpi.toScale(5),
-			lunaconf.dpi.toScale(5)
+			lunaconf.dpi.x(8, s),
+			lunaconf.dpi.x(12, s),
+			lunaconf.dpi.y(5, s),
+			lunaconf.dpi.y(5, s)
 		)
 
 	local center_layout = wibox.layout.fixed.horizontal()
 	center_layout:add(margin_icon)
 	local title_widget = awful.titlebar.widget.titlewidget(c)
-	lunaconf.dpi.textbox(title_widget)
+	lunaconf.dpi.textbox(title_widget, s)
 	center_layout:add(title_widget)
 
 	local titlebar = wibox.layout.align.horizontal()
