@@ -24,8 +24,9 @@ local orglendar = { files = {},
                     char_width = nil,
                     text_color = theme.cal_fg or theme.fg_normal or "#FFFFFF",
                     today_color = theme.cal_today or theme.bg_urgent or "#00FF00",
-                    font = 'Source Code Pro ' .. tostring(math.floor(lunaconf.dpi.toScale(11))),
                     calendar_width = 19 }
+
+local font = 'Source Code Pro'
 
 local freq_table =
 { d = { lapse = 86400,
@@ -117,7 +118,7 @@ local function create_calendar()
 
    local header = os.date("%B %Y", first_day)
    return header, string.format('<span font="%s" foreground="%s">%s</span>',
-                                orglendar.font, orglendar.text_color, result)
+                                font, orglendar.text_color, result)
 end
 
 function orglendar.get_calendar_and_todo_text(_offset)
@@ -128,11 +129,11 @@ function orglendar.get_calendar_and_todo_text(_offset)
    offset = _offset
    local header, cal = create_calendar()
    return string.format('<span font="%s" foreground="%s">%s</span>\n%s',
-                        orglendar.font, orglendar.text_color, header, cal)
+                        font, orglendar.text_color, header, cal)
 end
 
 local function calculate_char_width()
-   return theme.get_font_height(orglendar.font) * 0.555
+   return theme.get_font_height(font) * 0.555
 end
 
 function orglendar.hide()
@@ -161,7 +162,8 @@ function orglendar.show(inc_offset)
                             })
 end
 
-function orglendar.register(_, widget)
+function orglendar.register(_, widget, screen)
+   font = string.format('%s %d', font, math.ceil(lunaconf.dpi.y(11, screen)))
    widget:connect_signal("mouse::enter", function() orglendar.show(0) end)
    widget:connect_signal("mouse::leave", orglendar.hide)
    widget:buttons(util.table.join( awful.button({ }, 4, function()

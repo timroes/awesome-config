@@ -87,7 +87,7 @@ for s = 1, screen.count() do
 			elseif w == 'clock' then
 				local clock = lunaconf.widgets.textclock("%a, %e. %b  %H:%M", 60)
 				lunaconf.dpi.textbox(clock, screen[s])
-				orglendar(clock)
+				orglendar(clock, screen[s])
 				right_layout:add(clock)
 			end
 		end
