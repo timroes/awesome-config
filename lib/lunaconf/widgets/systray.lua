@@ -37,8 +37,8 @@ local function new(self)
 		local w, h = syswidget:fit(icon_dpi_size_x, icon_dpi_size_y)
 		self._panel.width = w
 		self._panel.height = h
-		self._panel.x = screen.geometry.width - w - padding
-		self._panel.y = math.ceil(screen.geometry.height - h)
+		self._panel.x = screen.geometry.x + screen.geometry.width - w - padding
+		self._panel.y = math.ceil(screen.geometry.y + screen.geometry.height - h)
 		-- Show systray when it changed
 		self._panel.visible = true
 		hide_timer:again()
