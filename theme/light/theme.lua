@@ -40,7 +40,7 @@ theme.floating_indicator = '#AED581'
 theme.ontop_indicator = '#E57373'
 
 -- Screenbar (the bar on top of each screen)
-theme.screenbar_bg = '#F5F5F544'
+theme.screenbar_bg = '#333333DD'
 
 -- Tasklist
 theme.tasklist_bg_normal = '#00000000'
