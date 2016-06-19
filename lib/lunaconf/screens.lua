@@ -45,6 +45,11 @@ local function screen_index(position)
 end
 -- }}}
 
+local function get_first_output(screen)
+	local next, t = pairs(screen.outputs)
+	return screen.outputs[next(t)]
+end
+
 local function detect_primary_screen()
 	local primary
 	local xrandr = awful.util.pread("xrandr | grep -E ' connected primary [0-9]' | cut -f1 -d' '")
@@ -77,15 +82,16 @@ function screens.xdpi(screen)
 	if not screen.outputs then
 		return nil
 	end
-	return (screen.geometry.width * 25.4) / screen.outputs['eDP-1'].mm_width
+	local output = get_first_output(screen)
+	return (screen.geometry.width * 25.4) / output.mm_width
 end
 
 function screens.ydpi(screen)
 	if not screen.outputs then
 		return nil
 	end
-
-	return (screen.geometry.height * 25.4) / screen.outputs['eDP-1'].mm_height
+	local output = get_first_output(screen)
+	return (screen.geometry.height * 25.4) / output.mm_height
 end
 
 return screens
