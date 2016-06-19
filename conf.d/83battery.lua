@@ -13,6 +13,7 @@ local GLib = require('lgi').GLib
 local config = require('lunaconf.config')
 local icons = require('lunaconf.icons')
 local dpi = require('lunaconf.dpi')
+local lunaconf = require('lunaconf')
 
 module('widgets.battery')
 
@@ -84,7 +85,7 @@ local function create(_, screen)
 	local layout = w.layout.fixed.horizontal()
 	local mlayout = w.layout.margin()
 
-	widget = w.widget.imagebox()
+	widget = lunaconf.widgets.svgbox()
 	widget:fit(dpi.x(64, screen), dpi.y(64, screen))
 	widget:set_resize(true)
 
@@ -92,7 +93,8 @@ local function create(_, screen)
 	dpi.textbox(label, screen)
 
 	mlayout:set_widget(widget)
-	mlayout:set_top(dpi.y(2, screen))
+	mlayout:set_top(dpi.y(10, screen))
+	mlayout:set_bottom(dpi.y(10, screen))
 
 	layout:add(mlayout)
 	layout:add(label)
