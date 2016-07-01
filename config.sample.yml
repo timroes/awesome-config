@@ -33,3 +33,6 @@ systray:
   # The pixel density independant size one icon in the systray should get.
   # The systray usualy won't use thta much size if the value is to high. (Default 50)
   size:
+
+# Disable the use of a compositor when set to true. Otherwise compton will be started.
+disable_compositor:
