@@ -117,8 +117,6 @@ function svgbox.new(image, resize_allowed, newcolor)
 		self._image = image
 		self.is_svg = is_svg(image_name)
 
-		log.info("isSvg? %s", tostring(self.is_svg))
-
 		self:emit_signal("widget::updated")
 		return true
 	end
