@@ -18,6 +18,25 @@ local default_dpi = 96
 local scale_x_cache = {}
 local scale_y_cache = {}
 
+local function screen_factor(screen, fac)
+	local output_name = screens.output_name(screen)
+	local factor
+	if output_name then
+		factor = config.get('dpi.' .. output_name .. '.' .. fac, 1.0)
+	else
+		factor = config.get('dpi.' .. fac, 1.0)
+	end
+	return tonumber(factor)
+end
+
+function dpi.xfactor(screen)
+	return screen_factor(screen, 'xfactor')
+end
+
+function dpi.yfactor(screen)
+	return screen_factor(screen, 'yfactor')
+end
+
 -- Pass in an wibox.widget.textbox to this method and it will scale its font
 -- so it will take the dpi from the theme into respect. This method will assume
 -- the font size set on the textbox was meant to be for 96 dpi.
@@ -30,7 +49,7 @@ function dpi.textbox(textbox, screen)
 	if not screen then
 		screen = screens.primary()
 	end
-	textbox._layout:get_context():set_resolution(screens.ydpi(screen) * tonumber(config.get('dpi.xfactor', 1.0)))
+	textbox._layout:get_context():set_resolution(screens.ydpi(screen) * dpi.yfactor(screen))
 	return textbox
 end
 
@@ -44,7 +63,7 @@ function dpi.x(value, screen)
 		if xdpi == nil then
 			xdpi = default_dpi
 		end
-		scale_x_cache[screen] = (xdpi * tonumber(config.get('dpi.xfactor', 1.0))) / default_dpi
+		scale_x_cache[screen] = (xdpi * dpi.xfactor(screen)) / default_dpi
 	end
 	return value * scale_x_cache[screen]
 end
@@ -55,7 +74,7 @@ function dpi.y(value, screen)
 		if ydpi == nil then
 			ydpi = default_dpi
 		end
-		scale_y_cache[screen] = (ydpi * tonumber(config.get('dpi.yfactor', 1.0))) / default_dpi
+		scale_y_cache[screen] = (ydpi * dpi.yfactor(screen)) / default_dpi
 	end
 	return value * scale_y_cache[screen]
 end

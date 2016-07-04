@@ -36,3 +36,13 @@ systray:
 
 # Disable the use of a compositor when set to true. Otherwise compton will be started.
 disable_compositor:
+
+# Configure dpi settings for the displays
+dpi:
+  # Specify a factor that will be multiplied to the x and y dpi setting for all screens
+  # that doesn't have a more specific setting.
+  xfactor:
+  yfactor:
+  # You can specify these settings also on a per display basis, by specifying the name
+  # of the display (as shown by xrandr) as a key and nest the xfactor and yfactor
+  # below this key. These factors will only be applied for dpi values of that screen.

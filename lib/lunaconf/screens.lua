@@ -94,4 +94,12 @@ function screens.ydpi(screen)
 	return (screen.geometry.height * 25.4) / output.mm_height
 end
 
+function screens.output_name(screen)
+	if not screen.outputs then
+		return nil
+	end
+	local next, t = pairs(screen.outputs)
+	return next(t)
+end
+
 return screens
