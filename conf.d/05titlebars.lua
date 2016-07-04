@@ -7,6 +7,7 @@ local colorbox = require("lunaconf.widgets.colorbox")
 local theme = lunaconf.theme.get()
 
 local titlebars_enabled = true
+local previous_titlebar_heights = {}
 
 local ontop_color = lunaconf.theme.get().ontop_indicator
 if ontop_color then ontop_color = gears.color(ontop_color) end
@@ -24,15 +25,26 @@ lunaconf.keys.globals(
 )
 
 local function refresh_titlebar(c)
-	local s = screen[c.screen]
-	local titlebar_height = lunaconf.dpi.y(30, s)
-	local color_indicator_size = lunaconf.dpi.y(10, s)
 
 	-- Don't draw a titlebar for windows, that don't want to be in the taskbar
 	if c.skip_taskbar then
 		awful.titlebar.hide(c)
 		return
 	end
+
+	local s = screen[c.screen]
+	local titlebar_height = lunaconf.dpi.y(30, s)
+	local color_indicator_size = lunaconf.dpi.y(10, s)
+
+	local titlebar = awful.titlebar(c)
+	if titlebar then
+		if previous_titlebar_heights[c.window] == titlebar_height then
+			-- If titlebar height hasn't changed, when changing screen, don't redraw anything
+			return
+		end
+	end
+
+	previous_titlebar_heights[c.window] = titlebar_height
 
 	local client_status = colorbox.rect(color_indicator_size, color_indicator_size, {
 		margin = (titlebar_height - color_indicator_size) / 2
@@ -104,4 +116,9 @@ client.connect_signal("manage", function(c, startup)
 
 	refresh_titlebar(c)
 
+end)
+
+client.connect_signal("unmanage", function(c)
+	-- When client gets unmanaged, remove its stored titlebar height from the cache
+	previous_titlebar_heights[c.window] = nil
 end)
