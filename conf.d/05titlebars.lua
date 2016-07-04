@@ -23,14 +23,14 @@ lunaconf.keys.globals(
 	end)
 )
 
-client.connect_signal("manage", function(c, startup)
-
+local function refresh_titlebar(c)
 	local s = screen[c.screen]
 	local titlebar_height = lunaconf.dpi.y(30, s)
 	local color_indicator_size = lunaconf.dpi.y(10, s)
 
 	-- Don't draw a titlebar for windows, that don't want to be in the taskbar
 	if c.skip_taskbar then
+		awful.titlebar.hide(c)
 		return
 	end
 
@@ -89,5 +89,19 @@ client.connect_signal("manage", function(c, startup)
 	if not titlebars_enabled then
 		awful.titlebar.hide(c)
 	end
+end
+
+client.connect_signal("manage", function(c, startup)
+
+	-- We need to register the screen listener in the manage method per client
+	-- otherwise we would get a property change call before the manage call for a newly
+	-- created client, in which not all properties are yet set correctly.
+	-- By registering it here it will only apply for screen changes after it got managed.
+	c:connect_signal("property::screen", function(c)
+		-- TODO: On screen change only modify height etc. instead of generating a new titlebar
+		refresh_titlebar(c)
+	end)
+
+	refresh_titlebar(c)
 
 end)
