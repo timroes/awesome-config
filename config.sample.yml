@@ -46,3 +46,7 @@ dpi:
   # You can specify these settings also on a per display basis, by specifying the name
   # of the display (as shown by xrandr) as a key and nest the xfactor and yfactor
   # below this key. These factors will only be applied for dpi values of that screen.
+
+screensaver:
+  # Configure how many minutes before the screen will be locked (Default: 10)
+  timeout: 10

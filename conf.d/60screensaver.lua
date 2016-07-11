@@ -5,7 +5,7 @@ local config = require("lunaconf.config")
 -- Use i3lock to lock the screen (requires package x11-misc/i3lock)
 local lock_cmd = scriptpath .. "lockscreen.sh"
 -- lockout time in minutes
-local screensaver_timeout = 10
+local screensaver_timeout = lunaconf.config.get('screensaver.timeout', 10)
 
 -- Use lock_cmd as a screensaver (requires x11-misc/xautolock)
 lunaconf.utils.run_once("xautolock -time " .. screensaver_timeout .. " -locker '" .. lock_cmd .. "'")
