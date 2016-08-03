@@ -235,7 +235,7 @@ local function start_desktop_entry(desktop_entry)
 	end
 
 	log.info("Starting %s via desktop file: %s", desktop_entry.Name, desktop_entry.file)
-	awful.util.spawn("dex " .. desktop_entry.file)
+	awful.util.spawn("dex '" .. desktop_entry.file .. "'")
 	return true
 end
 
