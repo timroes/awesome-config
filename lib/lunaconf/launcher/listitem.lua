@@ -35,7 +35,7 @@ function listitem:set_visible(is_visible)
 end
 
 function listitem:set_title(title)
-	self._title:set_markup(title)
+	self._title:set_text(title)
 end
 
 function listitem:set_description(description)
