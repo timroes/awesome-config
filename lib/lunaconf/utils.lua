@@ -25,7 +25,7 @@ end
 --- Returns the user that owns the process with the given pid.
 --- Will return nil if the user cannot be found.
 function utils.user_of_pid(pid)
-	if not pid then return nil end
+	if not pid or pid == 0 then return nil end
 	return strings.trim(awful.util.pread('ps -o user ' .. math.floor(pid) .. ' | sed 1d'))
 end
 

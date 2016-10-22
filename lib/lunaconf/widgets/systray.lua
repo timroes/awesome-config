@@ -41,8 +41,9 @@ local function new(self)
 		self._panel.y = math.ceil(screen.geometry.y + screen.geometry.height - h)
 		-- Show systray when it changed
 		self._panel.visible = true
-		hide_timer:again()
-		hide_timer:start()
+		if not hide_timer.started then
+			hide_timer:again()
+		end
 	end)
 
 	return self
