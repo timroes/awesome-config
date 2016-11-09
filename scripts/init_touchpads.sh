@@ -45,4 +45,5 @@ fi
 
 # Make external mouse left handed
 # TODO: Maybe there is a better way which also survives plugins/plugouts and can be configured
-xinput set-button-map "USB Optical Mouse" 3 2 1
+mouse=$(xinput list --name-only | grep "Optical Mouse")
+xinput set-button-map "$mouse" 3 2 1
