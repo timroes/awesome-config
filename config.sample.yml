@@ -50,3 +50,8 @@ dpi:
 screensaver:
   # Configure how many minutes before the screen will be locked (Default: 10)
   timeout: 10
+
+# A YML list of keyboard layouts, that the user can switch through.
+# The first one in this list will be used when starting awesome.
+keyboard_layouts:
+  - us

@@ -7,10 +7,7 @@ local MOD = lunaconf.config.MOD
 -- Requires setxkbmap to be installed
 
 local setkeymap = "setxkbmap"
-local keyboard_layouts = {
-	"us -variant altgr-intl",
-	"de"
-}
+local keyboard_layouts = lunaconf.config.get("keyboard_layouts", { "us" })
 local current_layout = 1
 
 local last_id = 0
@@ -19,10 +16,10 @@ local set_current_layout = function()
 	awful.util.spawn(setkeymap .. " " .. keyboard_layouts[current_layout])
 end
 
--- Initialize with porimary keyboard layout
+-- Initialize with primary keyboard layout
 set_current_layout()
 
-lunaconf.keys.globals(awful.key({ MOD }, "Tab", function() 
+lunaconf.keys.globals(awful.key({ MOD }, "Tab", function()
 	current_layout = ((current_layout) % #keyboard_layouts) + 1
 	set_current_layout()
 	local notif = naughty.notify({
