@@ -20,7 +20,7 @@ local function read(file)
 end
 
 local function create(_)
-	local mlayout = w.layout.margin()
+	local mlayout = w.container.margin()
 
 	widget = w.widget.imagebox()
 	widget:fit(24, 24)
@@ -72,14 +72,15 @@ local function create(_)
 		end)
 	))
 
-	local monitors = tonumber(awful.util.pread('/usr/bin/xrandr | grep " connected" | wc -l'))
-	if monitors < 2 then
-		is_active = false
-		widget:set_image(nil)
-	else
-		is_active = true
-		widget:set_image(ICON)
-	end
+	-- TODO: Fix this without awful.util.pread
+	-- local monitors = tonumber(awful.util.pread('/usr/bin/xrandr | grep " connected" | wc -l'))
+	-- if monitors < 2 then
+	-- 	is_active = false
+	-- 	widget:set_image(nil)
+	-- else
+	-- 	is_active = true
+	-- 	widget:set_image(ICON)
+	-- end
 
 	return mlayout
 end

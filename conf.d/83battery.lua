@@ -83,7 +83,7 @@ end
 
 local function create(_, screen)
 	local layout = w.layout.fixed.horizontal()
-	local mlayout = w.layout.margin()
+	local mlayout = w.container.margin()
 
 	widget = lunaconf.widgets.svgbox()
 	widget:fit(dpi.x(64, screen), dpi.y(64, screen))

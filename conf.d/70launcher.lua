@@ -5,7 +5,7 @@ local lunaconf = require('lunaconf')
 local ext_launcher = lunaconf.config.get('applications.launcher', nil)
 if ext_launcher then
 	lunaconf.keys.globals(
-		awful.key({ lunaconf.config.MOD }, "space", function() awful.util.spawn(ext_launcher) end)
+		awful.key({ lunaconf.config.MOD }, "space", function() awful.spawn.spawn(ext_launcher) end)
 	)
 else
 	local launcher = lunaconf.launcher()

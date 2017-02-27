@@ -1,5 +1,6 @@
 local awful = require('awful')
 local wibox = require('wibox')
+local menubar = require('menubar')
 local config = require('lunaconf.config')
 local icons = require('lunaconf.icons')
 local xdg = require('lunaconf.xdg')
@@ -16,6 +17,7 @@ local listitem = require('lunaconf.launcher.listitem')
 
 local log = require('lunaconf.log')
 local menubar = require('menubar')
+local inspect = require('inspect')
 
 -- Start module
 local launcher = {}
@@ -56,7 +58,7 @@ local function hotkey_badge(text)
 	hk_label:set_align('center')
 	hk_label:set_valign('center')
 	hk_label.fit = function (wibox, w, h) return 40, 40 end
-	local hk_badge = wibox.widget.background(hk_label)
+	local hk_badge = wibox.container.background(hk_label)
 	hk_badge:set_bg('#EEEEEEAA' or theme.get().taglist_badge_bg or theme.get().bg_normal)
 	hk_badge:set_fg('#000000')
 	return hk_badge
@@ -73,7 +75,7 @@ local function get_matching_apps()
 
 	-- This is the actual search logic to find matching applications.
 	-- Here is a lot of potential to improve this logic.
-	for k,v in pairs(xdg.apps()) do
+	for k,v in pairs(self._apps) do
 		if (v.Name and v.Name:lower():find(search)) then
 			table.insert(result, v)
 		end
@@ -128,14 +130,14 @@ local function update_result_list()
 		more_results_label:set_text(' ')
 	end
 
-	-- search_results:add(wibox.layout.margin(more_results, 20, 20, 5, 5))
+	-- search_results:add(wibox.container.margin(more_results, 20, 20, 5, 5))
 end
 
 local function on_query_changed()
 	if current_search and #current_search > 0 then
 		-- The user entered a search term so show a result list
 		inputbox:set_markup('<b>' .. current_search .. '</b>')
-		local bg = wibox.widget.background(search_results)
+		local bg = wibox.container.background(search_results)
 		split_container:set_middle(bg)
 		update_result_list()
 	else
@@ -165,7 +167,7 @@ local function reload_hotkeys()
 
 		local hotkeyDesktopPath = ini['Hotkeys'][tostring(key)]
 		if hotkeyDesktopPath and awful.util.file_readable(hotkeyDesktopPath) then
-			local desktop = menubar.utils.parse(hotkeyDesktopPath)
+			local desktop = menubar.utils.parse_desktop_file(hotkeyDesktopPath)
 			hotkeys[tostring(key)] = desktop
 
 			local icon_w = wibox.widget.imagebox()
@@ -185,7 +187,7 @@ local function reload_hotkeys()
 			widget:set_valign('center')
 		end
 
-		local margin = wibox.layout.margin(widget)
+		local margin = wibox.container.margin(widget)
 		local x_margin = dpi.x(15, launcher_screen)
 		local y_margin = dpi.y(15, launcher_screen)
 		margin:set_left(x_margin)
@@ -235,7 +237,7 @@ local function start_desktop_entry(desktop_entry)
 	end
 
 	log.info("Starting %s via desktop file: %s", desktop_entry.Name, desktop_entry.file)
-	awful.util.spawn("dex '" .. desktop_entry.file .. "'")
+	awful.spawn.spawn("dex '" .. desktop_entry.file .. "'")
 	return true
 end
 
@@ -324,7 +326,7 @@ local function setup_result_list_ui()
 	more_results_label = dpi.textbox(' ', launcher_screen)
 	more_results_label:set_align('right')
 	more_results_label:set_valign('center')
-	search_results:add(wibox.layout.margin(more_results_label, 20, 20, 5, 5))
+	search_results:add(wibox.container.margin(more_results_label, 20, 20, 5, 5))
 end
 
 local function setup_ui()
@@ -355,7 +357,7 @@ local function setup_ui()
 	hotkey_panel:add(hotkey_rows[2])
 	hotkey_panel:add(hotkey_rows[1])
 
-	local inputbox_margin = wibox.layout.margin(inputbox, 20, 20, 20, 20)
+	local inputbox_margin = wibox.container.margin(inputbox, 20, 20, 20, 20)
 
 	split_container:set_middle(hotkey_panel)
 	split_container:set_bottom(inputbox_margin)
@@ -369,7 +371,11 @@ local function new(self)
 	setup_ui()
 	reload_hotkeys()
 
-	xdg.refresh()
+	-- xdg.refresh()
+	-- Refresh all menu entries
+	menubar.menu_gen.generate(function(apps)
+		self._apps = apps
+	end)
 
 	return self
 end

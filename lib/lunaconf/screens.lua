@@ -68,14 +68,11 @@ local function detect_primary_screen()
 end
 
 function screens.primary_index()
-	if primary == nil then
-		primary = detect_primary_screen()
-	end
-	return primary
+	return screen.primary.index
 end
 
 function screens.primary()
-	return screen[screens.primary_index()]
+	return screen.primary
 end
 
 function screens.xdpi(screen)

@@ -39,9 +39,9 @@ local function screen_tag(screen)
 	label.fit = function (wibox, w, h)
 		return math.min(w, h), math.min(w, h)
 	end
-	local hk_badge = wibox.widget.background(label)
+	local hk_badge = wibox.container.background(label)
 	hk_badge:set_bg(theme.taglist_badge_bg or theme.bg_normal)
-	local margin = wibox.layout.margin(hk_badge, 6, 6, 6, 6)
+	local margin = wibox.container.margin(hk_badge, 6, 6, 6, 6)
 	return margin
 end
 
@@ -51,7 +51,7 @@ local function hotkey_badge(hotkey)
 	hk_label:set_align('center')
 	hk_label:set_valign('center')
 	hk_label.fit = function (wibox, w, h) return 40, 40 end
-	local hk_badge = wibox.widget.background(hk_label)
+	local hk_badge = wibox.container.background(hk_label)
 	hk_badge:set_bg(theme.taglist_badge_bg or theme.bg_normal)
 	return hk_badge
 end
@@ -78,11 +78,11 @@ function common.icon_widgets(screen, w, buttons, label, data, objects)
 			main = cache.main
 		else
 			ib = wibox.widget.imagebox()
-			bgb = wibox.widget.background()
+			bgb = wibox.container.background()
 			main = layout_badge(bgb)
 			local x_margin = dpi.x(4, screen)
 			local y_margin = dpi.y(4, screen)
-			im = wibox.layout.margin(ib, x_margin, x_margin, y_margin, y_margin)
+			im = wibox.container.margin(ib, x_margin, x_margin, y_margin, y_margin)
 			tooltip = awful.tooltip({
 				margin_topbottom = 400, -- does not work yet
 				margin_leftright = 50

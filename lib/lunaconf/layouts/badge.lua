@@ -1,5 +1,4 @@
-local widget_base = require('wibox.widget.base')
-local base = require('wibox.layout.base')
+local base = require('wibox.widget.base')
 local debug = require('gears.debug')
 local table = table
 local type = type
@@ -17,10 +16,21 @@ local function draw_badge(badge, wibox, cr, width, height, horizontal, vertical)
 		h = math.min(height * badge.max_height, h)
 	end
 
-	base.draw_widget(wibox, cr, badge.widget,
+	-- base.draw_widget(wibox, cr, badge.widget,
+	-- 	),
+	-- 	,
+	-- 	w, h)
+
+	cr:save()
+	cr:translate(
 		horizontal * (width - w) + ((1 - horizontal * 2) * badge.margin),
-		vertical * (height - h) + ((1 - vertical * 2) * badge.margin),
-		w, h)
+		vertical * (height - h) + ((1 - vertical * 2) * badge.margin)
+	)
+	cr:rectangle(0, 0, w, h)
+	cr:clip()
+
+
+	-- local
 end
 
 function badge:draw(wibox, cr, width, height)
@@ -42,8 +52,8 @@ end
 
 function badge:add_badge(placement, widget, margin, max_width, max_height)
 	-- Check that placement is one of the valid placements
-	debug.assert(placement == 'se' or placement == 'ne' or placement == 'nw' or placement == 'sw')
-	widget_base.check_widget(widget)
+	assert(placement == 'se' or placement == 'ne' or placement == 'nw' or placement == 'sw')
+	base.check_widget(widget)
 
 	self.badges[placement] = {
 		widget = widget,
@@ -54,7 +64,7 @@ function badge:add_badge(placement, widget, margin, max_width, max_height)
 end
 
 function badge:set_widget(widget)
-	widget_base.check_widget(widget)
+	base.check_widget(widget)
 	self.widget = widget
 	-- TODO: emit update event
 end
@@ -64,9 +74,9 @@ function badge:fit(width, height)
 end
 
 local function new(self, widget)
-	local w = widget_base.make_widget()
+	local w = base.make_widget()
 
-	widget_base.check_widget(widget)
+	base.check_widget(widget)
 
 	-- Overwrite functions
 	for k, v in pairs(badge) do

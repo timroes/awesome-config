@@ -66,24 +66,24 @@ local function create_ui(self)
 	shortcut:set_valign('center')
 	shortcut.fit = function(wid, w, h) return dpi.x(30, self._screen), dpi.y(30, self._screen) end
 
-	self._shortcut_bg = wibox.widget.background(shortcut)
+	self._shortcut_bg = wibox.container.background(shortcut)
 
 	local text = wibox.layout.flex.vertical()
 	text:add(self._title)
 	text:add(self._description)
 
 	item:add(self._shortcut_bg)
-	item:add(wibox.layout.margin(self._icon, dpi.x(8, self._screen), dpi.y(8, self._screen), 0, 0))
+	item:add(wibox.container.margin(self._icon, dpi.x(8, self._screen), dpi.y(8, self._screen), 0, 0))
 	item:add(text)
 
-	self._placeholder = wibox.widget.background()
+	self._placeholder = wibox.container.background()
 	self._placeholder.fit = function(wi, w, h) return dpi.x(48, self._screen), dpi.y(48, self._screen) end
 
 	return item
 end
 
 function new(_, index, screen)
-	local self = wibox.layout.margin()
+	local self = wibox.container.margin()
 
 	self._screen = screen
 

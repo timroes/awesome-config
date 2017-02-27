@@ -6,9 +6,9 @@ local icons = require("lunaconf.icons")
 
 -- Create own tag for pidgin
 local pidgin_tag = awful.tag.add("Pidgin", { hotkey = "p" })
-awful.tag.seticon(icons.lookup_icon('internet-chat'), pidgin_tag)
+pidgin_tag.icon = icons.lookup_icon('internet-chat')
 -- awful.tag.seticon("/usr/share/icons/hicolor/48x48/apps/pidgin.png", pidgin_tag)
-awful.tag.setscreen(pidgin_tag, PIDGIN_SCREEN)
+pidgin_tag.screen = PIDGIN_SCREEN
 -- Limit tag to pidgin's windows
 limit_tag(pidgin_tag, { class = "Pidgin" })
 -- start pidgin on this tag
@@ -16,7 +16,7 @@ start_on_tag(pidgin_tag, "pidgin")
 
 -- Set layout to tiling mode on pidgin tab
 awful.layout.set(awful.layout.suit.tile.right, pidgin_tag)
-awful.tag.setmwfact(0.2, pidgin_tag)
+pidgin_tag.master_width_factor = 0.2
 
 -- Store tags that has been activated when switching to pidgin tag
 local tags_before = nil

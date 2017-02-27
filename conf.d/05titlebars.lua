@@ -51,7 +51,7 @@ local function refresh_titlebar(c)
 	})
 
 	local icon = awful.titlebar.widget.iconwidget(c)
-	local margin_icon = wibox.layout.margin(icon,
+	local margin_icon = wibox.container.margin(icon,
 			lunaconf.dpi.x(8, s),
 			lunaconf.dpi.x(12, s),
 			lunaconf.dpi.y(5, s),

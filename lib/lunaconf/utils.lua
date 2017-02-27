@@ -1,6 +1,7 @@
 local awful = require('awful')
 local strings = require('lunaconf.strings')
 local lfs = require('lfs')
+local io = io
 
 local utils = {}
 
@@ -18,7 +19,7 @@ end
 function utils.run_once(cmd, pidof)
 	local pidof = pidof or cmd:match('[%w]+')
 	if not utils.is_running(pidof) then
-		awful.util.spawn(cmd)
+		awful.spawn.spawn(cmd)
 	end
 end
 

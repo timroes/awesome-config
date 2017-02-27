@@ -11,4 +11,4 @@ local screensaver_timeout = lunaconf.config.get('screensaver.timeout', 10)
 lunaconf.utils.run_once("xautolock -time " .. screensaver_timeout .. " -locker '" .. lock_cmd .. "'")
 
 -- Add shortcut for config.MOD + l to lock the screen
-lunaconf.keys.globals(awful.key({ config.MOD }, "l", function() awful.util.spawn(lock_cmd) end))
+lunaconf.keys.globals(awful.key({ config.MOD }, "l", function() awful.spawn.spawn(lock_cmd) end))

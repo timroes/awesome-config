@@ -27,7 +27,7 @@ local function create(_, screen)
 	textbox:set_align("center")
 	textbox:set_markup(string.format(button_text, disabled_color))
 
-	widget = w.layout.margin(textbox, dpi.x(5, screen), dpi.x(5, screen), 0, 0)
+	widget = w.container.margin(textbox, dpi.x(5, screen), dpi.x(5, screen), 0, 0)
 
 	widget:buttons(awful.util.table.join(
 		awful.button({ }, 1, function()

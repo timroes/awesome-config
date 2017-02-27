@@ -22,15 +22,30 @@ do
 end
 -- }}}
 
--- Add luarocks pathes to package pathes
-local luarockPath = awful.util.pread('luarocks path --lr-path')
-local luarockCpath = awful.util.pread('luarocks path --lr-cpath')
+-- Helper function to read output of program synchronously
+-- Required to get the luarock pathes
+local function pread_sync(cmd)
+	if cmd and cmd ~= "" then
+			local f, err = io.popen(cmd, 'r')
+			if f then
+					local s = f:read("*all")
+					f:close()
+					return s
+			else
+					return err
+			end
+	end
+end
 
+-- Read out the luarocks paths and append them to the package.path/cpath
+local luarockPath = pread_sync('luarocks path --lr-path')
+local luarockCpath = pread_sync('luarocks path --lr-cpath')
 -- Set path configuration
 local configpath = awful.util.getdir('config')
-scriptpath = configpath .. "/scripts/"
-package.path = configpath .. "/lib/?.lua;" .. configpath .. "/lib/?/init.lua;" .. luarockPath .. ";" .. package.path
+package.path = configpath .. "/lib/?.lua;" .. configpath .. "/lib/?/init.lua;" .. ";" .. luarockPath .. package.path
 package.cpath = luarockCpath .. ";" .. package.cpath
+
+scriptpath = configpath .. "/scripts/"
 
 local log = require('lunaconf.log')
 
