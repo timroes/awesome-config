@@ -20,21 +20,28 @@ local function draw_badge(badge, wibox, cr, width, height, horizontal, vertical)
 	-- 	),
 	-- 	,
 	-- 	w, h)
-
-	cr:save()
-	cr:translate(
-		horizontal * (width - w) + ((1 - horizontal * 2) * badge.margin),
-		vertical * (height - h) + ((1 - vertical * 2) * badge.margin)
-	)
-	cr:rectangle(0, 0, w, h)
-	cr:clip()
+	--
+	-- cr:save()
+	-- cr:translate(
+	-- 	horizontal * (width - w) + ((1 - horizontal * 2) * badge.margin),
+	-- 	vertical * (height - h) + ((1 - vertical * 2) * badge.margin)
+	-- )
+	-- cr:rectangle(0, 0, w, h)
+	-- cr:clip()
 
 
 	-- local
 end
 
 function badge:draw(wibox, cr, width, height)
-	base.draw_widget(wibox, cr, self.widget, 0, 0, width, height)
+	-- base.draw_widget(wibox, cr, self.widget, 0, 0, width, height)
+	-- cr:save()
+	-- cr:translate(
+	-- 	horizontal * (width - w) + ((1 - horizontal * 2) * badge.margin),
+	-- 	vertical * (height - h) + ((1 - vertical * 2) * badge.margin)
+	-- )
+	-- cr:rectangle(0, 0, w, h)
+	-- cr:clip()
 
 	if self.badges.se then
 		draw_badge(self.badges.se, wibox, cr, width, height, 1, 1)

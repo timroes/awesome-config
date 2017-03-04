@@ -2,6 +2,7 @@ local wibox = require('wibox')
 local screens = require('lunaconf.screens')
 local dpi = require('lunaconf.dpi')
 local config = require('lunaconf.config')
+local gears = require('gears')
 local awesome = awesome
 
 local systray = {}
@@ -23,12 +24,6 @@ local function new(self)
 		type = 'utility'
 	})
 
-	local hide_timer = timer({ timeout = 5 })
-	hide_timer:connect_signal("timeout", function()
-		self._panel.visible = false
-		hide_timer:stop()
-	end)
-
 	local syswidget = wibox.widget.systray()
 
 	self._panel:set_widget(syswidget)
@@ -41,9 +36,9 @@ local function new(self)
 		self._panel.y = math.ceil(screen.geometry.y + screen.geometry.height - h)
 		-- Show systray when it changed
 		self._panel.visible = true
-		if not hide_timer.started then
-			hide_timer:again()
-		end
+		gears.timer.start_new(5.0, function()
+			self._panel.visible = false
+		end)
 	end)
 
 	return self

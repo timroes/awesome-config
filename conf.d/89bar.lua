@@ -99,7 +99,12 @@ for s = 1, screen.count() do
 	layout:set_middle(tasklists[s])
 	layout:set_right(right_layout)
 
-	bars[s] = awful.wibox({ position = "top", screen = s, height = lunaconf.dpi.y(config.get("bar.height", 52), screen[s]), bg = lunaconf.theme.get().screenbar_bg })
+	bars[s] = awful.wibar({
+		position = "top",
+		screen = s,
+		height = lunaconf.dpi.y(config.get("bar.height", 52), screen[s]),
+		bg = lunaconf.theme.get().screenbar_bg
+	})
 	bars[s]:set_widget(layout)
 
 end
