@@ -92,21 +92,8 @@ local function new(self, shape, width, height, args)
 	widget._margin_vertical = args.margin_vertical or args.margin or 0
 	widget._margin_horizontal = args.margin_horizontal or args.margin or 0
 
-	-- if args.hover_color then
-	-- 	widget._hover_color = gears.color(args.hover_color or '#333333')
-	-- 	widget:connect_signal("mouse::enter", function()
-	-- 		widget._cur_color = widget._hover_color
-	-- 		widget:emit_signal("widget::updated")
-	-- 	end)
-	-- 	widget:connect_signal("mouse::leave", function()
-	-- 		widget._cur_color = widget._color
-	-- 		widget:emit_signal("widget::updated")
-	-- 	end)
-	-- end
-
 	widget._color = args.color and gears.color(args.color)
 	widget._color2 = args.color2 and gears.color(args.color2)
-	-- widget._cur_color = widget._color
 
 	return widget
 end
