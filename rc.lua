@@ -5,6 +5,14 @@ require("awful.autofocus")
 -- Notification library
 local naughty = require("naughty")
 
+function dbg(string)
+	naughty.notify({
+		preset = naughty.config.presets.critical,
+		title = 'Debug output',
+		text = tostring(string)
+	})
+end
+
 -- {{{ Error handling
 -- Handle runtime errors after startup
 do
@@ -41,7 +49,7 @@ end
 local luarockPath = pread_sync('luarocks path --lr-path')
 local luarockCpath = pread_sync('luarocks path --lr-cpath')
 -- Set path configuration
-local configpath = awful.util.getdir('config')
+local configpath = awful.util.get_configuration_dir()
 package.path = configpath .. "/lib/?.lua;" .. configpath .. "/lib/?/init.lua;" .. ";" .. luarockPath .. package.path
 package.cpath = luarockCpath .. ";" .. package.cpath
 

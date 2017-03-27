@@ -75,6 +75,7 @@ local function get_matching_apps()
 
 	-- This is the actual search logic to find matching applications.
 	-- Here is a lot of potential to improve this logic.
+	log.info("matching apps: %s", self._apps)
 	for k,v in pairs(self._apps) do
 		if (v.Name and v.Name:lower():find(search)) then
 			table.insert(result, v)
@@ -102,6 +103,7 @@ local function change_selected_item(index)
 end
 
 local function update_result_list()
+	log.info("update_result_list() %s", self)
 	-- Load all matching results
 	current_shown_results = get_matching_apps()
 
@@ -329,7 +331,8 @@ local function setup_result_list_ui()
 	search_results:add(wibox.container.margin(more_results_label, 20, 20, 5, 5))
 end
 
-local function setup_ui()
+local function setup_ui(self)
+	log.info("setup_ui() %s", self)
 	local box = wibox({
 		bg = '#222222',
 		width = width,
@@ -374,6 +377,7 @@ local function new(self)
 	-- xdg.refresh()
 	-- Refresh all menu entries
 	menubar.menu_gen.generate(function(apps)
+		log.info('Refreshed app!!!! %s', self)
 		self._apps = apps
 	end)
 

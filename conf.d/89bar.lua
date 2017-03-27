@@ -58,12 +58,14 @@ end
 
 for s = 1, screen.count() do
 
-	tasklists[s] = lunaconf.widgets.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklists.buttons)
+	-- TODO: Use custom tasklist again if needed
+	tasklists[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklists.buttons)
 
 	local layoutbox = awful.widget.layoutbox(s)
 
 	local left_layout = wibox.layout.fixed.horizontal()
-	left_layout:add(lunaconf.widgets.taglist(s, awful.widget.taglist.filter.all, taglist.buttons))
+	-- TODO: Use custom taglist again
+	left_layout:add(awful.widget.taglist(s, awful.widget.taglist.filter.all, taglist.buttons))
 	left_layout:add(spacer(5, screen[s]))
 
 	local right_layout = wibox.layout.fixed.horizontal()
@@ -77,6 +79,7 @@ for s = 1, screen.count() do
 			elseif w == 'displayswitcher' then
 				right_layout:add(displayswitcher())
 			elseif w == 'battery' then
+				-- TODO: Broken in awesome 4, create a new one
 				right_layout:add(battery(screen[s]))
 			elseif w == 'screensaver' then
 				right_layout:add(lunaconf.widgets.screensaver(screen[s]))
@@ -85,7 +88,7 @@ for s = 1, screen.count() do
 			elseif w == 'systray' then
 				right_layout:add(wibox.widget.systray())
 			elseif w == 'clock' then
-				local clock = lunaconf.widgets.textclock("%a, %e. %b  %H:%M", 60)
+				local clock = wibox.widget.textclock("%a, %e. %b  %H:%M")
 				lunaconf.dpi.textbox(clock, screen[s])
 				orglendar(clock, screen[s])
 				right_layout:add(clock)
