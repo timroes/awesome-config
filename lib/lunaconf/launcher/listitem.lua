@@ -12,7 +12,6 @@ function listitem:set_icon(icon)
 	self._icon:set_image(icon)
 end
 
-
 function listitem:set_highlight(highlight)
 	if highlight then
 		self._shortcut_bg:set_bg('#2196F3')

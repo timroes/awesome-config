@@ -16,7 +16,9 @@ function xdg.refresh(callback)
 
 	apps = {}
 	for i,path in ipairs(data_dirs) do
-		utils.merge_into_table(apps, menubar.utils.parse_dir(path .. 'applications'))
+		menubar.utils.parse_dir(path .. 'applications', function(result)
+			utils.merge_into_table(apps, result)
+		end)
 	end
 end
 
