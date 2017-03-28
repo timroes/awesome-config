@@ -1,5 +1,3 @@
-local base = require('wibox.widget.base')
-local debug = require('gears.debug')
 local table = table
 local type = type
 local math = math
