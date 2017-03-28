@@ -15,4 +15,8 @@ function strings.split(str, sep)
 	return fields
 end
 
+function strings.starts_with(str, start)
+	return string.sub(str, 1, string.len(start)) == start
+end
+
 return strings

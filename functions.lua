@@ -52,31 +52,3 @@ client.connect_signal("tagged", function(c, t)
 		end
 	end
 end)
-
--- Limit clients that can be attached to a specific tag.
--- Every client that is attached to the given tag is checked
--- against the given filter. If it doesn't match the filter
--- it won't be attached to the tag. If it has other tags left,
--- nothing will happen, if no other tags are attached, it will be
--- tagged with the default tag of the screen it was created on.
-function limit_tag(tag, filter)
-	tag_limits[tag] = filter
-end
-
--- Starts a program, if it isn't already running, when switching
--- to a specific tag.
-function start_on_tag(tag, cmd)
-	local proc = cmd:sub(0, cmd:find(" "))
-	tag:connect_signal("property::selected", function(t)
-		if t.selected then
-			local pid = tonumber(awful.util.pread("pidof " .. proc))
-			if not pid then
-				awful.spawn.spawn(cmd)
-			end
-		end
-	end)
-end
-
-function string.starts(str, start)
-	return string.sub(str, 1, string.len(start)) == start
-end
