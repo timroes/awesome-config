@@ -7,6 +7,7 @@ local xdg = require('lunaconf.xdg')
 local strings = require('lunaconf.strings')
 local theme = require('lunaconf.theme')
 local dpi = require('lunaconf.dpi')
+local utils = require('lunaconf.utils')
 local badge = require('lunaconf.layouts.badge')
 local inifile = require('lunaconf.inifile')
 local screens = require('lunaconf.screens')
@@ -238,7 +239,7 @@ local function start_desktop_entry(desktop_entry)
 	end
 
 	log.info("Starting %s via desktop file: %s", desktop_entry.Name, desktop_entry.file)
-	awful.spawn.spawn("dex '" .. desktop_entry.file .. "'")
+	utils.spawn("dex '" .. desktop_entry.file .. "'")
 	return true
 end
 

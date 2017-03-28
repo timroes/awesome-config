@@ -1,4 +1,3 @@
-local awful = require('awful')
 local lunaconf = require('lunaconf')
 local naughty = require('naughty')
 
@@ -6,7 +5,7 @@ local naughty = require('naughty')
 -- if dex isn't installed
 lunaconf.utils.command_exists('dex', function(exists)
 	if exists then
-		-- awful.spawn.spawn("dex -a -e awesome")
+		lunaconf.utils.spawn("dex -a -e awesome")
 	else
 		naughty.notify({
 			title = "dex missing",

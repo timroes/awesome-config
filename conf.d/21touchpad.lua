@@ -1,4 +1,4 @@
 -- Configure touchpad and trackpoints if available on this device
-local awful = require('awful')
+local lunaconf = require('lunaconf')
 
-awful.spawn.spawn(scriptpath .. '/init_touchpads.sh')
+lunaconf.utils.spawn(scriptpath .. '/init_touchpads.sh')

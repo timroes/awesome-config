@@ -13,7 +13,7 @@ local current_layout = 1
 local last_id = 0
 
 local set_current_layout = function()
-	awful.spawn.spawn(setkeymap .. " " .. keyboard_layouts[current_layout])
+	lunaconf.utils.spawn(setkeymap .. " " .. keyboard_layouts[current_layout])
 end
 
 -- Initialize with primary keyboard layout
@@ -31,4 +31,4 @@ lunaconf.keys.globals(awful.key({ MOD }, "Tab", function()
 end))
 
 -- Enable X-server kill
-awful.spawn.spawn(setkeymap .. " -option terminate:ctrl_alt_bksp")
+lunaconf.utils.spawn(setkeymap .. " -option terminate:ctrl_alt_bksp")

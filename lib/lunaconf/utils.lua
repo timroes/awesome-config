@@ -6,6 +6,13 @@ local log = require('lunaconf.log')
 
 local utils = {}
 
+--- A wrapper around `awful.spawn`, that spawns a process but forwards it's
+--- stdout and stderr to a logfile.
+-- @param cmd the command and all its parameters to run
+function utils.spawn(cmd)
+	awful.spawn.with_shell(cmd .. ' >> /tmp/awesome.spawn.log 2>&1')
+end
+
 --- Runs a command if it's not already started
 -- @param cmd the command and all its parameters to run
 -- @param pidof an optional string to use in the pidof check to
@@ -15,7 +22,7 @@ function utils.run_once(cmd, pidof)
 	local pidof = pidof or cmd:match('[%w]+')
 	awful.spawn.easy_async('pidof ' .. pidof, function(pid)
 		if pid ~= nil and pid:len() > 0 then
-			awful.spawn.spawn(cmd)
+			utils.spawn(cmd)
 		end
 	end)
 end
