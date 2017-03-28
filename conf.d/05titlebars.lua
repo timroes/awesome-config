@@ -71,8 +71,7 @@ local function refresh_titlebar(c)
 
 	if floating_color then
 		local switch_floating = function ()
-			local floating = awful.client.floating.get(c)
-			client_status:set_color2(floating and floating_color or nil)
+			client_status:set_color2(c.floating and floating_color or nil)
 		end
 
 		c:connect_signal("property::floating", switch_floating)

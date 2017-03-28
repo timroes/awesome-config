@@ -37,7 +37,7 @@ client.connect_signal("tagged", function(c, t)
 	end
 
 	-- Allow floating, ontop clients everywhere
-	if awful.client.floating.get(c) and c.skip_taskbar then
+	if c.floating and c.skip_taskbar then
 		return
 	end
 

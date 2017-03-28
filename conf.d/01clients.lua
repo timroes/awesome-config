@@ -46,7 +46,7 @@ buttons = awful.util.table.join(
 		else
 			-- On any non tiling screen we make the client floating and start resize mode
 			if not lunaconf.clients.get_attr(c, 'unresizeable', false) then
-				awful.client.floating.set(c, true)
+				c.floating = true
 				awful.mouse.client.resize(c)
 			end
 		end
@@ -124,7 +124,7 @@ client.connect_signal("manage", function(c, startup)
 		-- out a tab, so make it floating, so chromium can control its position
 		-- while we drag it to its final position
 		if under_mouse and under_mouse.pid == c.pid then
-			awful.client.floating.set(c, true)
+			c.floating = true
 		end
 	end
 
@@ -136,7 +136,7 @@ client.connect_signal("manage", function(c, startup)
 	c.maximized_horizontal = false
 
 	if c.role == "pop-up" then
-		awful.client.floating.set(c, true)
+		c.floating = true
 	end
 
 	if c.size_hints then
@@ -145,7 +145,7 @@ client.connect_signal("manage", function(c, startup)
 		if sh.user_size and sh.user_size.width ~= wa.width and sh.user_size.height ~= wa.height then
 			-- If the user size hint is set, make the window floating and give it the specific size
 			-- unless the size matches exactly the size of the workarea, in this case leave it fullscreen.
-			awful.client.floating.set(c, true)
+			c.floating = true
 			c:geometry(sh.user_size)
 			awful.placement.centered(c, nil)
 		elseif sh.max_height and sh.max_width and sh.max_height == sh.min_height and sh.min_width == sh.max_width then
@@ -153,7 +153,7 @@ client.connect_signal("manage", function(c, startup)
 			-- If so, treat this client as a dialog window (center it and make it floating)
 			-- Also make it unresizeable (also meaning it cannot be unfloated)
 			lunaconf.clients.set_attr(c, 'unresizeable', true)
-			awful.client.floating.set(c, true)
+			c.floating = true
 			awful.placement.centered(c, nil)
 		end
 	end

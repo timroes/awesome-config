@@ -4,7 +4,7 @@ local awful = require('awful')
 if not lunaconf.config.get('disable_compositor', false) then
 	local function set_shadow_hint(c)
 		local no_shadow
-		if awful.client.floating.get(c) then
+		if c.floating then
 			no_shadow = 0
 		else
 			no_shadow = 1
