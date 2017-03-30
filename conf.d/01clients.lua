@@ -13,9 +13,11 @@ local move_client = function(c, direction)
 
 	-- Only allow window move for windows on not named tags
 	if #cur_tag.name <= 1 then
-		local new_screen = ((c.screen - 1 + direction) % screen.count()) + 1
-		local new_tag = default_tag_for_screen(new_screen)
-		awful.client.movetotag(new_tag, c)
+		local new_screen = c.screen:get_next_in_direction(direction)
+		if new_screen then
+			local new_tag = default_tag_for_screen(new_screen)
+			awful.client.movetotag(new_tag, c)
+		end
 	end
 end
 
@@ -62,11 +64,10 @@ keys = awful.util.table.join(
 	awful.key({ "Mod1" }, "F4", function(c) c:kill() end),
 
 	-- move client to other screen/tag
-	awful.key({ MOD }, "Right", function(c) move_client(c, 1) end),
-	awful.key({ MOD }, "Left", function(c) move_client(c, -1) end),
-
-	-- Minimize current window
-	awful.key({ MOD }, "Down", function(c) c.minimized = true end),
+	awful.key({ MOD }, "Right", function(c) move_client(c, 'right') end),
+	awful.key({ MOD }, "Left", function(c) move_client(c, 'left') end),
+	awful.key({ MOD }, "Down", function(c) move_client(c, 'down') end),
+	awful.key({ MOD }, "Up", function(c) move_client(c, 'up') end),
 
 	-- swap clients into direction (only works in split mode (see tags.lua))
 	awful.key({ MOD, "Control" }, "Right", function(c) awful.client.swap.bydirection("right") end),
