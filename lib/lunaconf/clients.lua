@@ -54,8 +54,8 @@ end
 function clients.smart_move(c)
 	clients.move(c, {
 		snap = 8,
-		threshold = awful.client.floating.get(c) and 0 or 8,
-		threshold_cb = function() awful.client.floating.set(c, true) end,
+		threshold = c.floating and 0 or 8,
+		threshold_cb = function() c.floating = true end,
 		finished_cb = function()
 			local s = screen[c.screen].workarea
 			local g = c:geometry()
@@ -64,7 +64,7 @@ function clients.smart_move(c)
 					and s.y == g.y
 					and s.width == g.width
 					and s.height == g.height then
-				awful.client.floating.set(c, false)
+				c.floating = false
 			end
 		end
 	})
@@ -129,7 +129,7 @@ function clients.move(c, args)
 
 					-- If we passed the threshold already, move the client
 					if is_moving then
-						if awful.layout.get(c.screen) == awful.layout.suit.floating or awful.client.floating.get(c) then
+						if awful.layout.get(c.screen) == awful.layout.suit.floating or c.floating then
 							local x = ev.x - offset_x
 							local y = ev.y - offset_y
 							c:geometry(awful.mouse.client.snap(c, snap, x, y, fixed_x, fixed_y))
