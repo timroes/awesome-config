@@ -21,7 +21,7 @@ end
 function utils.run_once(cmd, pidof)
 	local pidof = pidof or cmd:match('[%w]+')
 	awful.spawn.easy_async('pidof ' .. pidof, function(pid)
-		if pid ~= nil and pid:len() > 0 then
+		if pid == nil or pid:len() == 0 then
 			utils.spawn(cmd)
 		end
 	end)
