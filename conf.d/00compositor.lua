@@ -19,5 +19,7 @@ if not lunaconf.config.get('disable_compositor', false) then
 		c:connect_signal("property::floating", set_shadow_hint)
 	end)
 
-	lunaconf.utils.run_once('compton --config ' .. awful.util.get_configuration_dir() .. '/compton.conf -b')
+	if not awesome.composite_manager_running then
+		lunaconf.utils.run_once('compton --config ' .. awful.util.get_configuration_dir() .. '/compton.conf -b')
+	end
 end
