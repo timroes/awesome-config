@@ -9,7 +9,7 @@ local root = root
 
 module('widgets.displayswitcher')
 
-local ICON = awful.util.getdir('config') .. '/images/display.png'
+local ICON = awful.util.get_configuration_dir() .. '/images/display.png'
 local is_active
 
 local function read(file)

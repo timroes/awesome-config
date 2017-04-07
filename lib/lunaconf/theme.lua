@@ -3,9 +3,9 @@ local awful = require('awful')
 
 local theme = {}
 
-local themepath = awful.util.getdir('config') .. "/theme/light/"
+local themepath = awful.util.get_configuration_dir() .. "/theme/light/"
 
-beautiful.init(awful.util.getdir('config') .. "/theme/light/theme.lua")
+beautiful.init(awful.util.get_configuration_dir() .. "/theme/light/theme.lua")
 
 function theme.get()
 	return beautiful.get()

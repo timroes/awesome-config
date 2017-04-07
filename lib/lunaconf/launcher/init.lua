@@ -215,7 +215,7 @@ local function save_hotkey(self, key, desktop_entry)
 	ini['Hotkeys'] = ini['Hotkeys'] or {}
 	ini['Hotkeys'][tostring(key)] = desktop_entry.file
 	-- Create cache folder if it doesn't exist yet
-	lfs.mkdir(awful.util.getdir('cache'))
+	lfs.mkdir(awful.util.get_cache_dir())
 	inifile.save(config_file, ini, 'io')
 	reload_hotkeys()
 	current_search = ""

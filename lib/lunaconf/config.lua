@@ -5,7 +5,7 @@ local config = {}
 
 local settings = {}
 
-local configFile = io.open(awful.util.getdir('config') .. '/config.yml', 'r')
+local configFile = io.open(awful.util.get_configuration_dir() .. '/config.yml', 'r')
 if configFile then
 	local configYaml = configFile:read('*all')
 	configFile:close()
