@@ -132,7 +132,7 @@ function clients.move(c, args)
 						if awful.layout.get(c.screen) == awful.layout.suit.floating or c.floating then
 							local x = ev.x - offset_x
 							local y = ev.y - offset_y
-							c:geometry(awful.mouse.client.snap(c, snap, x, y, fixed_x, fixed_y))
+							c:geometry(awful.mouse.snap(c, snap, x, y, fixed_x, fixed_y))
 						end
 					end
 					return true
