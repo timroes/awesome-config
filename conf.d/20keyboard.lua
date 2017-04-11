@@ -10,8 +10,6 @@ local setkeymap = "setxkbmap"
 local keyboard_layouts = lunaconf.config.get("keyboard_layouts", { "us" })
 local current_layout = 1
 
-local last_id = 0
-
 local set_current_layout = function()
 	lunaconf.utils.spawn(setkeymap .. " " .. keyboard_layouts[current_layout])
 end
@@ -19,15 +17,15 @@ end
 -- Initialize with primary keyboard layout
 set_current_layout()
 
-lunaconf.keys.globals(awful.key({ MOD }, "Tab", function()
+lunaconf.keys.globals(awful.key({ "Mod1" }, "Shift_L", function()
 	current_layout = ((current_layout) % #keyboard_layouts) + 1
 	set_current_layout()
-	local notif = naughty.notify({
+	lunaconf.notify.show_or_update('keyboard_layout::switch', {
 		title = "Changed keyboard layout",
 		text = keyboard_layouts[current_layout]:upper(),
-		replaces_id = last_id
+		icon = "input-keyboard",
+		timeout = 2
 	})
-	last_id = notif.id
 end))
 
 -- Enable X-server kill
