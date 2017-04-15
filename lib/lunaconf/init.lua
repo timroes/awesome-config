@@ -12,6 +12,7 @@ return {
 	notify = require('lunaconf.notify'),
 	screens = require('lunaconf.screens'),
 	strings = require('lunaconf.strings'),
+	tags = require('lunaconf.tags'),
 	theme = require('lunaconf.theme'),
 	widgets = require('lunaconf.widgets'),
 	utils = require('lunaconf.utils'),

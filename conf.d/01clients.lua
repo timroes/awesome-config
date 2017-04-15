@@ -15,7 +15,7 @@ local move_client = function(c, direction)
 	if #cur_tag.name <= 1 then
 		local new_screen = c.screen:get_next_in_direction(direction)
 		if new_screen then
-			local new_tag = default_tag_for_screen(new_screen)
+			local new_tag = lunaconf.tags.default_tag_for_screen(new_screen)
 			awful.client.movetotag(new_tag, c)
 		end
 	end
