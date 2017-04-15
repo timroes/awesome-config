@@ -13,6 +13,8 @@ if not lunaconf.config.get('disable_compositor', false) then
 	end
 
 	-- Shadow handling of compton
+	-- Disable shadows (set _COMPTON_NO_SHADOW xproperty) on all non floating windows
+	-- so they won't leave ugly shadows on the screen bar(s).
 	awesome.register_xproperty("_COMPTON_NO_SHADOW", "number")
 	client.connect_signal("manage", function(c, startup)
 		set_shadow_hint(c)
