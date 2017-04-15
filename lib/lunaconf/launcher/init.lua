@@ -58,7 +58,7 @@ local function hotkey_badge(text)
 	-- dpi.textbox(hk_label)
 	hk_label:set_align('center')
 	hk_label:set_valign('center')
-	hk_label.fit = function (wibox, w, h) return 40, 40 end
+	hk_label.fit = function (wibox, w, h) return 30, 30 end
 	local hk_badge = wibox.container.background(hk_label)
 	hk_badge:set_bg('#EEEEEEAA' or theme.get().taglist_badge_bg or theme.get().bg_normal)
 	hk_badge:set_fg('#000000')
@@ -178,7 +178,7 @@ local function reload_hotkeys()
 			icon_w.width = dpi.x(48, launcher_screen)
 			icon_w.height = dpi.y(48, launcher_screen)
 			local bad = badge(icon_w)
-			bad:add_badge('sw', hotkey_badge(tostring(key)), 3, 0.4, 0.4)
+			bad:add_badge(hotkey_badge(tostring(key)), 'left', 'bottom')
 
 			widget = wibox.layout.align.horizontal()
 			widget:set_second(bad)

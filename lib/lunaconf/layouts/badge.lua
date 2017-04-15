@@ -4,68 +4,25 @@ local math = math
 local wibox = require('wibox')
 
 local badge = {}
---
--- local function draw_badge(badge, wibox, cr, width, height, horizontal, vertical)
--- 	local w, h = base.fit_widget(badge.widget, width, height)
--- 	if badge.max_width then
--- 		w = math.min(width * badge.max_width, w)
--- 	end
--- 	if badge.max_height then
--- 		h = math.min(height * badge.max_height, h)
--- 	end
---
--- 	-- base.draw_widget(wibox, cr, badge.widget,
--- 	-- 	),
--- 	-- 	,
--- 	-- 	w, h)
--- 	--
--- 	-- cr:save()
--- 	-- cr:translate(
--- 	-- 	horizontal * (width - w) + ((1 - horizontal * 2) * badge.margin),
--- 	-- 	vertical * (height - h) + ((1 - vertical * 2) * badge.margin)
--- 	-- )
--- 	-- cr:rectangle(0, 0, w, h)
--- 	-- cr:clip()
---
---
--- 	-- local
--- end
 
--- function badge:draw(wibox, cr, width, height)
--- 	-- base.draw_widget(wibox, cr, self.widget, 0, 0, width, height)
--- 	-- cr:save()
--- 	-- cr:translate(
--- 	-- 	horizontal * (width - w) + ((1 - horizontal * 2) * badge.margin),
--- 	-- 	vertical * (height - h) + ((1 - vertical * 2) * badge.margin)
--- 	-- )
--- 	-- cr:rectangle(0, 0, w, h)
--- 	-- cr:clip()
---
--- 	if self.badges.se then
--- 		draw_badge(self.badges.se, wibox, cr, width, height, 1, 1)
--- 	end
--- 	if self.badges.sw then
--- 		draw_badge(self.badges.sw, wibox, cr, width, height, 0, 1)
--- 	end
--- 	if self.badges.ne then
--- 		draw_badge(self.badges.ne, wibox, cr, width, height, 1, 0)
--- 	end
--- 	if self.badges.nw then
--- 		draw_badge(self.badges.nw, wibox, cr, width, height, 0, 0)
--- 	end
--- end
+function badge:add_badge(widget, align, valign)
+	-- Check that the placement strings are valid
+	align = align or 'center'
+	assert(align == 'center' or align == 'left' or align == 'right', 'align must be one of: center, left, right')
+	valign = valign or 'center'
+	assert(valign == 'center' or valign == 'top' or valign == 'bottom', 'valign must be one of: center, top, bottom')
 
-function badge:add_badge(placement, widget, margin, max_width, max_height)
-	-- Check that placement is one of the valid placements
-	assert(placement == 'se' or placement == 'ne' or placement == 'nw' or placement == 'sw')
 	wibox.widget.base.check_widget(widget)
 
-	self.badges[placement] = {
-		widget = widget,
-		margin = margin or 0,
-		max_width = max_width or nil,
-		max_height = max_height or nil
-	}
+	if self.badges[align .. valign] then
+		self.badges[align .. valign]:set_children(widget)
+	else
+		local b = wibox.container.place(widget, align, valign)
+		b.forced_width = 5
+		b.fill_vertical = true
+		self:add(b)
+		self.badges[align .. valign] = b
+	end
 end
 
 function badge:set_widget(widget)
@@ -90,12 +47,7 @@ local function new(self, widget)
 		end
 	end
 
-	w.badges = {
-		se = nil,
-		sw = nil,
-		ne = nil,
-		nw = nil
-	}
+	w.badges = {}
 
 	w:add(widget)
 

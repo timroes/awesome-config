@@ -95,7 +95,7 @@ function common.icon_widgets(screen, w, buttons, label, data, objects)
 
 			if is_client and utils.user_of_pid(o.pid) == 'root' then
 				local rooticon = wibox.widget.imagebox(root_icon)
-				main:add_badge('se', rooticon, 3, 0.4, 0.4)
+				main:add_badge(rooticon, 'right', 'bottom')
 			end
 
 			if is_tag then
@@ -104,7 +104,7 @@ function common.icon_widgets(screen, w, buttons, label, data, objects)
 				end
 				local hotkey = awful.tag.getproperty(o, 'hotkey')
 				if hotkey then
-					main:add_badge('se', hotkey_badge(hotkey), 3, 0.35, 0.35)
+					main:add_badge(hotkey_badge(hotkey), 'right', 'bottom')
 				end
 			end
 
