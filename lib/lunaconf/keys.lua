@@ -1,10 +1,10 @@
-local awful = require('awful')
+local gears = require('gears')
 local root = root
 
 local keys = {}
 
 function keys.globals (...)
-	root.keys(awful.util.table.join(root.keys(), ...))
+	root.keys(gears.table.join(root.keys(), ...))
 end
 
 return keys
