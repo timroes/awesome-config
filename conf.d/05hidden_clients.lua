@@ -3,7 +3,9 @@
 local lunaconf = require('lunaconf')
 local awful = require('awful')
 
-local hidden_tag = awful.tag.add("hidden_clients")
+local hidden_tag = awful.tag.add("hidden_clients", {
+  activated = false -- Set tag is inactive so it won't show up in tag lists
+})
 
 -- Hide the currently focused client.
 local function hide_client()
