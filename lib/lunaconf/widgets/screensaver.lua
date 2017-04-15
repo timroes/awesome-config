@@ -32,11 +32,11 @@ local function create(_, screen)
 	widget:buttons(awful.util.table.join(
 		awful.button({ }, 1, function()
 			if is_off then
-				awful.util.pread(scriptpath .. '/screensaver.sh resume')
+				awful.spawn.spawn(scriptpath .. '/screensaver.sh resume')
 				textbox:set_markup(string.format(button_text, disabled_color))
 				is_off = false
 			else
-				awful.util.pread(scriptpath .. '/screensaver.sh pause')
+				awful.spawn.spawn(scriptpath .. '/screensaver.sh pause')
 				textbox:set_markup(string.format(button_text, active_color))
 				is_off = true
 			end
