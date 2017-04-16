@@ -57,9 +57,6 @@ scriptpath = configpath .. "/scripts/"
 
 local log = require('lunaconf.log')
 
--- Include functions
-dofile(configpath .. "/functions.lua")
-
 -- Clear all shortcuts before including any config files
 root.keys({ })
 

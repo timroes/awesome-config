@@ -72,7 +72,7 @@ for s = 1, screen.count() do
 	if s == primary_screen then
 
 		-- load widgets from config file
-		local widgets = split(config.get('bar.widgets', ''), ',')
+		local widgets = lunaconf.strings.split(config.get('bar.widgets', ''), ',')
 		for i,w in pairs(widgets) do
 			if tonumber(w) ~= nil and tonumber(w) > 0 then
 				right_layout:add(spacer(tonumber(w), screen[s]))
