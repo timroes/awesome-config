@@ -65,7 +65,7 @@ for s = 1, screen.count() do
 
 	local left_layout = wibox.layout.fixed.horizontal()
 	-- TODO: Use custom taglist again
-	left_layout:add(awful.widget.taglist(s, awful.widget.taglist.filter.all, taglist.buttons))
+	left_layout:add(awful.widget.taglist(s, function(t) return not t.invisible end, taglist.buttons))
 	left_layout:add(spacer(5, screen[s]))
 
 	local right_layout = wibox.layout.fixed.horizontal()

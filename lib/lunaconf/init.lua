@@ -4,6 +4,7 @@ return {
 	config = require('lunaconf.config'),
 	dpi = require('lunaconf.dpi'),
 	icons = require('lunaconf.icons'),
+	infolay = require('lunaconf.infolay'),
 	inifile = require('lunaconf.inifile'),
 	keys = require('lunaconf.keys'),
 	launcher = require('lunaconf.launcher'),

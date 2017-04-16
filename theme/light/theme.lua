@@ -59,6 +59,9 @@ theme.tooltip_bg_color = '#3F51B5DD'
 theme.tooltip_fg_color = '#FFFFFF'
 theme.tooltip_font = "Roboto Thin 14"
 
+theme.infolay_bg = '#333333'
+theme.infolay_opacity = 0.85
+
 -- There are other variable sets
 -- overriding the default one when
 -- defined, the sets are:
