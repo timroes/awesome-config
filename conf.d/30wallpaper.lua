@@ -1,8 +1,7 @@
-local gears = require("gears")
-local theme = require("lunaconf.theme")
-local config = require("lunaconf.config")
+local awful = require('awful')
+local gears = require('gears')
+local lunaconf = require('lunaconf')
 
-
-for s = 1, screen.count() do
-	gears.wallpaper.tiled(config.get('theme.wallpaper', nil), s, theme.get().wallpaper)
-end
+awful.screen.connect_for_each_screen(function(s)
+	gears.wallpaper.tiled(lunaconf.config.get('theme.wallpaper', nil), s)
+end)
