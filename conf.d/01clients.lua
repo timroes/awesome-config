@@ -138,6 +138,7 @@ client.connect_signal("manage", function(c, startup)
 
 	if c.role == "pop-up" then
 		c.floating = true
+		awful.placement.centered(c, nil)
 	end
 
 	if c.size_hints then
