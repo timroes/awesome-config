@@ -1,4 +1,5 @@
 return {
+	audio = require('lunaconf.audio'),
 	cairo = require('lunaconf.cairo'),
 	clients = require('lunaconf.clients'),
 	config = require('lunaconf.config'),
