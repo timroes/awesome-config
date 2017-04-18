@@ -1,5 +1,6 @@
 local awful = require("awful")
 local lunaconf = require("lunaconf")
+local gears = require('gears')
 
 local MOD = lunaconf.config.MOD
 
@@ -22,7 +23,7 @@ local move_client = function(c, direction)
 end
 
 -- Define buttons for every client
-buttons = awful.util.table.join(
+buttons = gears.table.join(
 	awful.button({ }, 1, function(c) client.focus = c; c:raise() end),
 	awful.button({ MOD }, 1, function(c)
 		lunaconf.clients.smart_move(c)
@@ -58,7 +59,7 @@ buttons = awful.util.table.join(
 -- Define keys for every client
 -- Keys depending on direct tag access (Mod + .. + Number) are
 -- defined in the tags configuration file
-keys = awful.util.table.join(
+keys = gears.table.join(
 	-- close client
 	awful.key({ MOD }, "q", function(c) c:kill() end),
 	awful.key({ "Mod1" }, "F4", function(c) c:kill() end),
