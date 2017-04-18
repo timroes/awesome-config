@@ -47,7 +47,7 @@ buttons = awful.util.table.join(
 			end, "sb_h_double_arrow")
 		else
 			-- On any non tiling screen we make the client floating and start resize mode
-			if not lunaconf.clients.get_attr(c, 'unresizeable', false) then
+			if not c.unresizeable then
 				c.floating = true
 				awful.mouse.client.resize(c)
 			end
@@ -77,7 +77,7 @@ keys = awful.util.table.join(
 
 	-- toggle client floating state
 	awful.key({ MOD }, "Return", function(c)
-		if not lunaconf.clients.get_attr(c, 'unresizeable', false) then
+		if not c.unresizeable then
 			awful.client.floating.toggle(c)
 		end
 	end),
@@ -154,7 +154,7 @@ client.connect_signal("manage", function(c, startup)
 			-- Check if the client has a program set minimum and maximum size, that are equal
 			-- If so, treat this client as a dialog window (center it and make it floating)
 			-- Also make it unresizeable (also meaning it cannot be unfloated)
-			lunaconf.clients.set_attr(c, 'unresizeable', true)
+			c.unresizeable = true
 			c.floating = true
 			awful.placement.centered(c, nil)
 		end
