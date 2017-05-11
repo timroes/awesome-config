@@ -4,67 +4,9 @@ local screen = screen
 
 local screens = {}
 
-local primary = nil
-
--- {{{ Offer functions to get screens in their right order
--- 		and not in by their index number
-
-local screen_order = {}
-
--- Sort screens by their x coordinates
--- and store them in screen_order
-table.insert(screen_order, screen[1])
-for s = 2, screen.count() do
-	local inserted = false
-	for i,sc in pairs(screen_order) do
-		if screen[s].geometry.x < sc.geometry.x then
-			table.insert(screen_order, i, screen[s])
-			inserted = true
-			break
-		end
-	end
-	if not inserted then
-		table.insert(screen_order, screen[s])
-	end
-end
-
--- Returns the x-coordinate sorted position of the screen
--- by its screen index
-function screen_position(index)
-	for i,s in pairs(screen_order) do
-		if s.index == index then
-			return i
-		end
-	end
-end
-
--- Returns the screen index (index in screen table) by
--- its position
-local function screen_index(position)
-	return screen_order[position].index
-end
--- }}}
-
 local function get_first_output(screen)
 	local next, t = pairs(screen.outputs)
 	return screen.outputs[next(t)]
-end
-
-local function detect_primary_screen()
-	local primary
-	local xrandr = awful.util.pread("xrandr | grep -E ' connected primary [0-9]' | cut -f1 -d' '")
-	if #xrandr > 0 then
-		-- if a primary screen has been configured via xrandr, use this as primary
-		xrandr = xrandr:gsub("%s+$", "") -- remove newline at end of string
-		primary = screen[xrandr].index
-	end
-	-- If xrandr has not been set (or the screen couldn't be detected)
-	-- use the screen that is the most in the center of all screens
-	if not primary then
-		primary = screen_index(math.ceil(screen.count() / 2))
-	end
-
-	return primary
 end
 
 function screens.primary_index()
@@ -97,6 +39,32 @@ function screens.output_name(screen)
 	end
 	local next, t = pairs(screen.outputs)
 	return next(t)
+end
+
+--- Iterates over all screen in their order form left to right.
+-- This method just looks at x coordinates to order the screens and only
+-- respects y coordinates of the screen if there are two screens with the same
+-- x coordinates.
+-- The passed function will be called for each screen and gets the position
+-- starting from 0 as first argment and the screen object itself as second.
+function screens.iterate_in_order(func)
+	local sorted_screens = {}
+	-- First copy all existing screen objects into the table
+	for s in screen do
+		table.insert(sorted_screens, s)
+	end
+	-- Sort that table first by its x coordinates and only respect y if x is the same
+	table.sort(sorted_screens, function(a, b)
+		if a.geometry.x == b.geometry.x then
+			return a.geometry.y < b.geometry.y
+		else
+			return a.geometry.x < b.geometry.x
+		end
+	end)
+
+	for i, s in ipairs(sorted_screens) do
+		func(i, s)
+	end
 end
 
 return screens

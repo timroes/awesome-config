@@ -13,11 +13,10 @@ local move_client = function(c, direction)
 	local cur_tag = awful.tag.selected(c.screen)
 
 	-- Only allow window move for windows on not named tags
-	if #cur_tag.name <= 1 then
+	if cur_tag.is_primary then
 		local new_screen = c.screen:get_next_in_direction(direction)
 		if new_screen then
-			local new_tag = lunaconf.tags.default_tag_for_screen(new_screen)
-			awful.client.movetotag(new_tag, c)
+			awful.client.movetotag(new_screen.primary_tag, c)
 		end
 	end
 end

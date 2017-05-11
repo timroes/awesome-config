@@ -22,7 +22,7 @@ end
 local function unhide_all_clients()
 	local hidden_clients = hidden_tag:clients()
 	for i, client in ipairs(hidden_clients) do
-		client:move_to_tag(lunaconf.tags.default_tag_for_screen(client.screen))
+		client:move_to_tag(client.screen.primary_tag)
 	end
 end
 
