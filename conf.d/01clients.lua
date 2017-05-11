@@ -101,11 +101,13 @@ awful.rules.rules = {
 		properties = {
 			floating = true,
 		}
-	},{
-		rule = { type = "dialog" },
-		callback = function(c)
-			awful.placement.centered(c,nil)
-		end
+	},
+	{
+		rule_any = { type = { 'dialog' }, role = { 'pop-up' } },
+		properties = {
+			floating = true,
+			placement = awful.placement.centered
+		}
 	}
 }
 
