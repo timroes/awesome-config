@@ -138,11 +138,6 @@ client.connect_signal("manage", function(c, startup)
 	c.maximized_vertical = false
 	c.maximized_horizontal = false
 
-	if c.role == "pop-up" then
-		c.floating = true
-		awful.placement.centered(c, nil)
-	end
-
 	if c.size_hints then
 		local sh = c.size_hints
 		local wa = screen[c.screen].workarea
