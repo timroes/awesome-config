@@ -115,6 +115,11 @@ awful.screen.connect_for_each_screen(function(s)
 		bg = lunaconf.theme.get().screenbar_bg
 	})
 	bars[s]:set_widget(layout)
+
+	-- Delete bar when screen is removed
+	s:connect_signal('removed', function(c)
+		bars[s] = nil
+	end)
 end)
 
 --- Function to be executed whenever the primary screen changes.
