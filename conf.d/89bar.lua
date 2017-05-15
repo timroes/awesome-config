@@ -50,14 +50,6 @@ local function spacer(width, screen)
 	return wibox.widget.textbox(string.rep(" ", math.floor(lunaconf.dpi.x(width, screen))))
 end
 
-local filter_named_tags = function(t)
-	return t.name:len() > 1
-end
-
-local filter_noname_tags = function(t)
-	return t.name:len() <= 1
-end
-
 --- Create the widgets, that should only be shown on the primary screen.
 -- This will read the config option 'bar.widgets' and creates widgets acoordingly
 -- to this config.
@@ -73,7 +65,6 @@ local function create_primaryscreen_widgets()
 		elseif w == 'displayswitcher' then
 			primaryscreen_widgets:add(displayswitcher())
 		elseif w == 'battery' then
-			-- TODO: Broken in awesome 4, create a new one
 			primaryscreen_widgets:add(battery(primary))
 		elseif w == 'screensaver' then
 			primaryscreen_widgets:add(lunaconf.widgets.screensaver(primary))
