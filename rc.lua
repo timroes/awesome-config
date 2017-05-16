@@ -60,14 +60,14 @@ local log = require('lunaconf.log')
 -- Clear all shortcuts before including any config files
 root.keys({ })
 
--- {{{ Load custom scripts from custom.d directory
+-- {{{ Load custom scripts from conf.d directory
 local lfs = require('lfs')
 local confs = {}
-local customdir = configpath .. '/conf.d/'
-for s in lfs.dir(customdir) do
-	local f = lfs.attributes(customdir .. s)
+local confd = configpath .. '/conf.d/'
+for s in lfs.dir(confd) do
+	local f = lfs.attributes(confd .. s)
 	if s:sub(-4) == ".lua" and f.mode == "file" then
-		table.insert(confs, customdir .. s)
+		table.insert(confs, confd .. s)
 	end
 end
 -- Load conf files in alphabetical order
