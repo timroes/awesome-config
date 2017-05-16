@@ -59,8 +59,7 @@ function clients.move(c, args)
 		or c.fullscreen
 		or c.type == "desktop"
 		or c.type == "splash"
-		or c.type == "dock"
-		or awful.client.property.get(c, "client::unmoveable") then
+		or c.type == "dock" then
 		return
 	end
 

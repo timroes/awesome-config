@@ -5,11 +5,6 @@ local gears = require('gears')
 local MOD = lunaconf.config.MOD
 
 local move_client = function(c, direction)
-	-- If client is unmoveable don't do anything
-	if awful.client.property.get(c, "client::unmoveable") then
-		return
-	end
-
 	local cur_tag = c.screen.selected_tag
 
 	-- Only allow window move for windows on not named tags
