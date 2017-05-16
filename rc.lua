@@ -55,8 +55,6 @@ local configpath = gears.filesystem.get_configuration_dir()
 package.path = configpath .. "/lib/?.lua;" .. configpath .. "/lib/?/init.lua;" .. ";" .. luarockPath .. package.path
 package.cpath = luarockCpath .. ";" .. package.cpath
 
-scriptpath = configpath .. "/scripts/"
-
 local log = require('lunaconf.log')
 
 -- Clear all shortcuts before including any config files

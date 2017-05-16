@@ -1,10 +1,16 @@
 local awful = require('awful')
+local gears = require('gears')
 local strings = require('lunaconf.strings')
 local lfs = require('lfs')
 local io = io
 local log = require('lunaconf.log')
 
 local utils = {}
+
+--- The path under which several utility scripts can be found.
+function utils.scriptpath()
+	return gears.filesystem.get_configuration_dir() .. '/scripts/'
+end
 
 --- A wrapper around `awful.spawn`, that spawns a process but forwards it's
 --- stdout and stderr to a logfile.
