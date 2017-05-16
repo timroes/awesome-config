@@ -2,6 +2,7 @@
 -- This will move the clients to an invisible tag.
 local lunaconf = require('lunaconf')
 local awful = require('awful')
+local gears = require('gears')
 local wibox = require('wibox')
 
 -- The actual tag object which is used to hide clients
@@ -42,7 +43,7 @@ local function create_infolay()
 	hidden_tag:connect_signal('untagged', refresh_counter)
 
 	hidden_count_textbox = wibox.widget.textbox('0')
-	local icon = wibox.widget.imagebox(awful.util.get_configuration_dir() .. '/icons/hidden.svg', true)
+	local icon = wibox.widget.imagebox(gears.filesystem.get_configuration_dir() .. '/icons/hidden.svg', true)
 	local layout = wibox.layout.fixed.horizontal(icon, hidden_count_textbox)
 	layout.spacing = 10
 

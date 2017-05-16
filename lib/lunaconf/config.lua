@@ -1,5 +1,6 @@
 local io = require('io')
 local yaml = require('lyaml')
+local gears = require('gears')
 local lunaconf = {
 	strings = require('lunaconf.strings')
 }
@@ -8,7 +9,7 @@ local config = {}
 
 local settings = {}
 
-local configFile = io.open(awful.util.get_configuration_dir() .. '/config.yml', 'r')
+local configFile = io.open(gears.filesystem.get_configuration_dir() .. '/config.yml', 'r')
 if configFile then
 	local configYaml = configFile:read('*all')
 	configFile:close()

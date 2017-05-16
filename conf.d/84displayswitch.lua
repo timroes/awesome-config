@@ -1,5 +1,6 @@
 local setmetatable = setmetatable
 local awful = require('awful')
+local gears = require('gears')
 local w = require('wibox')
 local scriptpath = scriptpath
 local dbus = dbus
@@ -9,7 +10,7 @@ local root = root
 
 module('widgets.displayswitcher')
 
-local ICON = awful.util.get_configuration_dir() .. '/images/display.png'
+local ICON = gears.filesystem.get_configuration_dir() .. '/images/display.png'
 local is_active
 
 local function read(file)

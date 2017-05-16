@@ -1,5 +1,6 @@
 -- Standard awesome library
 awful = require("awful")
+local gears = require('gears')
 awful.rules = require("awful.rules")
 require("awful.autofocus")
 -- Notification library
@@ -48,8 +49,9 @@ end
 -- Read out the luarocks paths and append them to the package.path/cpath
 local luarockPath = pread_sync('luarocks path --lr-path')
 local luarockCpath = pread_sync('luarocks path --lr-cpath')
+
 -- Set path configuration
-local configpath = awful.util.get_configuration_dir()
+local configpath = gears.filesystem.get_configuration_dir()
 package.path = configpath .. "/lib/?.lua;" .. configpath .. "/lib/?/init.lua;" .. ";" .. luarockPath .. package.path
 package.cpath = luarockCpath .. ";" .. package.cpath
 
