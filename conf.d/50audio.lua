@@ -38,5 +38,6 @@ lunaconf.keys.globals(
 	awful.key({ }, 'XF86AudioMute', toggle_mute),
 	awful.key({ }, 'XF86AudioRaiseVolume', function() change_volume(2) end),
 	awful.key({ }, 'XF86AudioLowerVolume', function() change_volume(-2) end),
-	awful.key({ }, 'XF86AudioMicMute', toggle_mic_mute)
+	awful.key({ }, 'XF86AudioMicMute', toggle_mic_mute),
+	awful.key({ lunaconf.config.MOD }, 'XF86AudioMute', toggle_mic_mute)
 )
