@@ -1,3 +1,4 @@
+local awful = require('awful')
 local wibox = require('wibox')
 local screens = require('lunaconf.screens')
 local dpi = require('lunaconf.dpi')

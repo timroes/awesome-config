@@ -1,3 +1,4 @@
+local awful = require('awful')
 local lunaconf = require('lunaconf')
 
 -- Bind launcher to MOD + space if a launcher has been defined in the configuration

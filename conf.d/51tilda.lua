@@ -1,3 +1,4 @@
+local awful = require('awful')
 local lunaconf = require('lunaconf')
 local TILDA_SCREEN = lunaconf.screens.primary_index()
 

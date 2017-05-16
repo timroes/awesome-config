@@ -1,4 +1,5 @@
 local lunaconf = require('lunaconf')
+local awful = require('awful')
 
 local systray = lunaconf.widgets.systray()
 lunaconf.keys.globals(
