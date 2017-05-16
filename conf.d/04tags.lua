@@ -42,7 +42,7 @@ local function focus_tag(screen_position)
 	local s = screens_in_order[screen_position]
 	-- Ignore key presses if there is no screen with that position
 	if s then
-		if client.focus and client.focus.screen == s and awful.tag.selected(s) == s.primary_tag then
+		if client.focus and client.focus.screen == s and s.selected_tag == s.primary_tag then
 			-- If screen is already focused switch to next client
 			awful.client.focus.byidx(1)
 			if client.focus then client.focus:raise() end
@@ -68,7 +68,7 @@ end
 	-- Switch layouts for the current screen
 local switch_layout = awful.key({ lunaconf.config.MOD }, "s", function()
 	-- Only allow split screen on screen tags
-	local cur_tag = awful.tag.selected(client.focus.screen)
+	local cur_tag = client.focus.screen.selected_tag
 	if cur_tag.is_primary then
 		awful.layout.inc(layouts, 1, client.focus.screen)
 	end

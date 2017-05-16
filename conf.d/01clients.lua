@@ -10,13 +10,13 @@ local move_client = function(c, direction)
 		return
 	end
 
-	local cur_tag = awful.tag.selected(c.screen)
+	local cur_tag = c.screen.selected_tag
 
 	-- Only allow window move for windows on not named tags
 	if cur_tag.is_primary then
 		local new_screen = c.screen:get_next_in_direction(direction)
 		if new_screen then
-			awful.client.movetotag(new_screen.primary_tag, c)
+			c:move_to_tag(new_screen.primary_tag)
 		end
 	end
 end
