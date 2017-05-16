@@ -1,4 +1,5 @@
 -- A module to offer helper to control volume, etc.
+-- This module requires alsa-utils to be installed on the system.
 local awful = require('awful')
 
 local tonumber = tonumber
