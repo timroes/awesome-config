@@ -5,7 +5,6 @@ local MOD = lunaconf.config.MOD
 lunaconf.keys.globals(
 	-- System shortcuts
 	awful.key({ MOD, "Control"}, "Delete", function()
-		restart = true
 		awesome.restart()
 	end),
 
