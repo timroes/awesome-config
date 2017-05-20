@@ -72,6 +72,8 @@ local function create_primaryscreen_widgets()
 			primaryscreen_widgets:add(lunaconf.widgets.networkmonitor())
 		elseif w == 'systray' then
 			primaryscreen_widgets:add(wibox.widget.systray())
+		elseif w == 'dnd' then
+			primaryscreen_widgets:add(lunaconf.widgets.dnd(primary, { lunaconf.config.MOD }, 'd'))
 		elseif w == 'clock' then
 			local clock = wibox.widget.textclock("%a, %e. %b  %H:%M")
 			lunaconf.dpi.textbox(clock, primary)

@@ -41,6 +41,7 @@ theme.ontop_indicator = '#E57373'
 
 -- Screenbar (the bar on top of each screen)
 theme.screenbar_bg = '#333333DD'
+theme.screenbar_fg = '#E0E0E0'
 
 -- Tasklist
 theme.tasklist_bg_normal = '#00000000'
