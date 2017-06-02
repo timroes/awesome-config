@@ -1,26 +1,23 @@
 local awful = require("awful")
 local lunaconf = require("lunaconf")
+local gears = require('gears')
 
 local MOD = lunaconf.config.MOD
 
 local move_client = function(c, direction)
-	-- If client is unmoveable don't do anything
-	if awful.client.property.get(c, "client::unmoveable") then
-		return
-	end
-
-	local cur_tag = awful.tag.selected(c.screen)
+	local cur_tag = c.screen.selected_tag
 
 	-- Only allow window move for windows on not named tags
-	if #cur_tag.name <= 1 then
-		local new_screen = ((c.screen - 1 + direction) % screen.count()) + 1
-		local new_tag = default_tag_for_screen(new_screen)
-		awful.client.movetotag(new_tag, c)
+	if cur_tag.is_primary then
+		local new_screen = c.screen:get_next_in_direction(direction)
+		if new_screen then
+			c:move_to_tag(new_screen.primary_tag)
+		end
 	end
 end
 
 -- Define buttons for every client
-buttons = awful.util.table.join(
+buttons = gears.table.join(
 	awful.button({ }, 1, function(c) client.focus = c; c:raise() end),
 	awful.button({ MOD }, 1, function(c)
 		lunaconf.clients.smart_move(c)
@@ -28,7 +25,7 @@ buttons = awful.util.table.join(
 	awful.button({ MOD }, 2, function(c) c:kill() end),
 	awful.button({ MOD }, 3, function(c)
 		-- Resizing of clients on modifier + right mouse button
-		if string.starts(awful.layout.get(c.screen).name, "tile") then
+		if lunaconf.strings.starts_with(awful.layout.get(c.screen).name, "tile") then
 			-- If client on a split screen is tried to rescale we modify the split factor instead
 			mousegrabber.run(function(ev)
 				local s = screen[c.screen] -- current screen
@@ -45,8 +42,8 @@ buttons = awful.util.table.join(
 			end, "sb_h_double_arrow")
 		else
 			-- On any non tiling screen we make the client floating and start resize mode
-			if not lunaconf.clients.get_attr(c, 'unresizeable', false) then
-				awful.client.floating.set(c, true)
+			if not c.unresizeable then
+				c.floating = true
 				awful.mouse.client.resize(c)
 			end
 		end
@@ -56,17 +53,16 @@ buttons = awful.util.table.join(
 -- Define keys for every client
 -- Keys depending on direct tag access (Mod + .. + Number) are
 -- defined in the tags configuration file
-keys = awful.util.table.join(
+keys = gears.table.join(
 	-- close client
 	awful.key({ MOD }, "q", function(c) c:kill() end),
 	awful.key({ "Mod1" }, "F4", function(c) c:kill() end),
 
 	-- move client to other screen/tag
-	awful.key({ MOD }, "Right", function(c) move_client(c, 1) end),
-	awful.key({ MOD }, "Left", function(c) move_client(c, -1) end),
-
-	-- Minimize current window
-	awful.key({ MOD }, "Down", function(c) c.minimized = true end),
+	awful.key({ MOD }, "Right", function(c) move_client(c, 'right') end),
+	awful.key({ MOD }, "Left", function(c) move_client(c, 'left') end),
+	awful.key({ MOD }, "Down", function(c) move_client(c, 'down') end),
+	awful.key({ MOD }, "Up", function(c) move_client(c, 'up') end),
 
 	-- swap clients into direction (only works in split mode (see tags.lua))
 	awful.key({ MOD, "Control" }, "Right", function(c) awful.client.swap.bydirection("right") end),
@@ -76,7 +72,7 @@ keys = awful.util.table.join(
 
 	-- toggle client floating state
 	awful.key({ MOD }, "Return", function(c)
-		if not lunaconf.clients.get_attr(c, 'unresizeable', false) then
+		if not c.unresizeable then
 			awful.client.floating.toggle(c)
 		end
 	end),
@@ -100,11 +96,13 @@ awful.rules.rules = {
 		properties = {
 			floating = true,
 		}
-	},{
-		rule = { type = "dialog" },
-		callback = function(c)
-			awful.placement.centered(c,nil)
-		end
+	},
+	{
+		rule_any = { type = { 'dialog' }, role = { 'pop-up' } },
+		properties = {
+			floating = true,
+			placement = awful.placement.centered
+		}
 	}
 }
 
@@ -124,7 +122,7 @@ client.connect_signal("manage", function(c, startup)
 		-- out a tab, so make it floating, so chromium can control its position
 		-- while we drag it to its final position
 		if under_mouse and under_mouse.pid == c.pid then
-			awful.client.floating.set(c, true)
+			c.floating = true
 		end
 	end
 
@@ -135,25 +133,21 @@ client.connect_signal("manage", function(c, startup)
 	c.maximized_vertical = false
 	c.maximized_horizontal = false
 
-	if c.role == "pop-up" then
-		awful.client.floating.set(c, true)
-	end
-
 	if c.size_hints then
 		local sh = c.size_hints
 		local wa = screen[c.screen].workarea
 		if sh.user_size and sh.user_size.width ~= wa.width and sh.user_size.height ~= wa.height then
 			-- If the user size hint is set, make the window floating and give it the specific size
 			-- unless the size matches exactly the size of the workarea, in this case leave it fullscreen.
-			awful.client.floating.set(c, true)
+			c.floating = true
 			c:geometry(sh.user_size)
 			awful.placement.centered(c, nil)
 		elseif sh.max_height and sh.max_width and sh.max_height == sh.min_height and sh.min_width == sh.max_width then
 			-- Check if the client has a program set minimum and maximum size, that are equal
 			-- If so, treat this client as a dialog window (center it and make it floating)
 			-- Also make it unresizeable (also meaning it cannot be unfloated)
-			lunaconf.clients.set_attr(c, 'unresizeable', true)
-			awful.client.floating.set(c, true)
+			c.unresizeable = true
+			c.floating = true
 			awful.placement.centered(c, nil)
 		end
 	end

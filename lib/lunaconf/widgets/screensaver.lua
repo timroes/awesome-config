@@ -2,7 +2,7 @@ local io = io
 local debug = debug
 local table = table
 local timer = timer
-local scriptpath = scriptpath
+local scriptpath = require('lunaconf.utils').scriptpath()
 local w = require('wibox')
 local awful = require('awful')
 local string = string
@@ -27,16 +27,16 @@ local function create(_, screen)
 	textbox:set_align("center")
 	textbox:set_markup(string.format(button_text, disabled_color))
 
-	widget = w.layout.margin(textbox, dpi.x(5, screen), dpi.x(5, screen), 0, 0)
+	widget = w.container.margin(textbox, dpi.x(5, screen), dpi.x(5, screen), 0, 0)
 
 	widget:buttons(awful.util.table.join(
 		awful.button({ }, 1, function()
 			if is_off then
-				awful.util.pread(scriptpath .. '/screensaver.sh resume')
+				awful.spawn.spawn(scriptpath .. '/screensaver.sh resume')
 				textbox:set_markup(string.format(button_text, disabled_color))
 				is_off = false
 			else
-				awful.util.pread(scriptpath .. '/screensaver.sh pause')
+				awful.spawn.spawn(scriptpath .. '/screensaver.sh pause')
 				textbox:set_markup(string.format(button_text, active_color))
 				is_off = true
 			end

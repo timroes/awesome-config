@@ -2,10 +2,12 @@
 -- If you use systemd you can easily follow the log with:
 -- $ journalctl -t awesome -f
 
+local awful = require('awful')
+
 local log = {}
 
 function log.log(level, message, ...)
-	awful.util.spawn('logger -t awesome "' .. string.format(message, ...) .. '"')
+	awful.spawn.spawn('logger -t awesome "' .. string.format(message, ...) .. '"')
 end
 
 function log.info(message, ...)

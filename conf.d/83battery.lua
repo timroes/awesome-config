@@ -1,6 +1,7 @@
 local setmetatable = setmetatable
 local awful = require('awful')
 local w = require('wibox')
+local wibox = require('wibox')
 local io = io
 local timer = timer
 local tonumber = tonumber
@@ -83,9 +84,9 @@ end
 
 local function create(_, screen)
 	local layout = w.layout.fixed.horizontal()
-	local mlayout = w.layout.margin()
+	local mlayout = w.container.margin()
 
-	widget = lunaconf.widgets.svgbox()
+	widget = wibox.widget.imagebox()
 	widget:fit(dpi.x(64, screen), dpi.y(64, screen))
 	widget:set_resize(true)
 

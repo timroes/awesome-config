@@ -41,6 +41,7 @@ theme.ontop_indicator = '#E57373'
 
 -- Screenbar (the bar on top of each screen)
 theme.screenbar_bg = '#333333DD'
+theme.screenbar_fg = '#E0E0E0'
 
 -- Tasklist
 theme.tasklist_bg_normal = '#00000000'
@@ -58,6 +59,9 @@ theme.tooltip_border_width = 0
 theme.tooltip_bg_color = '#3F51B5DD'
 theme.tooltip_fg_color = '#FFFFFF'
 theme.tooltip_font = "Roboto Thin 14"
+
+theme.infolay_bg = '#333333'
+theme.infolay_opacity = 0.85
 
 -- There are other variable sets
 -- overriding the default one when

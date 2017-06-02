@@ -10,40 +10,6 @@ local clients = {}
 
 local attributes = {}
 
---- Gets an attribute of a client. This is just some metainformation set via
---- client.set_attr.
--- @param client The client to get metadata from
--- @param key The key of the information to get
--- @param default The default value to return if that metadata wasn't set
-function clients.get_attr(client, key, default)
-	local attrs = attributes[client.window]
-	if attrs then
-		if attrs[key] ~= nil then
-			return attrs[key]
-		end
-	end
-	return default
-end
-
---- Sets some metadata for a specific client. It's just some key value pair to set.
---- If the attribute was already set, this method will just overwrite it.
--- @param client The client to set an attribute for
--- @param key The key of the information to set
--- @param value The value to set
-function clients.set_attr(client, key, value)
-	local attrs = attributes[client.window]
-	if not attrs then
-		attrs = {}
-		client:connect_signal('unmanage', function(c)
-			-- When client is unmanaged also remove all its attributes
-			attributes[client.window] = nil
-		end)
-	end
-	attrs[key] = value
-	attributes[client.window] = attrs
-end
-
-
 --- Start moving the client in a "smart" way.
 --- If the client is floating it will immediately move (and snap to other clients).
 --- If it is not a floating client, a small threshold will be added before the client
@@ -54,8 +20,8 @@ end
 function clients.smart_move(c)
 	clients.move(c, {
 		snap = 8,
-		threshold = awful.client.floating.get(c) and 0 or 8,
-		threshold_cb = function() awful.client.floating.set(c, true) end,
+		threshold = c.floating and 0 or 8,
+		threshold_cb = function() c.floating = true end,
 		finished_cb = function()
 			local s = screen[c.screen].workarea
 			local g = c:geometry()
@@ -64,7 +30,7 @@ function clients.smart_move(c)
 					and s.y == g.y
 					and s.width == g.width
 					and s.height == g.height then
-				awful.client.floating.set(c, false)
+				c.floating = false
 			end
 		end
 	})
@@ -93,8 +59,7 @@ function clients.move(c, args)
 		or c.fullscreen
 		or c.type == "desktop"
 		or c.type == "splash"
-		or c.type == "dock"
-		or awful.client.property.get(c, "client::unmoveable") then
+		or c.type == "dock" then
 		return
 	end
 
@@ -129,10 +94,10 @@ function clients.move(c, args)
 
 					-- If we passed the threshold already, move the client
 					if is_moving then
-						if awful.layout.get(c.screen) == awful.layout.suit.floating or awful.client.floating.get(c) then
+						if awful.layout.get(c.screen) == awful.layout.suit.floating or c.floating then
 							local x = ev.x - offset_x
 							local y = ev.y - offset_y
-							c:geometry(awful.mouse.client.snap(c, snap, x, y, fixed_x, fixed_y))
+							c:geometry(awful.mouse.snap(c, snap, x, y, fixed_x, fixed_y))
 						end
 					end
 					return true

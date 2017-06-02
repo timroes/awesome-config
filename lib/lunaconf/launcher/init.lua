@@ -1,11 +1,13 @@
 local awful = require('awful')
 local wibox = require('wibox')
+local menubar = require('menubar')
 local config = require('lunaconf.config')
 local icons = require('lunaconf.icons')
 local xdg = require('lunaconf.xdg')
 local strings = require('lunaconf.strings')
 local theme = require('lunaconf.theme')
 local dpi = require('lunaconf.dpi')
+local utils = require('lunaconf.utils')
 local badge = require('lunaconf.layouts.badge')
 local inifile = require('lunaconf.inifile')
 local screens = require('lunaconf.screens')
@@ -16,6 +18,7 @@ local listitem = require('lunaconf.launcher.listitem')
 
 local log = require('lunaconf.log')
 local menubar = require('menubar')
+local inspect = require('inspect')
 
 -- Start module
 local launcher = {}
@@ -29,7 +32,7 @@ local width = dpi.x(450, launcher_screen)
 
 local max_results_shown = 4
 
-local config_file = awful.util.getdir('cache') .. '/lunaconf.launcher.ini'
+local config_file = awful.util.get_cache_dir() .. '/lunaconf.launcher.ini'
 
 local default_icon = icons.lookup_icon('image-missing')
 local default_search_placeholder = "or search ..."
@@ -55,8 +58,8 @@ local function hotkey_badge(text)
 	-- dpi.textbox(hk_label)
 	hk_label:set_align('center')
 	hk_label:set_valign('center')
-	hk_label.fit = function (wibox, w, h) return 40, 40 end
-	local hk_badge = wibox.widget.background(hk_label)
+	hk_label.fit = function (wibox, w, h) return 30, 30 end
+	local hk_badge = wibox.container.background(hk_label)
 	hk_badge:set_bg('#EEEEEEAA' or theme.get().taglist_badge_bg or theme.get().bg_normal)
 	hk_badge:set_fg('#000000')
 	return hk_badge
@@ -66,14 +69,15 @@ local function icon_for_desktop_entry(desktop)
 	return icons.lookup_icon(desktop.Icon) or desktop.icon_path
 end
 
-local function get_matching_apps()
+local function get_matching_apps(self)
 	local result = {}
 
 	local search = current_search:lower()
 
 	-- This is the actual search logic to find matching applications.
 	-- Here is a lot of potential to improve this logic.
-	for k,v in pairs(xdg.apps()) do
+	local apps = xdg.apps()
+	for k,v in pairs(apps) do
 		if (v.Name and v.Name:lower():find(search)) then
 			table.insert(result, v)
 		end
@@ -99,9 +103,9 @@ local function change_selected_item(index)
 	end
 end
 
-local function update_result_list()
+local function update_result_list(self)
 	-- Load all matching results
-	current_shown_results = get_matching_apps()
+	current_shown_results = get_matching_apps(self)
 
 	-- Reset the result list
 	-- search_results:reset()
@@ -128,16 +132,16 @@ local function update_result_list()
 		more_results_label:set_text(' ')
 	end
 
-	-- search_results:add(wibox.layout.margin(more_results, 20, 20, 5, 5))
+	-- search_results:add(wibox.container.margin(more_results, 20, 20, 5, 5))
 end
 
-local function on_query_changed()
+local function on_query_changed(self)
 	if current_search and #current_search > 0 then
 		-- The user entered a search term so show a result list
 		inputbox:set_markup('<b>' .. current_search .. '</b>')
-		local bg = wibox.widget.background(search_results)
+		local bg = wibox.container.background(search_results)
 		split_container:set_middle(bg)
-		update_result_list()
+		update_result_list(self)
 	else
 		-- No search anymore so show hotkey panel again
 		inputbox:set_text(default_search_placeholder)
@@ -165,7 +169,7 @@ local function reload_hotkeys()
 
 		local hotkeyDesktopPath = ini['Hotkeys'][tostring(key)]
 		if hotkeyDesktopPath and awful.util.file_readable(hotkeyDesktopPath) then
-			local desktop = menubar.utils.parse(hotkeyDesktopPath)
+			local desktop = menubar.utils.parse_desktop_file(hotkeyDesktopPath)
 			hotkeys[tostring(key)] = desktop
 
 			local icon_w = wibox.widget.imagebox()
@@ -174,7 +178,7 @@ local function reload_hotkeys()
 			icon_w.width = dpi.x(48, launcher_screen)
 			icon_w.height = dpi.y(48, launcher_screen)
 			local bad = badge(icon_w)
-			bad:add_badge('sw', hotkey_badge(tostring(key)), 3, 0.4, 0.4)
+			bad:add_badge(hotkey_badge(tostring(key)), 'left', 'bottom')
 
 			widget = wibox.layout.align.horizontal()
 			widget:set_second(bad)
@@ -185,7 +189,7 @@ local function reload_hotkeys()
 			widget:set_valign('center')
 		end
 
-		local margin = wibox.layout.margin(widget)
+		local margin = wibox.container.margin(widget)
 		local x_margin = dpi.x(15, launcher_screen)
 		local y_margin = dpi.y(15, launcher_screen)
 		margin:set_left(x_margin)
@@ -203,7 +207,7 @@ end
 -- specified key. Key should be between 1 and 9. This method won't validate
 -- this.
 -- The method will update the config file for this hotkey and reload the panel.
-local function save_hotkey(key, desktop_entry)
+local function save_hotkey(self, key, desktop_entry)
 	local ini = {}
 	if awful.util.file_readable(config_file) then
 		ini = inifile.parse(config_file)
@@ -211,18 +215,18 @@ local function save_hotkey(key, desktop_entry)
 	ini['Hotkeys'] = ini['Hotkeys'] or {}
 	ini['Hotkeys'][tostring(key)] = desktop_entry.file
 	-- Create cache folder if it doesn't exist yet
-	lfs.mkdir(awful.util.getdir('cache'))
+	lfs.mkdir(awful.util.get_cache_dir())
 	inifile.save(config_file, ini, 'io')
 	reload_hotkeys()
 	current_search = ""
-	on_query_changed()
+	on_query_changed(self)
 end
 
-local function store_currently_highlighted_to_hotkey(key)
+local function store_currently_highlighted_to_hotkey(self, key)
 	local desktop_entry = current_shown_results[current_selected_result]
 	if desktop_entry then
 		log.info("Store %s to hotkey %s", desktop_entry.Name, key)
-		save_hotkey(key, desktop_entry)
+		save_hotkey(self, key, desktop_entry)
 	end
 end
 
@@ -235,15 +239,15 @@ local function start_desktop_entry(desktop_entry)
 	end
 
 	log.info("Starting %s via desktop file: %s", desktop_entry.Name, desktop_entry.file)
-	awful.util.spawn("dex '" .. desktop_entry.file .. "'")
+	utils.spawn("dex '" .. desktop_entry.file .. "'")
 	return true
 end
 
-local function close()
+local function close(self)
 	ui.visible = false
 	if #current_search > 0 then
 		current_search = ""
-		on_query_changed()
+		on_query_changed(self)
 	end
 	awful.keygrabber.stop(active_keygrabber)
 end
@@ -261,7 +265,7 @@ local function start_hotkey(key)
 	end
 end
 
-local function keyhandler(modifiers, key, event)
+local function keyhandler(self, modifiers, key, event)
 	-- Rewrite the modifiers map to a proper table you can lookup modifiers in
 	local mod = {}
 	for k, v in ipairs(modifiers) do mod[v] = true end
@@ -273,27 +277,27 @@ local function keyhandler(modifiers, key, event)
 
 	if key == "Escape" then
 		-- on Escape close the launcher
-		close()
+		close(self)
 	elseif #current_search == 0 and hotkeys[key] ~= nil then
 		-- If its a hotkey (and we haven't searched for anything) start that program
 		start_hotkey(key)
 	elseif #current_search > 0 and mod['Control'] and key:match("[1-9]") then
 		-- If the user presses Ctrl + hotkey button while in search results store a hotkey
-		store_currently_highlighted_to_hotkey(key)
+		store_currently_highlighted_to_hotkey(self, key)
 	elseif #current_search > 0 and (key == "1" or key == "2" or key == "3" or key == "4") then
 		start_from_search_results(key)
 	elseif key == "BackSpace" then
 		-- Backspace just deletes one letter (as one would expect)
 		current_search = current_search:sub(0, -2)
-		on_query_changed()
+		on_query_changed(self)
 	elseif key == "Delete" then
 		-- Delete will delete the whole input (as one would not expect)
 		current_search = ""
-		on_query_changed()
+		on_query_changed(self)
 	elseif key:wlen() == 1 then
 		-- If the key is just one letter it is most likely a character key so append it
 		current_search = strings.trim_start(current_search .. key)
-		on_query_changed()
+		on_query_changed(self)
 	elseif #current_search > 0 and key == "Up" then
 		change_selected_item(current_selected_result - 1)
 	elseif #current_search > 0 and key == "Down" then
@@ -305,10 +309,10 @@ local function keyhandler(modifiers, key, event)
 	return false
 end
 
-function launcher.toggle()
+function launcher:toggle()
 	ui.visible = not ui.visible
 	if ui.visible then
-		active_keygrabber = awful.keygrabber.run(keyhandler)
+		active_keygrabber = awful.keygrabber.run(function(...) keyhandler(self, ...) end)
 	end
 end
 
@@ -324,10 +328,10 @@ local function setup_result_list_ui()
 	more_results_label = dpi.textbox(' ', launcher_screen)
 	more_results_label:set_align('right')
 	more_results_label:set_valign('center')
-	search_results:add(wibox.layout.margin(more_results_label, 20, 20, 5, 5))
+	search_results:add(wibox.container.margin(more_results_label, 20, 20, 5, 5))
 end
 
-local function setup_ui()
+local function setup_ui(self)
 	local box = wibox({
 		bg = '#222222',
 		width = width,
@@ -355,7 +359,7 @@ local function setup_ui()
 	hotkey_panel:add(hotkey_rows[2])
 	hotkey_panel:add(hotkey_rows[1])
 
-	local inputbox_margin = wibox.layout.margin(inputbox, 20, 20, 20, 20)
+	local inputbox_margin = wibox.container.margin(inputbox, 20, 20, 20, 20)
 
 	split_container:set_middle(hotkey_panel)
 	split_container:set_bottom(inputbox_margin)
@@ -366,8 +370,8 @@ local function setup_ui()
 end
 
 local function new(self)
-	setup_ui()
-	reload_hotkeys()
+	setup_ui(self)
+	reload_hotkeys(self)
 
 	xdg.refresh()
 

@@ -14,6 +14,7 @@ local os = os
 local textbox = require("wibox.widget.textbox")
 local timer = timer
 local DateTime = require("lgi").GLib.DateTime
+local log = require('lunaconf.log')
 
 local textclock = { mt = {} }
 
@@ -37,7 +38,9 @@ function textclock.new(format, timeout)
 		w._private = {}
     local t
     function w._private.textclock_update_cb()
-        w:set_markup(DateTime.new_now_local():format(format))
+        local time = DateTime.new_now_local():format(format)
+				log.info("########## time: %s", time)
+        w:set_markup(time)
         t.timeout = calc_timeout(timeout)
         t:again()
         return true -- Continue the timer

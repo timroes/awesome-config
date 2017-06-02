@@ -1,16 +1,17 @@
+local awful = require('awful')
 local lunaconf = require('lunaconf')
 
-
--- Bin dlauncher to MOD + space if a launcher has been defined in the configuration
+-- Bind launcher to MOD + space if a launcher has been defined in the configuration
 local ext_launcher = lunaconf.config.get('applications.launcher', nil)
+local launcher_function
 if ext_launcher then
-	lunaconf.keys.globals(
-		awful.key({ lunaconf.config.MOD }, "space", function() awful.util.spawn(ext_launcher) end)
-	)
+	launcher_function = function() awful.spawn.spawn(ext_launcher) end
 else
 	local launcher = lunaconf.launcher()
-	lunaconf.keys.globals(
-		awful.key({ lunaconf.config.MOD }, "space", function() launcher.toggle() end),
-		awful.key({ lunaconf.config.MOD }, "KP_Insert", function() launcher.toggle() end)
-	)
+	launcher_function = function() launcher:toggle() end
 end
+
+lunaconf.keys.globals(
+	awful.key({ lunaconf.config.MOD }, "space", launcher_function),
+	awful.key({ lunaconf.config.MOD }, "KP_Insert", launcher_function)
+)

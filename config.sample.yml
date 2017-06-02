@@ -17,6 +17,7 @@ bar:
   # network: A network monitor showing up and down traffic
   # systray: The systray
   # clock: Clock widget
+  # dnd: A do not disturb button to mute notifications
   # The default value is empty.
   widgets:
 # Define some applications, that will be used across the config

@@ -51,7 +51,7 @@ local function refresh_titlebar(c)
 	})
 
 	local icon = awful.titlebar.widget.iconwidget(c)
-	local margin_icon = wibox.layout.margin(icon,
+	local margin_icon = wibox.container.margin(icon,
 			lunaconf.dpi.x(8, s),
 			lunaconf.dpi.x(12, s),
 			lunaconf.dpi.y(5, s),
@@ -71,8 +71,7 @@ local function refresh_titlebar(c)
 
 	if floating_color then
 		local switch_floating = function ()
-			local floating = awful.client.floating.get(c)
-			client_status:set_color2(floating and floating_color or nil)
+			client_status:set_color2(c.floating and floating_color or nil)
 		end
 
 		c:connect_signal("property::floating", switch_floating)

@@ -1,7 +1,8 @@
 local setmetatable = setmetatable
 local awful = require('awful')
+local gears = require('gears')
 local w = require('wibox')
-local scriptpath = scriptpath
+local scriptpath = require('lunaconf').scriptpath
 local dbus = dbus
 local tonumber = tonumber
 local tostring = tostring
@@ -9,7 +10,7 @@ local root = root
 
 module('widgets.displayswitcher')
 
-local ICON = awful.util.getdir('config') .. '/images/display.png'
+local ICON = gears.filesystem.get_configuration_dir() .. '/images/display.png'
 local is_active
 
 local function read(file)
@@ -20,7 +21,7 @@ local function read(file)
 end
 
 local function create(_)
-	local mlayout = w.layout.margin()
+	local mlayout = w.container.margin()
 
 	widget = w.widget.imagebox()
 	widget:fit(24, 24)
@@ -72,14 +73,15 @@ local function create(_)
 		end)
 	))
 
-	local monitors = tonumber(awful.util.pread('/usr/bin/xrandr | grep " connected" | wc -l'))
-	if monitors < 2 then
-		is_active = false
-		widget:set_image(nil)
-	else
-		is_active = true
-		widget:set_image(ICON)
-	end
+	-- TODO: Fix this without awful.util.pread
+	-- local monitors = tonumber(awful.util.pread('/usr/bin/xrandr | grep " connected" | wc -l'))
+	-- if monitors < 2 then
+	-- 	is_active = false
+	-- 	widget:set_image(nil)
+	-- else
+	-- 	is_active = true
+	-- 	widget:set_image(ICON)
+	-- end
 
 	return mlayout
 end

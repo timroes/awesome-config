@@ -49,7 +49,7 @@ function dpi.textbox(textbox, screen)
 	if not screen then
 		screen = screens.primary()
 	end
-	textbox._layout:get_context():set_resolution(screens.ydpi(screen) * dpi.yfactor(screen))
+	-- textbox._layout:get_context():set_resolution(screens.ydpi(screen) * dpi.yfactor(screen))
 	return textbox
 end
 
