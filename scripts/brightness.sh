@@ -40,6 +40,7 @@ case "$1" in
 			new=$max
 		fi
 		echo $new > $device/brightness
+		echo $(($new * 100 / $max))
 		;;
 	"down")
 		new=$(($current-$step))
@@ -47,5 +48,6 @@ case "$1" in
 			new=1
 		fi
 		echo $new > $device/brightness
+		echo $(($new * 100 / $max))
 		;;
 esac

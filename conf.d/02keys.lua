@@ -15,12 +15,6 @@ lunaconf.keys.globals(
 	awful.key({ 'Mod1' }, "Print", function() awful.spawn.spawn(lunaconf.utils.scriptpath() .. "screenshot win") end),
 	awful.key({ MOD }, "Print", function() awful.spawn.spawn(lunaconf.utils.scriptpath() .. "screenshot scr") end),
 
-	-- Brightness Control
-	awful.key({}, 'XF86MonBrightnessUp', function() awful.spawn.spawn(lunaconf.utils.scriptpath() .. "brightness.sh up") end),
-	awful.key({ 'Shift' }, 'XF86MonBrightnessUp', function() awful.spawn.spawn(lunaconf.utils.scriptpath() .. "brightness.sh up small") end),
-	awful.key({}, 'XF86MonBrightnessDown', function() awful.spawn.spawn(lunaconf.utils.scriptpath() .. "brightness.sh down") end),
-	awful.key({ 'Shift' }, 'XF86MonBrightnessDown', function() awful.spawn.spawn(lunaconf.utils.scriptpath() .. "brightness.sh down small") end),
-
 	-- MOD + PageUp/PageDown switches through clients on current tag and screen
 	awful.key({ MOD }, "Page_Up", function()
 		awful.client.focus.byidx(-1)
