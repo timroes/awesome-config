@@ -8,18 +8,6 @@ bar:
   # This value isn't physical pixel, but dependency independant pixel i.e. pixel
   # on a 96 dpi screen, which will be automatically increased, if you have a hidpi screen
   height: 52
-  # Set the widgets to show in the bar on the main display. This should be a
-  # comma separated list with the following possibilities:
-  # <positive integer> - add spacing of that width
-  # displayswitcher: A simple menu to switch which displays to use
-  # battery: Battery widget
-  # screensaver: A simple button to disable screensaver with one click
-  # network: A network monitor showing up and down traffic
-  # systray: The systray
-  # clock: Clock widget
-  # dnd: A do not disturb button to mute notifications
-  # The default value is empty.
-  widgets:
 # Define some applications, that will be used across the config
 applications:
   # Define the launcher, that will be opened on modkey + space.
