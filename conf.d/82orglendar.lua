@@ -116,20 +116,8 @@ local function create_calendar()
       end
    end
 
-   local header = os.date("%B %Y", first_day)
-   return header, string.format('<span font="%s" foreground="%s">%s</span>',
-                                font, orglendar.text_color, result)
-end
-
-function orglendar.get_calendar_and_todo_text(_offset)
-   if not data or parse_on_show then
-      orglendar.parse_agenda()
-   end
-
-   offset = _offset
-   local header, cal = create_calendar()
-   return string.format('<span font="%s" foreground="%s">%s</span>\n%s',
-                        font, orglendar.text_color, header, cal)
+   return string.format('<span font="%s" foreground="%s">%s\n%s</span>',
+                                font, orglendar.text_color, os.date("%B %Y", first_day), result)
 end
 
 local function calculate_char_width()
@@ -152,9 +140,8 @@ function orglendar.show(inc_offset)
    offset = save_offset + inc_offset
 
    local char_width = char_width or calculate_char_width()
-   local header, cal_text = create_calendar()
-   calendar = naughty.notify({ title = header,
-                               text = cal_text,
+   local cal_text = create_calendar()
+   calendar = naughty.notify({ text = cal_text,
                                timeout = 0, hover_timeout = 0.5,
                                width = orglendar.calendar_width * char_width,
                                screen = mouse.screen,

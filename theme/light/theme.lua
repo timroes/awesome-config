@@ -30,6 +30,7 @@ theme.bg_systray = '#113A45'
 
 -- Calendar
 theme.cal_today = '#99CC00'
+theme.cal_fg = '#222222'
 
 -- Titlebar
 theme.titlebar_bg_normal = "#F5F5F5"
