@@ -20,8 +20,8 @@ theme.border_focus  = "#33B5E5"
 theme.border_marked = "#339933"
 
 -- Notifications
-theme.notify_normal_bg = "#444444"
-theme.notify_normal_fg = "#FFFFFF"
+theme.notify_normal_bg = "#FFFFFF"
+theme.notify_normal_fg = "#222222"
 theme.notify_border_width = "0"
 theme.notify_opacity = 0.9
 
