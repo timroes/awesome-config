@@ -4,7 +4,7 @@ local gears = require('gears')
 
 if not lunaconf.config.get('disable_compositor', false) then
 	local function set_shadow_hint(c)
-		c:set_xproperty("_COMPTON_NO_SHADOW", not c.floating or c.shape_client_bounding)
+		c:set_xproperty("_COMPTON_NO_SHADOW", not c.floating)
 	end
 
 	-- Shadow handling of compton
@@ -14,7 +14,6 @@ if not lunaconf.config.get('disable_compositor', false) then
 	client.connect_signal('manage', function(c, startup)
 		set_shadow_hint(c)
 		c:connect_signal('property::floating', set_shadow_hint)
-		c:connect_signal('property::shape_client_bounding', set_shadow_hint)
 	end)
 
 	lunaconf.utils.only_if_command_exists('compton', function()
