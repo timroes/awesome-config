@@ -65,6 +65,16 @@ function utils.command_exists(command, callback)
 	end)
 end
 
+--- Checks whether the specified command exists and execute the
+--- given callback only if it exists.
+function utils.only_if_command_exists(command, callback)
+	utils.command_exists(command, function(exists)
+		if exists then
+			callback()
+		end
+	end)
+end
+
 function utils.list_directories(path)
 	local dir = lfs.attributes(path)
 	if not dir or dir.mode ~= "directory" then
