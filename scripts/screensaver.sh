@@ -5,19 +5,14 @@
 # and dis/enable xserver's own screen blanking and display
 # energy saving.
 
-function has() {
-	command -v $1 >/dev/null 2>&1
-	return $?
-}
-
 case "$1" in
 	"pause")
 		# Disables screen blanking of xserver
 		xset s off
 		# Disables DPMS (energy star) feature
 		xset -dpms
-		# If xautolock is available disable it
-		has xautolock && xautolock -disable
+		# Xautolock is available disable it
+		xautolock -disable
 		;;
 	"resume")
 		# Reset the screensaver values to default
@@ -25,7 +20,7 @@ case "$1" in
 		# Enable DPMS again
 		xset +dpms
 		# Enable xautolock again
-		has xautolock && xautolock -enable
+		xautolock -enable
 		;;
 	*)
 		echo "Specify 'pause' or 'resume' as first parameter."
