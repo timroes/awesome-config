@@ -1,5 +1,7 @@
 Setup
 =====
 
-1. Install `luarocks` on your system.
-2. Execute `./install.sh` in this folder to install all dependencies.
+To install all required dependencies on an Archlinux system
+just run `./install.sh`. If you don't have an Archlinux system
+you must make sure to install all required dependencies (have a look
+at the `install.sh` file) yourself.
