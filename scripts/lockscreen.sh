@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# Lock screen with a backgruond color
-i3lock -c BBBBBB
+# Lock screen using the light-locker-command from light-locker
+light-locker-command -l
 # Switch off monitor output
 xset dpms force off

@@ -19,6 +19,7 @@ PKG_DEPS = {
 OPT_PKG_DEPS = {
   'compton': 'required if you want compositing effects (e.g. shadow)',
   'imagemagick': 'required to make screenshots',
+  'light-locker': 'required to lock screen properly',
   'upower': 'required for battery widget',
 }
 
