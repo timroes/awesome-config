@@ -9,7 +9,7 @@ local config = {}
 
 local settings = {}
 
-local configFile = io.open(gears.filesystem.get_configuration_dir() .. '/config.yml', 'r')
+local configFile = io.open(gears.filesystem.get_configuration_dir() .. '/configs/config.yml', 'r')
 if configFile then
 	local configYaml = configFile:read('*all')
 	configFile:close()

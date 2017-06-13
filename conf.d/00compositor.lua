@@ -18,7 +18,7 @@ if not lunaconf.config.get('disable_compositor', false) then
 
 	lunaconf.utils.only_if_command_exists('compton', function()
 		if not awesome.composite_manager_running then
-			lunaconf.utils.run_once('compton --config ' .. gears.filesystem.get_configuration_dir() .. '/compton.conf -b')
+			lunaconf.utils.run_once('compton --config ' .. gears.filesystem.get_configuration_dir() .. '/configs/compton.conf -b')
 		end
 	end)
 end
