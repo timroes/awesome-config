@@ -57,8 +57,8 @@ theme.taglist_screentag_bg_focus = '#78909C'
 
 -- Tooltips
 theme.tooltip_border_width = 0
-theme.tooltip_bg_color = '#3F51B5DD'
-theme.tooltip_fg_color = '#FFFFFF'
+theme.tooltip_bg = theme.notify_normal_bg
+theme.tooltip_fg = theme.notify_normal_fg
 theme.tooltip_font = "Roboto Thin 14"
 
 theme.infolay_bg = '#333333'
