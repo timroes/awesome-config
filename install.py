@@ -25,6 +25,7 @@ OPT_PKG_DEPS = {
 
 # List all packages that should be installed via luarocks
 LUA_DEPS = {
+  'inspect': 'required for debugging tables',
   'luafilesystem': 'required to interact with the filesystem',
   'lyaml': 'YAML library to read out config',
 }
