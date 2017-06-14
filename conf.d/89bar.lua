@@ -111,7 +111,7 @@ awful.screen.connect_for_each_screen(function(s)
 	bars[s] = awful.wibar({
 		position = "top",
 		screen = s,
-		height = lunaconf.dpi.y(config.get("bar.height", 52), screen[s]),
+		height = lunaconf.dpi.y(config.get("bar.height", 32), screen[s]),
 		bg = lunaconf.theme.get().screenbar_bg
 	})
 	bars[s]:set_widget(layout)
