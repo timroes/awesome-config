@@ -49,7 +49,7 @@ local function spacer(width, screen)
 end
 
 --- Create the widgets, that should only be shown on the primary screen.
--- It gets the container passed to which it will add the
+--- The widgets will be passed to the specified callback once they are created.
 local function create_primaryscreen_widgets(callback)
 	lunaconf.pacman.installed('upower', function(upower_installed)
 
