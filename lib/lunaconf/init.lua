@@ -3,6 +3,7 @@ return {
 	cairo = require('lunaconf.cairo'),
 	clients = require('lunaconf.clients'),
 	config = require('lunaconf.config'),
+	dbus = require('lunaconf.dbus'),
 	dpi = require('lunaconf.dpi'),
 	icons = require('lunaconf.icons'),
 	infolay = require('lunaconf.infolay'),
