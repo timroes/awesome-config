@@ -50,11 +50,11 @@ local function update_battery()
 			bar:set_value(status.Percentage)
 
 			local time = status.State == 1 -- Charging
-				and '<b>Charging time:</b>\t' .. to_time_string(status.TimeToFull)
-				or '<b>Remaining:</b>\t' .. to_time_string(status.TimeToEmpty)
+				and 'Charging time:\t<b>' .. to_time_string(status.TimeToFull) .. '</b>'
+				or 'Remaining:\t<b>' .. to_time_string(status.TimeToEmpty) .. '</b>'
 			tooltip.markup = string.format(
-				'<b>Percentage:</b>\t%.0f%%\n%s\n' ..
-				'<b>Energy rate:</b>\t%.2f W',
+				'Percentage:\t<b>%.0f%%</b>\n%s\n' ..
+				'Energy rate:\t<b>%.2f W</b>',
 				status.Percentage,
 				time,
 				status.EnergyRate
