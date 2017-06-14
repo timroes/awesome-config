@@ -1,7 +1,6 @@
 local awful = require("awful")
 local wibox = require("wibox")
 local orglendar = require("widgets.orglendar")
-local battery = require('widgets.battery')
 local config = require('lunaconf.config')
 local tasklist = require('lunaconf.widgets.tasklist')
 local gears = require('gears')
@@ -59,7 +58,7 @@ local function create_primaryscreen_widgets(callback)
 
 		-- Add battery widget if upower is installed
 		if upower_installed then
-			widgets:add(battery(primary))
+			widgets:add(lunaconf.widgets.battery(primary))
 		end
 
 		-- Add widget to disable screensaver
