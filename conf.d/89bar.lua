@@ -48,6 +48,17 @@ local function spacer(width, screen)
 	return wibox.widget.textbox(string.rep(" ", math.floor(lunaconf.dpi.x(width, screen))))
 end
 
+local function margin(widget, left, right, top, bottom, screen)
+	if not screen then
+		screen = lunaconf.screens.primary()
+	end
+	left = lunaconf.dpi.x(left, screen)
+	right = lunaconf.dpi.x(right, screen)
+	top = lunaconf.dpi.y(top, screen)
+	bottom = lunaconf.dpi.y(bottom, screen)
+	return wibox.container.margin(widget, left, right, top, bottom)
+end
+
 --- Create the widgets, that should only be shown on the primary screen.
 --- The widgets will be passed to the specified callback once they are created.
 local function create_primaryscreen_widgets(callback)
@@ -58,7 +69,7 @@ local function create_primaryscreen_widgets(callback)
 
 		-- Add battery widget if upower is installed
 		if upower_installed then
-			widgets:add(lunaconf.widgets.battery(primary))
+			widgets:add(margin(lunaconf.widgets.battery(primary), 4, 4, 0, 0))
 		end
 
 		-- Add widget to disable screensaver
@@ -69,7 +80,7 @@ local function create_primaryscreen_widgets(callback)
 		-- Add textclock
 		local clock = wibox.widget.textclock("%H:%M")
 		orglendar(clock, primary)
-		widgets:add(clock)
+		widgets:add(margin(clock, 4, 8, 0, 0))
 
 		callback(widgets)
 	end)

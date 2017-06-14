@@ -83,7 +83,7 @@ local function create(_, screen)
 		margins = {
 			top = lunaconf.dpi.y(10, screen),
 			bottom = lunaconf.dpi.y(10, screen),
-			right = lunaconf.dpi.x(5, screen),
+			right = 0,
 			left = lunaconf.dpi.x(4, screen)
 		},
 		paddings = 2,
@@ -100,7 +100,6 @@ local function create(_, screen)
 
 	layout:add(mlayout)
 	layout:add(bar)
-
 
 	-- TODO: Write own better dbus implementation based on lgi
 	-- We cannot use dbus.connect_signal in any other place to listen for

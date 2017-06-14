@@ -32,7 +32,7 @@ local function create(_, screen, mod, key)
 	imagebox:set_image(icon_active)
 
 	widget = wibox.container.margin(imagebox,
-		lunaconf.dpi.x(5, screen), lunaconf.dpi.x(5, screen),
+		lunaconf.dpi.x(4, screen), lunaconf.dpi.x(4, screen),
 		lunaconf.dpi.y(8, screen), lunaconf.dpi.y(8, screen))
 
 	widget:buttons(awful.button({ }, 1, toggle))
