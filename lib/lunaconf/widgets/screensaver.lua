@@ -23,7 +23,6 @@ local disabled_color = '#CCCCCC'
 local function create(_, screen)
 
 	textbox = w.widget.textbox()
-	dpi.textbox(textbox, screen)
 	textbox:set_align("center")
 	textbox:set_markup(string.format(button_text, disabled_color))
 

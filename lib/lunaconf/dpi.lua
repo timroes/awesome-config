@@ -56,22 +56,6 @@ local function refresh_dpi()
 	end
 end
 
--- Pass in an wibox.widget.textbox to this method and it will scale its font
--- so it will take the dpi from the theme into respect. This method will assume
--- the font size set on the textbox was meant to be for 96 dpi.
-function dpi.textbox(textbox, screen)
-	if textbox == nil then
-		textbox = wibox.widget.textbox()
-	elseif type(textbox) == "string" then
-		textbox = wibox.widget.textbox(textbox)
-	end
-	if not screen then
-		screen = screens.primary()
-	end
-	-- textbox._layout:get_context():set_resolution(screens.ydpi(screen) * dpi.yfactor(screen))
-	return textbox
-end
-
 function dpi.x(value, screen)
 	return value * scale_x_cache[screen]
 end

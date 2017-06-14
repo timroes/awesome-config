@@ -61,7 +61,6 @@ local function refresh_titlebar(c)
 	local center_layout = wibox.layout.fixed.horizontal()
 	center_layout:add(margin_icon)
 	local title_widget = awful.titlebar.widget.titlewidget(c)
-	lunaconf.dpi.textbox(title_widget, s)
 	center_layout:add(title_widget)
 
 	local titlebar = wibox.layout.align.horizontal()

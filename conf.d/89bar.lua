@@ -67,8 +67,7 @@ local function create_primaryscreen_widgets(callback)
 		widgets:add(lunaconf.widgets.dnd(primary, { lunaconf.config.MOD }, 'd'))
 
 		-- Add textclock
-		local clock = wibox.widget.textclock("%a, %e. %b  %H:%M")
-		lunaconf.dpi.textbox(clock, primary)
+		local clock = wibox.widget.textclock("%H:%M")
 		orglendar(clock, primary)
 		widgets:add(clock)
 

@@ -52,14 +52,14 @@ local function create_ui(self)
 	self._icon.width = dpi.x(48, self._screen)
 	self._icon.height = dpi.y(48, self._screen)
 
-	self._title = dpi.textbox(nil, self._screen)
+	self._title = wibox.widget.textbox(nil, self._screen)
 	self._title:set_align('left')
 	self._title:set_valign('bottom')
 
-	self._description = dpi.textbox(nil, self._screen)
+	self._description = wibox.widget.textbox(nil, self._screen)
 	self._description:set_valign('top')
 
-	local shortcut = dpi.textbox(nil, self._screen)
+	local shortcut = wibox.widget.textbox(nil, self._screen)
 	shortcut:set_text(tostring(self._index))
 	shortcut:set_align('center')
 	shortcut:set_valign('center')

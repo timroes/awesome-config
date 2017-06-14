@@ -33,7 +33,6 @@ end
 
 local function screen_tag(screen)
 	local label = wibox.widget.textbox(screen)
-	dpi.textbox(label)
 	label:set_align('center')
 	label:set_valign('center')
 	label.fit = function (wibox, w, h)
@@ -47,7 +46,6 @@ end
 
 local function hotkey_badge(hotkey)
 	local hk_label = wibox.widget.textbox(hotkey:upper())
-	dpi.textbox(hk_label)
 	hk_label:set_align('center')
 	hk_label:set_valign('center')
 	hk_label.fit = function (wibox, w, h) return 40, 40 end
