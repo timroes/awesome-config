@@ -3,8 +3,8 @@ local config = require('lunaconf.config')
 local screens = require('lunaconf.screens')
 local log = require('lunaconf.log')
 local wibox = require('wibox')
-
-local typeof = typeof
+local awful = require('awful')
+local beautiful = require('beautiful')
 
 -- Utilities to work with hidpi screens
 local dpi = {}
@@ -33,6 +33,29 @@ function dpi.yfactor(screen)
 	return screen_factor(screen, 'yfactor')
 end
 
+local function refresh_dpi()
+	scale_x_cache = {}
+	scale_y_cache = {}
+	for s in screen do
+		-- Calculate x dpi for each screen
+		local xdpi = screens.xdpi(s)
+		if xdpi == nil then
+			xdpi = default_dpi
+		end
+		xdpi = xdpi * dpi.xfactor(s)
+		scale_x_cache[s] = xdpi / default_dpi
+		-- Calculate y dpi for each screen
+		local ydpi = screens.ydpi(s)
+		if ydpi == nil then
+			ydpi = default_dpi
+		end
+		ydpi = ydpi * dpi.yfactor(s)
+		scale_y_cache[s] = ydpi / default_dpi
+		-- Pass the lower dpi to awesome as dpi for that screen
+		beautiful.xresources.set_dpi(math.min(xdpi, ydpi), s)
+	end
+end
+
 -- Pass in an wibox.widget.textbox to this method and it will scale its font
 -- so it will take the dpi from the theme into respect. This method will assume
 -- the font size set on the textbox was meant to be for 96 dpi.
@@ -50,25 +73,18 @@ function dpi.textbox(textbox, screen)
 end
 
 function dpi.x(value, screen)
-	if not scale_x_cache[screen] then
-		local xdpi = screens.xdpi(screen)
-		if xdpi == nil then
-			xdpi = default_dpi
-		end
-		scale_x_cache[screen] = (xdpi * dpi.xfactor(screen)) / default_dpi
-	end
 	return value * scale_x_cache[screen]
 end
 
 function dpi.y(value, screen)
-	if not scale_y_cache[screen] then
-		local ydpi = screens.ydpi(screen)
-		if ydpi == nil then
-			ydpi = default_dpi
-		end
-		scale_y_cache[screen] = (ydpi * dpi.yfactor(screen)) / default_dpi
-	end
 	return value * scale_y_cache[screen]
 end
+
+-- Set up listeners to recalculate dpi and pass it to awesome
+for _, signal in ipairs({'list', 'property::geometry', 'property::outputs'}) do
+	screen.connect_signal(signal, refresh_dpi)
+end
+
+refresh_dpi()
 
 return dpi
