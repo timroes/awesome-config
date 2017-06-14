@@ -26,7 +26,7 @@ local orglendar = { files = {},
                     today_color = theme.cal_today or theme.bg_urgent or "#00FF00",
                     calendar_width = 19 }
 
-local font = 'Source Code Pro'
+local font = 'Source Code Pro 11'
 
 local freq_table =
 { d = { lapse = 86400,
@@ -121,7 +121,7 @@ local function create_calendar()
 end
 
 local function calculate_char_width()
-   return theme.get_font_height(font) * 0.555
+   return theme.get_font_height(font) * 0.555 * lunaconf.dpi.y(1.0, lunaconf.screens.primary())
 end
 
 function orglendar.hide()
@@ -150,7 +150,6 @@ function orglendar.show(inc_offset)
 end
 
 function orglendar.register(_, widget, screen)
-   font = string.format('%s %d', font, math.ceil(lunaconf.dpi.y(11, screen)))
    widget:connect_signal("mouse::enter", function() orglendar.show(0) end)
    widget:connect_signal("mouse::leave", orglendar.hide)
    widget:buttons(util.table.join( awful.button({ }, 4, function()
