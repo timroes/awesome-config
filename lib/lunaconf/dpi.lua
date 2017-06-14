@@ -9,10 +9,6 @@ local typeof = typeof
 -- Utilities to work with hidpi screens
 local dpi = {}
 
--- TODO: Get this from one of the several places where this is set
-local currentDpi = config.get('theme.dpi', 96)
-local scale = currentDpi / 96
-
 local default_dpi = 96
 
 local scale_x_cache = {}
@@ -51,10 +47,6 @@ function dpi.textbox(textbox, screen)
 	end
 	-- textbox._layout:get_context():set_resolution(screens.ydpi(screen) * dpi.yfactor(screen))
 	return textbox
-end
-
-function dpi.toScale(value)
-	return value * scale
 end
 
 function dpi.x(value, screen)
