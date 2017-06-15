@@ -33,6 +33,10 @@ theme.cal_today_bg = '#99CC00'
 theme.cal_today = '#FFFFFF'
 theme.cal_fg = '#222222'
 
+-- Battery widget
+theme.battery_bar_color = '#2196F3'
+theme.battery_warning_color = '#F44336'
+
 -- Titlebar
 theme.titlebar_bg_normal = "#F5F5F5"
 theme.titlebar_bg_focus = "#F5F5F5"

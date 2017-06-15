@@ -6,6 +6,8 @@ local lunaconf = {
 	dbus = require('lunaconf.dbus'),
 	dpi = require('lunaconf.dpi'),
 	icons = require('lunaconf.icons'),
+	notify = require('lunaconf.notify'),
+	theme = require('lunaconf.theme'),
 	widgets = {
 		bar = require('lunaconf.widgets.bar')
 	}
@@ -19,6 +21,35 @@ local ac_icon = gears.color.recolor_image(lunaconf.icons.lookup_icon('battery-fu
 local dbus_dest = 'org.freedesktop.UPower'
 
 local icon_widget, bar, tooltip
+local shown_warning
+local theme = lunaconf.theme.get()
+local bar_color = theme.battery_bar_color or '#000000'
+local warning_color = theme.battery_warning_color or '#FF0000'
+
+
+--- Checks whether the battery is in a critical state and recolor bar and
+--- show notification if it is
+local function check_critical(status)
+	-- Reset warning when battery isn't discharging anymore
+	if status.State ~= 2 then
+		shown_warning = false
+	end
+	if status.State == 2 and status.TimeToEmpty <= 60 * 20 then
+		-- If battery is critical show notification
+		bar.color = warning_color
+		if not shown_warning then
+			lunaconf.notify.show {
+				title = 'Battery Warning',
+				text = 'Remaining time under 20 minutes',
+				icon = 'battery-caution',
+				timeout = 10
+			}
+			shown_warning = true
+		end
+	else
+		bar.color = bar_color
+	end
+end
 
 local function to_time_string(time)
 	local hours = math.floor(time / 3600)
@@ -47,7 +78,9 @@ local function update_battery()
 		'GetAll',
 		{ 's:org.freedesktop.UPower.Device' },
 		function(status)
+
 			bar:set_value(status.Percentage)
+			check_critical(status)
 
 			local time = status.State == 1 -- Charging
 				and 'Charging time:\t<b>' .. to_time_string(status.TimeToFull) .. '</b>'
@@ -87,10 +120,10 @@ local function create(_, screen)
 			left = lunaconf.dpi.x(4, screen)
 		},
 		paddings = 2,
-		color = '#2196F3',
+		color = bar_color,
 		background_color = '#00000000',
 		border_width = 2,
-		border_color = '#2196F3',
+		border_color = bar_color,
 		widget = wibox.widget.progressbar
 	}
 
