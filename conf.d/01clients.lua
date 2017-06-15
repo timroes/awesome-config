@@ -4,6 +4,22 @@ local gears = require('gears')
 
 local MOD = lunaconf.config.MOD
 
+--- Toggle ontop state of a client.
+-- This is only allowed for floating clients, since only these can be "above"
+-- another client and should stay there.
+local function toggle_ontop(c)
+	if c.floating then
+		c.ontop = not c.ontop
+	end
+end
+
+-- When a client isn't floating anymore switch its ontop property to false (see above).
+client.connect_signal('property::floating', function(c)
+	if not c.floating then
+		c.ontop = false
+	end
+end)
+
 local move_client = function(c, direction)
 	local cur_tag = c.screen.selected_tag
 
@@ -77,7 +93,7 @@ keys = gears.table.join(
 		end
 	end),
 	-- toggle client always on top
-	awful.key({ MOD }, "t", function(c) c.ontop = not c.ontop end)
+	awful.key({ MOD }, "t", toggle_ontop)
 )
 
 awful.rules.rules = {
