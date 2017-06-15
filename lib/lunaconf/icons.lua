@@ -17,13 +17,6 @@ local icon_cache = {}
 --- List of supported icon formats.
 local icon_formats = { "svg", "png", "xpm" }
 
-local function calling_function()
-	return debug.traceback()
-	-- local trace = debug.traceback()
-	-- local find = trace:gsub("\\n", ""):match("lua:%d+.*([.A-Za-z]+:%d)")
-	-- return find
-end
-
 --- Check whether the icon format is supported.
 -- @param icon_file Filename of the icon.
 -- @return true if format is supported, false otherwise.
