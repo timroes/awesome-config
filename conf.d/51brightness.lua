@@ -10,7 +10,7 @@ local function brightness_control(which)
 		local value_blocks = string.rep('█', value_rounded) .. string.rep('░', 11 - value_rounded)
 		lunaconf.notify.show_or_update('brightness.control', {
 			title = 'Brightness',
-			text = value_blocks,
+			text = '[' .. value_blocks .. ']',
 			icon = 'display-brightness-symbolic',
 			timeout = 2
 		})

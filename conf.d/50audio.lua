@@ -8,7 +8,7 @@ local function show_volume_notification(is_muted, volume)
 	local volume_blocks = string.rep(is_muted and '▒' or '█', volume_rounded) .. string.rep('░', 11 - volume_rounded)
 	lunaconf.notify.show_or_update('audio.volume', {
 		title = 'Volume' .. (is_muted and ' (off)' or ' (' .. tostring(volume) .. '%)'),
-		text = volume_blocks,
+		text = '[' .. volume_blocks .. ']',
 		icon = is_muted and 'audio-volume-muted' or 'audio-volume-high',
 		timeout = 2
 	})
