@@ -1,6 +1,5 @@
 local awful = require("awful")
 local wibox = require("wibox")
-local orglendar = require("widgets.orglendar")
 local config = require('lunaconf.config')
 local tasklist = require('lunaconf.widgets.tasklist')
 local gears = require('gears')
@@ -79,7 +78,7 @@ local function create_primaryscreen_widgets(callback)
 
 		-- Add textclock
 		local clock = wibox.widget.textclock("%H:%M")
-		orglendar(clock, primary)
+		lunaconf.widgets.calendar(clock) -- Attach calendar to clock
 		widgets:add(margin(clock, 4, 8, 0, 0))
 
 		callback(widgets)

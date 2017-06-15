@@ -29,7 +29,8 @@ theme.notify_opacity = 0.9
 theme.bg_systray = '#113A45'
 
 -- Calendar
-theme.cal_today = '#99CC00'
+theme.cal_today_bg = '#99CC00'
+theme.cal_today = '#FFFFFF'
 theme.cal_fg = '#222222'
 
 -- Titlebar
