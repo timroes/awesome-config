@@ -41,12 +41,6 @@ tasklists.buttons = awful.util.table.join(
 	end)
 )
 
---- A simple function creating a spacer widget with the given with for the specified
---- screen.
-local function spacer(width, screen)
-	return wibox.widget.textbox(string.rep(" ", math.floor(lunaconf.dpi.x(width, screen))))
-end
-
 local function margin(widget, left, right, top, bottom, screen)
 	if not screen then
 		screen = lunaconf.screens.primary()
@@ -111,18 +105,17 @@ awful.screen.connect_for_each_screen(function(s)
 	local left_layout = wibox.layout.fixed.horizontal()
 	-- TODO: Use custom taglist again
 	left_layout:add(awful.widget.taglist(s, function(t) return not t.invisible end, taglist.buttons))
-	left_layout:add(spacer(5, screen[s]))
 
 	local layout = wibox.layout.align.horizontal()
 	layout:set_left(left_layout)
 	layout:set_middle(tasklists[s])
 
-	bars[s] = awful.wibar({
+	bars[s] = awful.wibar {
 		position = "top",
 		screen = s,
 		height = lunaconf.dpi.y(config.get("bar.height", 32), screen[s]),
 		bg = lunaconf.theme.get().screenbar_bg
-	})
+	}
 	bars[s]:set_widget(layout)
 
 	-- Delete bar when screen is removed
