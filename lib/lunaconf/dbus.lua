@@ -3,8 +3,11 @@ local GLib = require('lgi').GLib
 local lunaconf = {
 	strings = require('lunaconf.strings')
 }
+local awesome_dbus = dbus
 
 local dbus = {}
+
+local properties_changed_listener = {}
 
 local system_bus = Gio.bus_get_sync(Gio.BusType.SYSTEM)
 
@@ -39,5 +42,22 @@ function dbus.system(dest, path, interface, method, params, callback)
 			callback(res[1])
 		end
 end
+
+--- Subscribe to a PropertiesChanged dbus event for the specific path.
+-- The specified listener will be called whenever a property of that path change.
+-- This function is needed, since dbus.connect_signal only allows one listener
+-- per interface and all property changed listeners need to listen on the same
+-- org.freedesktop.DBus.Properties interface.
+function dbus.properties_changed(path, listener)
+	awesome_dbus.add_match('system', "interface='org.freedesktop.DBus.Properties',member='PropertiesChanged',path='" .. path .. "'")
+	properties_changed_listener[path] = listener
+end
+
+-- Listen for PropertiesChanged events and call the registered listener for that path.
+awesome_dbus.connect_signal('org.freedesktop.DBus.Properties', function(signal)
+	if signal.member == 'PropertiesChanged' and properties_changed_listener[signal.path] then
+		properties_changed_listener[signal.path]()
+	end
+end)
 
 return dbus

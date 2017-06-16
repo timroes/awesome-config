@@ -134,18 +134,8 @@ local function create(_, screen)
 	layout:add(mlayout)
 	layout:add(bar)
 
-	-- TODO: Write own better dbus implementation based on lgi
-	-- We cannot use dbus.connect_signal in any other place to listen for
-	-- the same signal.
-	dbus.add_match('system', "interface='org.freedesktop.DBus.Properties',member='PropertiesChanged',path='/org/freedesktop/UPower/devices/DisplayDevice'")
-	dbus.add_match('system', "interface='org.freedesktop.DBus.Properties',member='PropertiesChanged',path='/org/freedesktop/UPower'")
-	dbus.connect_signal('org.freedesktop.DBus.Properties', function(signal)
-		if signal.path == '/org/freedesktop/UPower' then
-			update_state()
-		elseif signal.path == '/org/freedesktop/UPower/devices/DisplayDevice' then
-			update_battery()
-		end
-	end)
+	lunaconf.dbus.properties_changed('/org/freedesktop/UPower/devices/DisplayDevice', update_battery)
+	lunaconf.dbus.properties_changed('/org/freedesktop/UPower', update_state)
 
 	update_battery()
 	update_state()
