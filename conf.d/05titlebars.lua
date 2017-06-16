@@ -6,23 +6,10 @@ local colorbox = require("lunaconf.widgets.colorbox")
 
 local theme = lunaconf.theme.get()
 
-local titlebars_enabled = true
 local previous_titlebar_heights = {}
 
 local ontop_color = lunaconf.theme.get().ontop_indicator
 if ontop_color then ontop_color = gears.color(ontop_color) end
-
-local floating_color = lunaconf.theme.get().floating_indicator
-if floating_color then floating_color = gears.color(floating_color) end
-
-lunaconf.keys.globals(
-	awful.key({ lunaconf.config.MOD, "Shift" }, "t", function()
-		titlebars_enabled = not titlebars_enabled
-		for k, c in ipairs(client.get()) do
-			awful.titlebar.toggle(c)
-		end
-	end)
-)
 
 local function refresh_titlebar(c)
 
@@ -32,16 +19,14 @@ local function refresh_titlebar(c)
 		return
 	end
 
-	local s = screen[c.screen]
+	local s = c.screen
 	local titlebar_height = lunaconf.dpi.y(30, s)
 	local color_indicator_size = lunaconf.dpi.y(10, s)
 
 	local titlebar = awful.titlebar(c)
-	if titlebar then
-		if previous_titlebar_heights[c.window] == titlebar_height then
+	if titlebar and previous_titlebar_heights[c.window] == titlebar_height then
 			-- If titlebar height hasn't changed, when changing screen, don't redraw anything
 			return
-		end
 	end
 
 	previous_titlebar_heights[c.window] = titlebar_height
@@ -58,24 +43,25 @@ local function refresh_titlebar(c)
 			lunaconf.dpi.y(5, s)
 		)
 
+	local title_widget = awful.titlebar.widget.titlewidget(c)
+
 	local center_layout = wibox.layout.fixed.horizontal()
 	center_layout:add(margin_icon)
-	local title_widget = awful.titlebar.widget.titlewidget(c)
 	center_layout:add(title_widget)
 
 	local titlebar = wibox.layout.align.horizontal()
 	titlebar:set_left(client_status)
 	titlebar:set_middle(center_layout)
-	titlebar:set_right(actions)
 
-	if floating_color then
-		local switch_floating = function ()
-			client_status:set_color2(c.floating and floating_color or nil)
+	local on_floating_change = function ()
+		if c.floating then
+			awful.titlebar.show(c)
+		else
+			awful.titlebar.hide(c)
 		end
-
-		c:connect_signal("property::floating", switch_floating)
-		switch_floating()
 	end
+
+	c:connect_signal("property::floating", on_floating_change)
 
 	if ontop_color then
 		local switch_ontop = function ()
@@ -95,14 +81,11 @@ local function refresh_titlebar(c)
 
 	local bar = awful.titlebar(c, { size = titlebar_height })
 	bar:set_widget(titlebar)
-
-	if not titlebars_enabled then
-		awful.titlebar.hide(c)
-	end
+	-- Update according to initial floating state
+	on_floating_change()
 end
 
 client.connect_signal("manage", function(c, startup)
-
 	-- We need to register the screen listener in the manage method per client
 	-- otherwise we would get a property change call before the manage call for a newly
 	-- created client, in which not all properties are yet set correctly.
@@ -113,7 +96,6 @@ client.connect_signal("manage", function(c, startup)
 	end)
 
 	refresh_titlebar(c)
-
 end)
 
 client.connect_signal("unmanage", function(c)

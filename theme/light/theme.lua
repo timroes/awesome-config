@@ -47,7 +47,6 @@ theme.titlebar_bg_normal = "#F5F5F5"
 theme.titlebar_bg_focus = "#F5F5F5"
 theme.titlebar_fg_normal = "#AAAAAA"
 theme.titlebar_fg_focus = "#555555"
-theme.floating_indicator = '#AED581'
 theme.ontop_indicator = '#E57373'
 
 -- Screenbar (the bar on top of each screen)
