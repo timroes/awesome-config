@@ -66,8 +66,8 @@ theme.taglist_screentag_bg_focus = '#78909C'
 
 -- Tooltips
 theme.tooltip_border_width = 0
-theme.tooltip_bg = theme.notify_normal_bg
-theme.tooltip_fg = theme.notify_normal_fg
+theme.tooltip_bg = theme.notification_bg
+theme.tooltip_fg = theme.notification_fg
 
 theme.infolay_bg = '#333333'
 theme.infolay_opacity = 0.85
