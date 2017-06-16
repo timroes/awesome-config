@@ -38,7 +38,7 @@ function dbus.system(dest, path, interface, method, params, callback)
 			-1 -- timeout
 		)
 
-		if not err then
+		if not err and callback then
 			callback(res[1])
 		end
 end
@@ -54,9 +54,9 @@ function dbus.properties_changed(path, listener)
 end
 
 -- Listen for PropertiesChanged events and call the registered listener for that path.
-awesome_dbus.connect_signal('org.freedesktop.DBus.Properties', function(signal)
+awesome_dbus.connect_signal('org.freedesktop.DBus.Properties', function(signal, ...)
 	if signal.member == 'PropertiesChanged' and properties_changed_listener[signal.path] then
-		properties_changed_listener[signal.path]()
+		properties_changed_listener[signal.path](signal, ...)
 	end
 end)
 
