@@ -1,9 +1,12 @@
 -- The style of the interface
 local theme = {}
 
-theme.font          = "Roboto Light 11"
+local highlight_color   = '#2196F3'
+local text_on_highlight = '#FFFFFF'
+local error_color       = '#F44336'
 
--- theme.bg_normal     = "linear:0,0:0,28:0,#3A3A3A:1,#202020"
+theme.font          = "Source Sans Pro Light 10"
+
 theme.bg_normal     = "#F5F5F5AA"
 theme.bg_focus      = "#BEBEBE"
 theme.bg_urgent     = "linear:0,0:0,28:0,#99CC00:1,#739900"
@@ -16,26 +19,28 @@ theme.fg_minimize   = "#666666"
 
 theme.border_width  = "1"
 theme.border_normal = "#333333"
-theme.border_focus  = "#33B5E5"
+theme.border_focus  = highlight_color
 theme.border_marked = "#339933"
 
 -- Notifications
-theme.notify_normal_bg = "#FFFFFF"
-theme.notify_normal_fg = "#222222"
-theme.notify_border_width = "0"
-theme.notify_opacity = 0.9
+theme.notification_bg = "#FFFFFF"
+theme.notification_fg = "#222222"
+theme.notitication_border_width = 0
+theme.notification_margin = 7
+theme.notification_spacing = 7
+theme.notification_padding = 5
+theme.notification_opacity = 0.9
 
 -- Systray
 theme.bg_systray = '#113A45'
 
 -- Calendar
-theme.cal_today_bg = '#99CC00'
-theme.cal_today = '#FFFFFF'
-theme.cal_fg = '#222222'
+theme.cal_today_bg = highlight_color
+theme.cal_today = text_on_highlight
 
 -- Battery widget
-theme.battery_bar_color = '#2196F3'
-theme.battery_warning_color = '#F44336'
+theme.battery_bar_color = highlight_color
+theme.battery_warning_color = error_color
 
 -- Titlebar
 theme.titlebar_bg_normal = "#F5F5F5"
@@ -64,20 +69,9 @@ theme.taglist_screentag_bg_focus = '#78909C'
 theme.tooltip_border_width = 0
 theme.tooltip_bg = theme.notify_normal_bg
 theme.tooltip_fg = theme.notify_normal_fg
-theme.tooltip_font = "Roboto Thin 14"
 
 theme.infolay_bg = '#333333'
 theme.infolay_opacity = 0.85
-
--- There are other variable sets
--- overriding the default one when
--- defined, the sets are:
--- [taglist|tasklist]_[bg|fg]_[focus|urgent]
--- titlebar_[bg|fg]_[normal|focus]
--- tooltip_[font|opacity|fg_color|bg_color|border_width|border_color]
--- mouse_finder_[color|timeout|animate_timeout|radius|factor]
--- Example:
---theme.taglist_bg_focus = "#ff0000"
 
 -- Wallpaper color if no wallpaper is set in config
 theme.wallpaper = '#F1F1F1'

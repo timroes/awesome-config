@@ -7,7 +7,7 @@ local lunaconf = {
 local theme = lunaconf.theme.get()
 
 local calendar = {
-	text_color = theme.cal_fg or theme.fg_normal or "#FFFFFF",
+	text_color = theme.cal_fg or theme.tooltip_fg or "#FFFFFF",
 	today_color = theme.cal_today or theme.fg_urgent or "#00FF00",
 	today_bg = theme.cal_today_bg or theme.bg_urgent or '#FFFFFF',
 	font = theme.cal_font or 'monospace 11'
