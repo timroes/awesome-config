@@ -3,7 +3,12 @@ local gears = require('gears')
 local lunaconf = require('lunaconf')
 
 local function set_wallpaper(s)
-	gears.wallpaper.tiled(lunaconf.config.get('theme.wallpaper', nil), s)
+	local wallpaper = lunaconf.config.get('theme.wallpaper', nil)
+	if wallpaper then
+		gears.wallpaper.tiled(wallpaper, s)
+	else
+		gears.wallpaper.set(lunaconf.theme.get().wallpaper or '#FFFFFF')
+	end
 end
 
 -- Set wallpaper for each new screen and if the geometry of a screen changes

@@ -79,8 +79,8 @@ theme.infolay_opacity = 0.85
 -- Example:
 --theme.taglist_bg_focus = "#ff0000"
 
--- You can use your own command to set your wallpaper
-theme.wallpaper = '#333333'
+-- Wallpaper color if no wallpaper is set in config
+theme.wallpaper = '#F1F1F1'
 
 theme.icon_theme = "Paper"
 
