@@ -1,6 +1,11 @@
 local awful = require('awful')
 local lunaconf = require('lunaconf')
 
+-- All keys in this list serve as tag keys and can be used to attach clients
+-- to and activate the appropriate tag. For each letter here the MOD + letter
+-- and MOD + Shift + letter hotkey must be free.
+local tag_keys = {'x', 'c', 'v', 'b', 'n', 'm'}
+
 local layouts = {
 	awful.layout.suit.max,
 	awful.layout.suit.tile.right
@@ -63,6 +68,52 @@ for i = 1, 9 do
 		focus_tag(i)
 	end)
 	lunaconf.keys.globals(key)
+end
+
+--- This method will move the currently focused client to the tag with the specified
+--- name. If there isn't a tag with that name yet, it will create it and show it.
+local function move_to_tag(tagname)
+	local c = client.focus
+
+	if c then
+		-- Only do if a client has the focus
+		local t = awful.tag.find_by_name(c.screen, tagname)
+		if not t then
+			-- If tag doesn't exist on that screen yet, create a volatile tag for that name
+			t = awful.tag.add(tagname, {
+				screen = c.screen,
+				layout = layouts[1],
+				volatile = true, -- delete the tag if the last client is removed from it
+				selected = true -- immediately show that tag
+			})
+		end
+
+		-- If client is already on tag move it back to primary tag of its screen
+		-- otherwise move it to the tag
+		if c.first_tag == t then
+			c:move_to_tag(c.screen.primary_tag)
+		else
+			c:move_to_tag(t)
+		end
+	end
+end
+
+local function toggle_tag(tagname)
+	-- TODO: Toggle on all screens
+	local t = awful.tag.find_by_name(client.focus.screen, tagname)
+	if t then
+		t.selected = not t.selected
+	end
+end
+
+for _, letter in ipairs(tag_keys) do
+	local move_hotkey = awful.key({ lunaconf.config.MOD, 'Control' }, letter, function()
+		move_to_tag(letter)
+	end)
+	local toggle_tag_hotkey = awful.key({ lunaconf.config.MOD }, letter, function()
+		toggle_tag(letter)
+	end)
+	lunaconf.keys.globals(move_hotkey, toggle_tag_hotkey)
 end
 
 	-- Switch layouts for the current screen

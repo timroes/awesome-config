@@ -7,11 +7,6 @@ local lunaconf = require('lunaconf')
 local primary_screen = lunaconf.screens.primary_index()
 
 local bars = {}
-local taglist = {}
-
-taglist.buttons = awful.util.table.join(
-	awful.button({ }, 1, awful.tag.viewonly)
-)
 
 local function margin(widget, left, right, top, bottom, screen)
 	if not screen then
@@ -70,7 +65,7 @@ end
 -- For all current and future screens create a bar
 awful.screen.connect_for_each_screen(function(s)
 	local layout = wibox.layout.align.horizontal()
-	layout:set_left(lunaconf.widgets.tasklist(s))
+	layout:set_left(lunaconf.widgets.tasklist(s, function(tag) return not tag.invisible end))
 	layout:set_middle(margin(lunaconf.widgets.clienttitle(s), 12, 4, 0, 0))
 
 	bars[s] = awful.wibar {
@@ -91,15 +86,3 @@ end)
 screen.connect_signal('primary_changed', update_primary_bar)
 -- Initialize the widgets on the current primary
 update_primary_bar()
-
--- TODO: replace by fullscreen mode
-local bars_visible = true
-
-root.keys(awful.util.table.join(root.keys(),
-	awful.key({ config.MOD }, "b", function()
-		bars_visible = not bars_visible
-		for i,bar in pairs(bars) do
-			bar.visible = bars_visible
-		end
-	end)
-))

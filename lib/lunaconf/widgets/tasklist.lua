@@ -110,6 +110,8 @@ local function list_update(screen, container, buttons, label, data, clients)
 	end
 end
 
+-- A function which creates a filter function for the specific tag, i.e.
+-- a function that will accept a client and return true if is tagged with that tag.
 local function filter_clients_for_tag(tag)
 	return function(client)
 		local tags = client:tags()
@@ -119,6 +121,15 @@ local function filter_clients_for_tag(tag)
 			end
 		end
 		return false
+	end
+end
+
+-- A helper function creating the shape function for the tagname for a specific screen
+local function tag_name_shape(screen)
+	return function(cr, width, height)
+		gears.shape.partially_rounded_rect(cr, width, height, false, false, true, false,
+			lunaconf.dpi.y(2, screen)
+		)
 	end
 end
 
@@ -134,6 +145,7 @@ local function taglist(screen, tag)
 		widget = wibox.widget.textbox
 	}
 	local tag_name_box = wibox.container.background(margin(tag_name, 4, 4, 2, 2, screen))
+	tag_name_box.shape = tag_name_shape(screen)
 
 	-- Update the tag stripe color dependent on its selected state
 	local update_stripe_color = function()
@@ -151,6 +163,10 @@ local function taglist(screen, tag)
 	tag:connect_signal('property::selected', update_stripe_color)
 	update_stripe_color()
 
+	local tasklist = awful.widget.tasklist(screen, filter_clients_for_tag(tag), tasklist_buttons, nil, function(...)
+		list_update(screen, ...)
+	end)
+
 	local taglist_widget = wibox.widget {
 		{
 			tag_name_box,
@@ -159,9 +175,7 @@ local function taglist(screen, tag)
 		},
 		{
 			tag_stripe,
-			awful.widget.tasklist(screen, filter_clients_for_tag(tag), tasklist_buttons, nil, function(...)
-				list_update(screen, ...)
-			end),
+			margin(tasklist, 4, 0, 0, 0, screen),
 			layout = wibox.layout.fixed.vertical
 		},
 		layout = wibox.layout.fixed.horizontal
@@ -170,13 +184,33 @@ local function taglist(screen, tag)
 	return taglist_widget
 end
 
-local function new(self, screen)
-	-- TODO: on tag change recalculate list
-	local widget = wibox.widget {
-		taglist(screen, screen.primary_tag),
-		layout = wibox.layout.fixed.horizontal
+-- A custom render function for awful.widget.taglist, that will use the above
+-- 'taglist' function to create a taglist for each tag
+local function taglist_update(screen, container, buttons, label, data, tags)
+	container:reset()
+	for i, t in ipairs(tags) do
+		local cache = data[t]
+		if not cache then
+			data[t] = taglist(screen, t)
+		end
+		container:add(data[t])
+	end
+end
+
+local function new(self, screen, tag_filter)
+
+	-- The container widget that will be used to put all taglists in
+	local taglist_container = wibox.widget {
+		spacing = lunaconf.dpi.x(10, screen),
+		widget = wibox.layout.fixed.horizontal
 	}
-	return widget
+
+	-- Use awful.widget.taglist to render the overall taglist with a custom render function
+	local alltags = awful.widget.taglist(screen, tag_filter, nil, nil, function(...)
+		taglist_update(screen, ...)
+	end, taglist_container)
+
+	return wibox.layout.fixed.horizontal(alltags)
 end
 
 return setmetatable(tasklist, { __call = new })
