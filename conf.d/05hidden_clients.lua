@@ -32,26 +32,6 @@ local function unhide_all_clients()
 	end
 end
 
-local function create_infolay()
-
-	local function refresh_counter()
-		hidden_count_textbox.text = tostring(#hidden_tag:clients())
-	end
-
-	-- Refresh the amount of hidden clients each time a new client is tagged
-	hidden_tag:connect_signal('tagged', refresh_counter)
-	hidden_tag:connect_signal('untagged', refresh_counter)
-
-	hidden_count_textbox = wibox.widget.textbox('0')
-	local icon = wibox.widget.imagebox(gears.filesystem.get_configuration_dir() .. '/icons/hidden.svg', true)
-	local layout = wibox.layout.fixed.horizontal(icon, hidden_count_textbox)
-	layout.spacing = 10
-
-	lunaconf.infolay.add(layout, awful.placement.bottom_right)
-end
-
-create_infolay()
-
 -- Set shortcut to MOD + H
 lunaconf.keys.globals(
 	awful.key({ lunaconf.config.MOD }, 'h', hide_client),
