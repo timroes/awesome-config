@@ -8,37 +8,9 @@ local primary_screen = lunaconf.screens.primary_index()
 
 local bars = {}
 local taglist = {}
-local tasklists = {}
 
 taglist.buttons = awful.util.table.join(
 	awful.button({ }, 1, awful.tag.viewonly)
-)
-
-tasklists.buttons = awful.util.table.join(
-	awful.button({ }, 1, function(c)
-		if c == client.focus then
-			c.minimized = true
-		else
-			c.minimized = false
-			client.focus = c
-			c:raise()
-		end
-	end),
-	awful.button({ config.MOD }, 1, function(c)
-		awful.layout.set(awful.layout.suit.max)
-		c.minimized = false
-		client.focus = c
-		c:raise()
-	end),
-	awful.button({ }, 2, function(c) c:kill() end),
-	awful.button({ }, 4, function()
-		awful.client.focus.byidx(-1)
-		if client.focus then client.focus:raise() end
-	end),
-	awful.button({ }, 5, function()
-		awful.client.focus.byidx(1)
-		if client.focus then client.focus:raise() end
-	end)
 )
 
 local function margin(widget, left, right, top, bottom, screen)
@@ -97,23 +69,14 @@ end
 
 -- For all current and future screens create a bar
 awful.screen.connect_for_each_screen(function(s)
-	-- TODO: Use custom tasklist again if needed
-	tasklists[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklists.buttons)
-
-	local layoutbox = awful.widget.layoutbox(s)
-
-	local left_layout = wibox.layout.fixed.horizontal()
-	-- TODO: Use custom taglist again
-	left_layout:add(awful.widget.taglist(s, function(t) return not t.invisible end, taglist.buttons))
-
 	local layout = wibox.layout.align.horizontal()
-	layout:set_left(left_layout)
-	layout:set_middle(tasklists[s])
+	layout:set_left(lunaconf.widgets.tasklist(s))
+	layout:set_middle(margin(lunaconf.widgets.clienttitle(s), 12, 4, 0, 0))
 
 	bars[s] = awful.wibar {
 		position = "top",
 		screen = s,
-		height = lunaconf.dpi.y(config.get("bar.height", 32), screen[s]),
+		height = lunaconf.dpi.y(config.get("bar.height", 32), s),
 		bg = lunaconf.theme.get().screenbar_bg
 	}
 	bars[s]:set_widget(layout)
@@ -129,6 +92,7 @@ screen.connect_signal('primary_changed', update_primary_bar)
 -- Initialize the widgets on the current primary
 update_primary_bar()
 
+-- TODO: replace by fullscreen mode
 local bars_visible = true
 
 root.keys(awful.util.table.join(root.keys(),

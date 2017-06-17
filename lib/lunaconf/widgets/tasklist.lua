@@ -1,14 +1,182 @@
 local awful = require('awful')
+local common = require('awful.widget.common')
+local gears = require('gears')
 local wibox = require('wibox')
-local common = require('lunaconf.widgets.common')
+local lunaconf = {
+	config = require('lunaconf.config'),
+	dpi = require('lunaconf.dpi'),
+	icons = require('lunaconf.icons'),
+	theme = require('lunaconf.theme')
+}
 
 local tasklist = {}
 
-local function new(self, screen_index, filter, buttons)
-	local icon_widget_wrapper = function(...)
-		common.icon_widgets(screen[screen_index], ...)
+local theme = lunaconf.theme.get()
+
+local function margin(widget, left, right, top, bottom, screen)
+	return wibox.container.margin(widget,
+		lunaconf.dpi.x(left, screen),
+		lunaconf.dpi.x(right, screen),
+		lunaconf.dpi.y(top, screen),
+		lunaconf.dpi.y(bottom, screen)
+	)
+end
+
+local tasklist_buttons = gears.table.join(
+	awful.button({ }, 1, function(c)
+		if c == client.focus then
+			c.minimized = true
+		else
+			c.minimized = false
+			client.focus = c
+			c:raise()
+		end
+	end),
+	awful.button({ lunaconf.config.MOD }, 1, function(c)
+		awful.layout.set(awful.layout.suit.max)
+		c.minimized = false
+		client.focus = c
+		c:raise()
+	end),
+	awful.button({ }, 2, function(c) c:kill() end),
+	awful.button({ }, 3, function(c) c.floating = not c.floating end),
+	awful.button({ }, 4, function()
+		awful.client.focus.byidx(-1)
+		if client.focus then client.focus:raise() end
+	end),
+	awful.button({ }, 5, function()
+		awful.client.focus.byidx(1)
+		if client.focus then client.focus:raise() end
+	end)
+)
+
+local function list_update(screen, container, buttons, label, data, clients)
+	-- update the widgets, creating them if needed
+	container:reset()
+	for i, cl in ipairs(clients) do
+		local cache = data[cl]
+		local ib, bgb, ibm, l
+		if cache then
+			ib = cache.ib
+			bgb = cache.bgb
+			ibm = cache.ibm
+		else
+			-- TODO: Create tooltip for every icon
+			ib = wibox.widget.imagebox()
+			bgb = wibox.container.background()
+			ibm = margin(ib, 2, 2, 2, 2, screen)
+			l = wibox.layout.fixed.horizontal()
+
+			-- All of this is added in a fixed widget
+			l:fill_space(true)
+			l:add(ibm)
+
+			-- And all of this gets a background
+			bgb:set_widget(ibm)
+
+			bgb:buttons(common.create_buttons(buttons, cl))
+
+			data[cl] = {
+					ib  = ib,
+					bgb = bgb,
+					ibm = ibm,
+			}
+		end
+
+		if not cl.icon and not cl.replacement_icon then
+			local ic = lunaconf.icons.lookup_icon(cl.instance)
+			if ic then
+				cl.replacement_icon = ic
+			else
+				-- TODO: Draw a replacement icon (circle with letter or similar)
+			end
+		end
+
+		if cl.icon then
+			ib:set_image(cl.icon)
+		elseif cl.replacement_icon then
+			ib:set_image(cl.replacement_icon)
+		end
+
+		if client.focus == cl then
+			bgb:set_bg(theme.tasklist_bg_focus or theme.bg_focus or theme.bg_normal)
+		else
+			bgb:set_bg(theme.tasklist_bg_normal or theme.bg_normal)
+		end
+
+		bgb.opacity = cl.minimized and 0.5 or 1.0
+
+		container:add(bgb)
 	end
-	return awful.widget.tasklist(screen_index, filter, buttons, nil, icon_widget_wrapper, wibox.layout.fixed.horizontal())
+end
+
+local function filter_clients_for_tag(tag)
+	return function(client)
+		local tags = client:tags()
+		for _, t in ipairs(tags) do
+			if tag == t then
+				return true
+			end
+		end
+		return false
+	end
+end
+
+--- Create the list of all tasks for one tag including decoration
+local function taglist(screen, tag)
+	-- The stripe above all clients belonging to this tag
+	local tag_stripe = wibox.container.background(wibox.widget{}, nil)
+	tag_stripe.forced_height = lunaconf.dpi.y(3, screen)
+
+	local tag_name = wibox.widget {
+		text = tag.name,
+		font = 'monospace 11', -- TODO: use theme variable
+		widget = wibox.widget.textbox
+	}
+	local tag_name_box = wibox.container.background(margin(tag_name, 4, 4, 2, 2, screen))
+
+	-- Update the tag stripe color dependent on its selected state
+	local update_stripe_color = function()
+		local bg = theme.tag_color or theme.bg_normal
+		if tag.selected then
+			bg = theme.tag_color_selected or theme.bg_focus
+		else
+			bg = theme.tag_color or theme.bg_normal
+		end
+		tag_stripe.bg = bg
+		tag_name_box.bg = bg
+	end
+
+	-- Whenever the selected state of the tag change, update the strip color
+	tag:connect_signal('property::selected', update_stripe_color)
+	update_stripe_color()
+
+	local taglist_widget = wibox.widget {
+		{
+			tag_name_box,
+			valign = 'top',
+			widget = wibox.container.place
+		},
+		{
+			tag_stripe,
+			awful.widget.tasklist(screen, filter_clients_for_tag(tag), tasklist_buttons, nil, function(...)
+				list_update(screen, ...)
+			end),
+			layout = wibox.layout.fixed.vertical
+		},
+		layout = wibox.layout.fixed.horizontal
+	}
+
+	return taglist_widget
+end
+
+local function new(self, screen)
+	-- TODO: on tag change recalculate list
+	local widget = wibox.widget {
+		taglist(screen, screen.primary_tag),
+		layout = wibox.layout.fixed.horizontal
+	}
+	return widget
 end
 
 return setmetatable(tasklist, { __call = new })

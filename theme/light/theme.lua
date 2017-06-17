@@ -57,9 +57,11 @@ theme.screenbar_fg = '#E0E0E0'
 theme.tasklist_bg_normal = '#00000000'
 theme.tasklist_bg_focus = '#F5F5F5EE'
 
+theme.tag_color = '#FF0000'
+theme.tag_color_selected = highlight_color
+
 -- Taglist
 theme.taglist_bg_normal = '#00000000'
-theme.taglist_bg_focus = '#F5F5F5EE'
 theme.taglist_badge_bg = '#455A6466'
 theme.taglist_badge_fg = '#FFFFFF'
 theme.taglist_screentag_bg_focus = '#78909C'

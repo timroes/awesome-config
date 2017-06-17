@@ -2,6 +2,7 @@ return {
 	bar = require('lunaconf.widgets.bar'),
 	battery = require('lunaconf.widgets.battery'),
 	calendar = require('lunaconf.widgets.calendar'),
+	clienttitle = require('lunaconf.widgets.clienttitle'),
 	colorbox = require('lunaconf.widgets.colorbox'),
 	common = require('lunaconf.widgets.common'),
 	dnd = require('lunaconf.widgets.dnd'),
