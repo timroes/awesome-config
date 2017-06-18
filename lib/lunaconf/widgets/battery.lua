@@ -26,6 +26,16 @@ local theme = lunaconf.theme.get()
 local bar_color = theme.battery_bar_color or '#000000'
 local warning_color = theme.battery_warning_color or '#FF0000'
 
+local state_strings = {
+	[0] = 'Unknown',
+	[1] = 'Charging',
+	[2] = 'Discharging',
+	[3] = 'Empty',
+	[4] = 'Fully charged',
+	[5] = 'Pending charge',
+	[6] = 'Pending discharge'
+}
+
 
 --- Checks whether the battery is in a critical state and recolor bar and
 --- show notification if it is
@@ -86,8 +96,10 @@ local function update_battery()
 				and 'Charging time:\t<b>' .. to_time_string(status.TimeToFull) .. '</b>'
 				or 'Remaining:\t<b>' .. to_time_string(status.TimeToEmpty) .. '</b>'
 			tooltip.markup = string.format(
+				'Status:\t\t\t<b>%s</b>\n' ..
 				'Percentage:\t<b>%.0f%%</b>\n%s\n' ..
 				'Energy rate:\t<b>%.2f W</b>',
+				state_strings[status.State],
 				status.Percentage,
 				time,
 				status.EnergyRate
