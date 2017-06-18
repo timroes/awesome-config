@@ -20,18 +20,6 @@ client.connect_signal('property::floating', function(c)
 	end
 end)
 
-local move_client = function(c, direction)
-	local cur_tag = c.screen.selected_tag
-
-	-- Only allow window move for windows on not named tags
-	if cur_tag.is_primary then
-		local new_screen = c.screen:get_next_in_direction(direction)
-		if new_screen then
-			c:move_to_tag(new_screen.primary_tag)
-		end
-	end
-end
-
 -- Define buttons for every client
 buttons = gears.table.join(
 	awful.button({ }, 1, function(c) client.focus = c; c:raise() end),
@@ -73,12 +61,6 @@ keys = gears.table.join(
 	-- close client
 	awful.key({ MOD }, "q", function(c) c:kill() end),
 	awful.key({ "Mod1" }, "F4", function(c) c:kill() end),
-
-	-- move client to other screen/tag
-	awful.key({ MOD }, "Right", function(c) move_client(c, 'right') end),
-	awful.key({ MOD }, "Left", function(c) move_client(c, 'left') end),
-	awful.key({ MOD }, "Down", function(c) move_client(c, 'down') end),
-	awful.key({ MOD }, "Up", function(c) move_client(c, 'up') end),
 
 	-- swap clients into direction (only works in split mode (see tags.lua))
 	awful.key({ MOD, "Control" }, "Right", function(c) awful.client.swap.bydirection("right") end),
