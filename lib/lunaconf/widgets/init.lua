@@ -6,6 +6,5 @@ return {
 	colorbox = require('lunaconf.widgets.colorbox'),
 	dnd = require('lunaconf.widgets.dnd'),
 	screensaver = require('lunaconf.widgets.screensaver'),
-	systray = require('lunaconf.widgets.systray'),
 	tasklist = require('lunaconf.widgets.tasklist'),
 }

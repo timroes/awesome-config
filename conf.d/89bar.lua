@@ -32,6 +32,8 @@ local function create_primaryscreen_widgets(callback)
 			widgets:add(margin(lunaconf.widgets.battery(primary), 4, 4, 0, 0))
 		end
 
+		widgets:add(wibox.widget.systray())
+
 		-- Add widget to disable screensaver
 		widgets:add(lunaconf.widgets.screensaver(primary))
 		-- Add do not disturb widget with hotkey

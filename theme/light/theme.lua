@@ -31,9 +31,6 @@ theme.notification_spacing = 7
 theme.notification_padding = 5
 theme.notification_opacity = 0.9
 
--- Systray
-theme.bg_systray = '#113A45'
-
 -- Calendar
 theme.cal_today_bg = highlight_color
 theme.cal_today = text_on_highlight
@@ -50,8 +47,11 @@ theme.titlebar_fg_focus = "#555555"
 theme.ontop_indicator = '#E57373'
 
 -- Screenbar (the bar on top of each screen)
-theme.screenbar_bg = '#333333DD'
+theme.screenbar_bg = '#454545'
 theme.screenbar_fg = '#E0E0E0'
+
+-- Systray
+theme.bg_systray = theme.screenbar_bg
 
 -- Tasklist
 theme.tasklist_bg_normal = '#00000000'

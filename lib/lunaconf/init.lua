@@ -6,7 +6,6 @@ return {
 	dbus = require('lunaconf.dbus'),
 	dpi = require('lunaconf.dpi'),
 	icons = require('lunaconf.icons'),
-	infolay = require('lunaconf.infolay'),
 	keys = require('lunaconf.keys'),
 	launcher = require('lunaconf.launcher'),
 	layouts = require('lunaconf.layouts'),
