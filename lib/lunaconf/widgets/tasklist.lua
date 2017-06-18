@@ -125,9 +125,9 @@ local function filter_clients_for_tag(tag)
 end
 
 -- A helper function creating the shape function for the tagname for a specific screen
-local function tag_name_shape(screen)
+local function tag_name_shape(screen, tag)
 	return function(cr, width, height)
-		gears.shape.partially_rounded_rect(cr, width, height, false, false, true, false,
+		gears.shape.partially_rounded_rect(cr, width, height, false, false, true, not tag.is_primary,
 			lunaconf.dpi.y(2, screen)
 		)
 	end
@@ -145,7 +145,7 @@ local function taglist(screen, tag)
 		widget = wibox.widget.textbox
 	}
 	local tag_name_box = wibox.container.background(margin(tag_name, 4, 4, 2, 2, screen))
-	tag_name_box.shape = tag_name_shape(screen)
+	tag_name_box.shape = tag_name_shape(screen, tag)
 
 	-- Update the tag stripe color dependent on its selected state
 	local update_stripe_color = function()
