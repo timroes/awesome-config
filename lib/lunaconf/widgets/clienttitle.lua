@@ -16,6 +16,8 @@ local function new(_, screen)
 	client.connect_signal('property::name', update_client)
 	client.connect_signal('focus', update_client)
 	client.connect_signal('unfocus', update_client)
+	client.connect_signal('manage', update_client)
+	client.connect_signal('unmanage', update_client)
 	return textbox
 end
 
