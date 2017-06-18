@@ -1,6 +1,6 @@
 #! /bin/bash
 
-TAG='awesome(init-touchpads)'
+TAG='awesome(pointing-devices)'
 
 # This script requires xinput to be installed.
 command -v xinput >/dev/null 2>&1 || exit 1
