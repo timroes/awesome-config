@@ -194,6 +194,13 @@ lunaconf.keys.globals(switch_layout,
 	awful.key({ lunaconf.config.MOD }, "Up", function() move_in_direction('up') end)
 )
 
+client.connect_signal('focus', function(c)
+	-- If a client is focused, whose tag is not selected, activate the tag (on all screens)
+	if not c.first_tag.selected then
+		toggle_tag(c.first_tag.name)
+	end
+end)
+
 client.connect_signal('manage', function(c)
 		-- Don't add newly created clients to all currently visible tags, only to the
 		-- primary tag of the screen they are created on.
