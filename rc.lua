@@ -1,10 +1,7 @@
 -- Standard awesome library
-local awful = require("awful")
+local awful = require('awful')
 local gears = require('gears')
-awful.rules = require("awful.rules")
-require("awful.autofocus")
--- Notification library
-local naughty = require("naughty")
+local naughty = require('naughty')
 
 function dbg(string)
 	naughty.notify({
