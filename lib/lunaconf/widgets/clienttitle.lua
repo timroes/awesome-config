@@ -1,19 +1,18 @@
+local awful = require('awful')
 local wibox = require('wibox')
 
 local clienttitle = {}
 
-local textbox = nil
-
-local function update_client()
-	if client.focus and client.focus.name then
-		textbox.text = client.focus.name
-	else
-		textbox.text = ''
-	end
-end
-
 local function new(_, screen)
-	textbox = wibox.widget.textbox()
+	local textbox = wibox.widget.textbox()
+	local update_client = function()
+		local c = awful.client.focus.history.get(screen, 0)
+		if c and c.name then
+			textbox.text = c.name
+		else
+			textbox.text = ''
+		end
+	end
 	client.connect_signal('focus', update_client)
 	client.connect_signal('unfocus', update_client)
 	return textbox
