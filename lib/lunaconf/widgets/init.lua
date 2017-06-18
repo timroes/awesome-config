@@ -8,5 +8,4 @@ return {
 	screensaver = require('lunaconf.widgets.screensaver'),
 	systray = require('lunaconf.widgets.systray'),
 	tasklist = require('lunaconf.widgets.tasklist'),
-	titlebar = require('lunaconf.widgets.titlebar')
 }
