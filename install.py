@@ -21,6 +21,8 @@ OPT_PKG_DEPS = {
   'imagemagick': 'required to make screenshots',
   'light-locker': 'required to lock screen properly',
   'upower': 'required for battery widget',
+  'xf86-input-synaptics': 'required for better touchpad behavior',
+  'xorg-xinput': 'required to configure mouse and trackpads',
 }
 
 # List all packages that should be installed via luarocks
