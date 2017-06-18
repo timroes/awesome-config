@@ -167,6 +167,15 @@ local function toggle_tag(tagname)
 	end
 end
 
+local function focus_fallback(oldfocus)
+	if not client.focus then
+		local fallback = awful.client.focus.history.get(oldfocus.screen, 0)
+		if fallback then
+			client.focus = fallback
+		end
+	end
+end
+
 for _, letter in ipairs(tag_keys) do
 	local move_hotkey = awful.key({ lunaconf.config.MOD, 'Control' }, letter, function()
 		move_to_tag(letter)
@@ -206,3 +215,9 @@ client.connect_signal('manage', function(c)
 		-- primary tag of the screen they are created on.
 		c:tags({ c.screen.primary_tag })
 end)
+
+-- Whenever a client is unmanaged or possibliy loses focus otherwise, make sure
+-- another client will receive the focus.
+client.connect_signal('unmanage', focus_fallback)
+client.connect_signal('property::minimized', focus_fallback)
+client.connect_signal('property::hidden', focus_fallback)
