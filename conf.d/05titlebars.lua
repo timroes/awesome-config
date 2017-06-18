@@ -2,7 +2,6 @@ local wibox = require("wibox")
 local gears = require("gears")
 local awful = require("awful")
 local lunaconf = require("lunaconf")
-local colorbox = require("lunaconf.widgets.colorbox")
 
 local theme = lunaconf.theme.get()
 
@@ -11,10 +10,13 @@ local previous_titlebar_heights = {}
 local ontop_color = lunaconf.theme.get().ontop_indicator
 if ontop_color then ontop_color = gears.color(ontop_color) end
 
-local function refresh_titlebar(c)
+local function should_show_titlebar(c)
+	return not c.skip_taskbar and c.floating
+end
 
-	-- Don't draw a titlebar for windows, that don't want to be in the taskbar
-	if c.skip_taskbar then
+local function refresh_titlebar(c)
+	-- If the client doesn't need a titlebar, hide it and don't continue with configuration
+	if not should_show_titlebar(c) then
 		awful.titlebar.hide(c)
 		return
 	end
@@ -31,7 +33,7 @@ local function refresh_titlebar(c)
 
 	previous_titlebar_heights[c.window] = titlebar_height
 
-	local client_status = colorbox.rect(color_indicator_size, color_indicator_size, {
+	local client_status = lunaconf.widgets.colorbox.rect(color_indicator_size, color_indicator_size, {
 		margin = (titlebar_height - color_indicator_size) / 2
 	})
 
@@ -53,16 +55,6 @@ local function refresh_titlebar(c)
 	titlebar:set_left(client_status)
 	titlebar:set_middle(center_layout)
 
-	local on_floating_change = function ()
-		if c.floating then
-			awful.titlebar.show(c)
-		else
-			awful.titlebar.hide(c)
-		end
-	end
-
-	c:connect_signal("property::floating", on_floating_change)
-
 	if ontop_color then
 		local switch_ontop = function ()
 			client_status:set_color(c.ontop and ontop_color or nil)
@@ -81,8 +73,6 @@ local function refresh_titlebar(c)
 
 	local bar = awful.titlebar(c, { size = titlebar_height })
 	bar:set_widget(titlebar)
-	-- Update according to initial floating state
-	on_floating_change()
 end
 
 client.connect_signal("manage", function(c, startup)
@@ -90,10 +80,11 @@ client.connect_signal("manage", function(c, startup)
 	-- otherwise we would get a property change call before the manage call for a newly
 	-- created client, in which not all properties are yet set correctly.
 	-- By registering it here it will only apply for screen changes after it got managed.
-	c:connect_signal("property::screen", function(c)
-		-- TODO: On screen change only modify height etc. instead of generating a new titlebar
-		refresh_titlebar(c)
-	end)
+	-- Update titlebar on floating change (since only floating clients have titlebars)
+	-- and screen changes (since screens might have different densities and need different
+	-- heights of titlebars)
+	c:connect_signal("property::screen", refresh_titlebar)
+	c:connect_signal("property::floating", refresh_titlebar)
 
 	refresh_titlebar(c)
 end)
