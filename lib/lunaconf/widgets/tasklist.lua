@@ -167,17 +167,28 @@ local function taglist(screen, tag)
 		list_update(screen, ...)
 	end)
 
+	local tasklist_container = wibox.widget {
+		tag_stripe,
+		margin(tasklist, 4, 0, 0, 0, screen),
+		layout = wibox.layout.fixed.vertical
+	}
+
+	local check_client_count = function()
+		tasklist_container.visible = #tag:clients() > 0
+	end
+
+	-- Whenever a client tagging change state, check if we still have clients
+	client.connect_signal('tagged', check_client_count)
+	client.connect_signal('untagged', check_client_count)
+	check_client_count()
+
 	local taglist_widget = wibox.widget {
 		{
 			tag_name_box,
 			valign = 'top',
 			widget = wibox.container.place
 		},
-		{
-			tag_stripe,
-			margin(tasklist, 4, 0, 0, 0, screen),
-			layout = wibox.layout.fixed.vertical
-		},
+		tasklist_container,
 		layout = wibox.layout.fixed.horizontal
 	}
 
