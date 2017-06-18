@@ -5,7 +5,7 @@ local highlight_color   = '#2196F3'
 local text_on_highlight = '#FFFFFF'
 local error_color       = '#F44336'
 
-theme.font          = "Source Sans Pro Light 10"
+theme.font          = "Source Sans Pro Light 11"
 
 theme.bg_normal     = "#F5F5F5AA"
 theme.bg_focus      = "#BEBEBE"
@@ -57,8 +57,8 @@ theme.screenbar_fg = '#E0E0E0'
 theme.tasklist_bg_normal = '#00000000'
 theme.tasklist_bg_focus = '#F5F5F5EE'
 
-theme.tag_color = '#FF0000'
-theme.tag_color_selected = highlight_color
+theme.tag_color_bg = '#CCCCCC'
+theme.tag_color_selected_bg = highlight_color
 
 -- Taglist
 theme.taglist_bg_normal = '#00000000'

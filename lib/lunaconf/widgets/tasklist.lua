@@ -140,7 +140,7 @@ local function taglist(screen, tag)
 	tag_stripe.forced_height = lunaconf.dpi.y(3, screen)
 
 	local tag_name = wibox.widget {
-		text = tag.name,
+		text = tag.name:upper(),
 		font = 'monospace 11', -- TODO: use theme variable
 		widget = wibox.widget.textbox
 	}
@@ -149,11 +149,11 @@ local function taglist(screen, tag)
 
 	-- Update the tag stripe color dependent on its selected state
 	local update_stripe_color = function()
-		local bg = theme.tag_color or theme.bg_normal
+		local bg
 		if tag.selected then
-			bg = theme.tag_color_selected or theme.bg_focus
+			bg = theme.tag_color_selected_bg or theme.bg_focus
 		else
-			bg = theme.tag_color or theme.bg_normal
+			bg = theme.tag_color_bg or theme.bg_normal
 		end
 		tag_stripe.bg = bg
 		tag_name_box.bg = bg
