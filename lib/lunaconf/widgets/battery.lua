@@ -7,22 +7,20 @@ local lunaconf = {
 	dpi = require('lunaconf.dpi'),
 	icons = require('lunaconf.icons'),
 	notify = require('lunaconf.notify'),
-	theme = require('lunaconf.theme'),
-	widgets = {
-		bar = require('lunaconf.widgets.bar')
-	}
+	theme = require('lunaconf.theme')
 }
 
 local battery = {}
 
-local battery_icon = gears.color.recolor_image(lunaconf.icons.lookup_icon('battery-symbolic'), lunaconf.widgets.bar.widget_color())
-local ac_icon = gears.color.recolor_image(lunaconf.icons.lookup_icon('battery-full-charging-symbolic'), lunaconf.widgets.bar.widget_color())
+local theme = lunaconf.theme.get()
+
+local battery_icon = gears.color.recolor_image(lunaconf.icons.lookup_icon('battery-symbolic'), theme.screenbar_fg)
+local ac_icon = gears.color.recolor_image(lunaconf.icons.lookup_icon('battery-full-charging-symbolic'), theme.screenbar_fg)
 
 local dbus_dest = 'org.freedesktop.UPower'
 
 local icon_widget, bar, tooltip
 local shown_warning
-local theme = lunaconf.theme.get()
 local bar_color = theme.battery_bar_color or '#000000'
 local warning_color = theme.battery_warning_color or '#FF0000'
 

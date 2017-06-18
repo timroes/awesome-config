@@ -1,5 +1,4 @@
 return {
-	bar = require('lunaconf.widgets.bar'),
 	battery = require('lunaconf.widgets.battery'),
 	calendar = require('lunaconf.widgets.calendar'),
 	clienttitle = require('lunaconf.widgets.clienttitle'),

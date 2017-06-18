@@ -49,6 +49,7 @@ theme.ontop_indicator = '#E57373'
 -- Screenbar (the bar on top of each screen)
 theme.screenbar_bg = '#454545'
 theme.screenbar_fg = '#E0E0E0'
+theme.screenbar_inactive_fg = '#888888'
 
 -- Systray
 theme.bg_systray = theme.screenbar_bg

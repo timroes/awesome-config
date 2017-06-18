@@ -4,7 +4,6 @@ local setmetatable = setmetatable
 local gears = require('gears')
 local naughty = require('naughty')
 local lunaconf = {
-	bar = require('lunaconf.widgets.bar'),
 	dpi = require('lunaconf.dpi'),
 	icons = require('lunaconf.icons'),
 	keys = require('lunaconf.keys'),
@@ -18,8 +17,8 @@ local widget
 
 local theme = lunaconf.theme.get()
 
-local icon_active = gears.color.recolor_image(lunaconf.icons.lookup_icon('notification-symbolic'), lunaconf.bar.widget_color())
-local icon_dnd = gears.color.recolor_image(lunaconf.icons.lookup_icon('notification-disabled-symbolic'), lunaconf.bar.widget_color())
+local icon_active = gears.color.recolor_image(lunaconf.icons.lookup_icon('notification-symbolic'), theme.screenbar_inactive_fg)
+local icon_dnd = gears.color.recolor_image(lunaconf.icons.lookup_icon('notification-disabled-symbolic'), theme.screenbar_fg)
 
 local function toggle()
 	naughty.toggle()
