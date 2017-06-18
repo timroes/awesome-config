@@ -13,6 +13,7 @@ local function new(_, screen)
 			textbox.text = ''
 		end
 	end
+	client.connect_signal('property::name', update_client)
 	client.connect_signal('focus', update_client)
 	client.connect_signal('unfocus', update_client)
 	return textbox
