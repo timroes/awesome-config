@@ -219,5 +219,6 @@ end)
 -- Whenever a client is unmanaged or possibliy loses focus otherwise, make sure
 -- another client will receive the focus.
 client.connect_signal('unmanage', focus_fallback)
+client.connect_signal('untagged', focus_fallback)
 client.connect_signal('property::minimized', focus_fallback)
 client.connect_signal('property::hidden', focus_fallback)
