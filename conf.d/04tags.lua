@@ -122,14 +122,15 @@ end
 --- a key and the tag as a value. It also returns as a second parameter one
 --- of the found tags by random.
 local function find_all_by_name(tagname)
-	local tag_per_screen = {}, t
+	local tag_per_screen = {}, t, random_tag
 	for s in screen do
 		t = awful.tag.find_by_name(s, tagname)
 		if t then
 			tag_per_screen[s] = t
+			random_tag = t
 		end
 	end
-	return tag_per_screen, t
+	return tag_per_screen, random_tag
 end
 
 local function toggle_tag(tagname)
@@ -137,7 +138,7 @@ local function toggle_tag(tagname)
 
 	-- Collect all tags by their
 	local tags, random_tag = find_all_by_name(tagname)
-	if not #tags then
+	if not random_tag then
 		-- If no tags with that name exists exit
 		return
 	end
