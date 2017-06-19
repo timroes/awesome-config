@@ -57,11 +57,11 @@ local function refresh_dpi()
 end
 
 function dpi.x(value, screen)
-	return value * scale_x_cache[screen]
+	return math.ceil(value * scale_x_cache[screen])
 end
 
 function dpi.y(value, screen)
-	return value * scale_y_cache[screen]
+	return math.ceil(value * scale_y_cache[screen])
 end
 
 -- Set up listeners to recalculate dpi and pass it to awesome
