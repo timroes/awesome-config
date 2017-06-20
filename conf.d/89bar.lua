@@ -79,7 +79,7 @@ awful.screen.connect_for_each_screen(function(s)
 	bars[s]:set_widget(layout)
 
 	-- Delete bar when screen is removed
-	s:connect_signal('removed', function(c)
+	s:connect_signal('removed', function()
 		bars[s] = nil
 	end)
 end)
