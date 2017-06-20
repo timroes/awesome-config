@@ -57,10 +57,16 @@ local function refresh_dpi()
 end
 
 function dpi.x(value, screen)
+	if not scale_x_cache[screen] then
+		refresh_dpi()
+	end
 	return math.ceil(value * scale_x_cache[screen])
 end
 
 function dpi.y(value, screen)
+	if not scale_y_cache[screen] then
+		refresh_dpi()
+	end
 	return math.ceil(value * scale_y_cache[screen])
 end
 
