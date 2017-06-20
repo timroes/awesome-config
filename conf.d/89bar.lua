@@ -4,7 +4,6 @@ local config = require('lunaconf.config')
 local tasklist = require('lunaconf.widgets.tasklist')
 local gears = require('gears')
 local lunaconf = require('lunaconf')
-local primary_screen = lunaconf.screens.primary_index()
 
 local bars = {}
 
