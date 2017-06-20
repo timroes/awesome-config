@@ -12,7 +12,7 @@ local lunaconf = {
 
 local switcher = {}
 
-local modes = { 'Clone', 'Extend' }
+local modes = { 'Extend', 'Clone' }
 
 local script = lunaconf.utils.scriptpath() .. 'displayswitcher.py'
 local display_icon = lunaconf.icons.lookup_icon('preferences-desktop-display')
@@ -21,6 +21,11 @@ local function apply_and_hide(self)
 	if self.has_multiple_displays then
 		-- If we detected multiple displays apply the chosen configuration
 		awful.spawn.spawn(script .. ' ' .. modes[self.current]:lower())
+	else
+		-- If there is only a single display detected execute the auto setup on
+		-- closing of the displayswitcher, so you can use it to reset possibly unplugged
+		-- displays.
+		awful.spawn.spawn(script .. ' auto')
 	end
 	self.widget.visible = false
 end
@@ -46,11 +51,8 @@ local function setup_keygrabber(self)
 end
 
 local function show(self)
-
 	-- If the switcher is already shown don't do anything
 	if self.widget.visible then
-		-- TODO: remove !
-		self.widget.visible = false
 		return
 	end
 
@@ -89,7 +91,6 @@ local function new(self, modifiers, key)
 	local container = wibox.widget {
 		icon,
 		label_bg,
-		-- self.label,
 		layout = wibox.layout.fixed.horizontal
 	}
 
