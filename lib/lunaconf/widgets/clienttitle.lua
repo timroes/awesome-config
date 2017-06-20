@@ -46,6 +46,17 @@ local function new(_, screen)
 	client.connect_signal('unfocus', update_client)
 	client.connect_signal('manage', update_client)
 	client.connect_signal('unmanage', update_client)
+
+	screen:connect_signal('removed', function()
+		-- remove all listeners on client, since this will otherwise keep this widget
+		-- illegally in memory, even though the screen it was for is already removed
+		client.disconnect_signal('property::name', update_client)
+		client.disconnect_signal('focus', update_client)
+		client.disconnect_signal('unfocus', update_client)
+		client.disconnect_signal('manage', update_client)
+		client.disconnect_signal('unmanage', update_client)
+	end)
+
 	return textbox
 end
 
