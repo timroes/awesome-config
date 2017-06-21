@@ -79,9 +79,6 @@ theme.tooltip_border_width = 0
 theme.tooltip_bg = theme.notification_bg
 theme.tooltip_fg = theme.notification_fg
 
-theme.infolay_bg = '#333333'
-theme.infolay_opacity = 0.85
-
 -- Wallpaper color if no wallpaper is set in config
 theme.wallpaper = '#F1F1F1'
 
