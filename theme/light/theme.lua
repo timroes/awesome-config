@@ -5,7 +5,10 @@ local highlight_color   = '#2196F3'
 local text_on_highlight = '#FFFFFF'
 local error_color       = '#F44336'
 
+local dark_text         = '#333333'
+
 theme.font          = "Source Sans Pro Light 11"
+theme.large_font   = "Source Sans Pro 14"
 
 theme.bg_normal     = "#F5F5F5AA"
 theme.bg_focus      = "#BEBEBE"
@@ -22,9 +25,13 @@ theme.border_normal = "#333333"
 theme.border_focus  = highlight_color
 theme.border_marked = "#339933"
 
+-- Dialogs
+theme.dialog_bg = '#FFFFFF'
+theme.dialog_fg = dark_text
+
 -- Notifications
 theme.notification_bg = "#FFFFFF"
-theme.notification_fg = "#222222"
+theme.notification_fg = dark_text
 theme.notitication_border_width = 0
 theme.notification_margin = 7
 theme.notification_spacing = 7

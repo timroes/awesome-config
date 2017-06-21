@@ -7,12 +7,15 @@ local lunaconf = {
 	keys = require('lunaconf.keys'),
 	screens = require('lunaconf.screens'),
 	strings = require('lunaconf.strings'),
+	theme = require('lunaconf.theme'),
 	utils = require('lunaconf.utils')
 }
 
 local switcher = {}
 
 local modes = { 'Extend', 'Clone' }
+
+local theme = lunaconf.theme.get()
 
 local script = lunaconf.utils.scriptpath() .. 'displayswitcher.py'
 local display_icon = lunaconf.icons.lookup_icon('preferences-desktop-display')
@@ -60,9 +63,13 @@ local function show(self)
 	-- Before showing it, place it on the main screen
 	self.widget.screen = screen
 
-	-- Recalculate heights that are dpi dependant
+	-- Recalculate values that are dpi dependant
 	self.widget.width = lunaconf.dpi.x(250, screen)
 	self.widget.height = lunaconf.dpi.y(50, screen)
+	self.icon_margin.top = lunaconf.dpi.y(4, screen)
+	self.icon_margin.bottom = lunaconf.dpi.y(4, screen)
+	self.icon_margin.left = lunaconf.dpi.y(4, screen)
+	self.icon_margin.right = lunaconf.dpi.y(10, screen)
 
 	-- Center the widget in the screen
 	awful.placement.centered(self.widget)
@@ -84,10 +91,14 @@ end
 
 local function new(self, modifiers, key)
 	local icon = wibox.widget.imagebox(display_icon)
-	self.label = wibox.widget.textbox()
+	self.label = wibox.widget {
+		widget = wibox.widget.textbox,
+		font = theme.large_font or theme.font
+	}
+	self.icon_margin = wibox.container.margin(icon)
 
 	local container = wibox.widget {
-		icon,
+		self.icon_margin,
 		self.label,
 		layout = wibox.layout.fixed.horizontal
 	}
@@ -95,8 +106,8 @@ local function new(self, modifiers, key)
 	self.widget = wibox {
 		widget = container,
 		screen = lunaconf.screens.primary(),
-		bg = '#FFFFFF',
-		fg = '#000000',
+		bg = theme.dialog_bg or theme.bg_normal,
+		fg = theme.dialog_fg or theme.fg_normal,
 		visible = false,
 		opacity = 1.0,
 		ontop = true,
