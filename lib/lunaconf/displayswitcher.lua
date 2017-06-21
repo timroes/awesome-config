@@ -85,12 +85,10 @@ end
 local function new(self, modifiers, key)
 	local icon = wibox.widget.imagebox(display_icon)
 	self.label = wibox.widget.textbox()
-	local label_bg = wibox.container.background(self.label, nil)
-	label_bg:set_fg('#000000')
 
 	local container = wibox.widget {
 		icon,
-		label_bg,
+		self.label,
 		layout = wibox.layout.fixed.horizontal
 	}
 
@@ -98,6 +96,7 @@ local function new(self, modifiers, key)
 		widget = container,
 		screen = lunaconf.screens.primary(),
 		bg = '#FFFFFF',
+		fg = '#000000',
 		visible = false,
 		opacity = 1.0,
 		ontop = true,
