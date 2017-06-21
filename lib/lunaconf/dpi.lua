@@ -14,58 +14,59 @@ local default_dpi = 96
 local scale_x_cache = {}
 local scale_y_cache = {}
 
-local function screen_factor(screen, fac)
+local function force_dpi(screen)
 	local output_name = screens.output_name(screen)
-	local factor
+	local dpi
 	if output_name then
-		factor = config.get('dpi.' .. output_name .. '.' .. fac, 1.0)
-	else
-		factor = config.get('dpi.' .. fac, 1.0)
+		dpi = config.get(string.format('dpi.%s', output_name), nil)
 	end
-	return tonumber(factor)
+	if not dpi then
+		dpi = config.get('dpi.default', nil)
+	end
+	return tonumber(dpi)
 end
 
-function dpi.xfactor(screen)
-	return screen_factor(screen, 'xfactor')
-end
-
-function dpi.yfactor(screen)
-	return screen_factor(screen, 'yfactor')
+local function refresh_dpi_for_screen(s)
+	-- Calculate x dpi for each screen
+	local xdpi = force_dpi(s)
+	if not xdpi then
+		xdpi = screens.xdpi(s)
+		if xdpi == nil then
+			xdpi = default_dpi
+		end
+	end
+	scale_x_cache[s] = xdpi / default_dpi
+	-- Calculate y dpi for each screen
+	local ydpi = force_dpi(s)
+	if not ydpi then
+		ydpi = screens.ydpi(s)
+		if ydpi == nil then
+			ydpi = default_dpi
+		end
+	end
+	scale_y_cache[s] = ydpi / default_dpi
+	-- Pass the lower dpi to awesome as dpi for that screen
+	beautiful.xresources.set_dpi(math.min(xdpi, ydpi), s)
 end
 
 local function refresh_dpi()
 	scale_x_cache = {}
 	scale_y_cache = {}
 	for s in screen do
-		-- Calculate x dpi for each screen
-		local xdpi = screens.xdpi(s)
-		if xdpi == nil then
-			xdpi = default_dpi
-		end
-		xdpi = xdpi * dpi.xfactor(s)
-		scale_x_cache[s] = xdpi / default_dpi
-		-- Calculate y dpi for each screen
-		local ydpi = screens.ydpi(s)
-		if ydpi == nil then
-			ydpi = default_dpi
-		end
-		ydpi = ydpi * dpi.yfactor(s)
-		scale_y_cache[s] = ydpi / default_dpi
-		-- Pass the lower dpi to awesome as dpi for that screen
-		beautiful.xresources.set_dpi(math.min(xdpi, ydpi), s)
+		refresh_dpi_for_screen(s)
 	end
 end
 
 function dpi.x(value, screen)
 	if not scale_x_cache[screen] then
-		refresh_dpi()
+		refresh_dpi_for_screen(screen)
 	end
 	return math.ceil(value * scale_x_cache[screen])
 end
 
 function dpi.y(value, screen)
 	if not scale_y_cache[screen] then
-		refresh_dpi()
+		refresh_dpi_for_screen(screen)
 	end
 	return math.ceil(value * scale_y_cache[screen])
 end
