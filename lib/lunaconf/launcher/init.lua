@@ -338,7 +338,7 @@ local function setup_ui(self)
 		x = launcher_screen.workarea.x + (launcher_screen.workarea.width / 2) - (width / 2),
 		y = math.ceil(launcher_screen.workarea.y + launcher_screen.workarea.height - height),
 		ontop = true,
-		opacity = 0.75,
+		opacity = 0.9,
 		type = 'utility'
 	})
 
