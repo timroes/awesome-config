@@ -109,7 +109,7 @@ local function new(self, modifiers, key)
 		bg = theme.dialog_bg or theme.bg_normal,
 		fg = theme.dialog_fg or theme.fg_normal,
 		visible = false,
-		opacity = 1.0,
+		opacity = 0.9,
 		ontop = true,
 		shape = function(cr, width, height) gears.shape.rounded_rect(cr, width, height, 6) end,
 		type = 'notification'
