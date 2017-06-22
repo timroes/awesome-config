@@ -36,20 +36,20 @@ local function recalculate_sizes(self)
 	self._icon_margin.margins = lunaconf.dpi.x(4, screen)
 end
 
-function bar.set_disabled(self, disabled)
+function bar:set_disabled(disabled)
 	self._progress.color = disabled and theme.dialog_bar_disabled_fg or theme.dialog_bar_fg
 end
 
-function bar.set_icon(self, icon_name)
+function bar:set_icon(icon_name)
 	local icon = lunaconf.icons.lookup_icon(icon_name)
 	self._icon:set_image(icon)
 end
 
-function bar.set_value(self, value)
+function bar:set_value(value)
 	self._progress:set_value(value)
 end
 
-function bar.show(self)
+function bar:show()
 	self._widget.screen = lunaconf.screens.primary()
 
 	-- Recalculate all sizes on the new screen
@@ -64,8 +64,11 @@ function bar.show(self)
 	self._timeout:again()
 end
 
-local function new(self, icon_name, timeout)
-	timeout = timeout or 3
+local function new(_, icon_name, timeout)
+	local self = {}
+	for k,v in pairs(_) do
+		self[k] = v
+	end
 
 	local icon = lunaconf.icons.lookup_icon(icon_name)
 
@@ -95,7 +98,7 @@ local function new(self, icon_name, timeout)
 		type = 'notification'
 	}
 
-	self._timeout = gears.timer.start_new(timeout, function()
+	self._timeout = gears.timer.start_new(timeout or 3, function()
 		self._widget.visible = false
 	end)
 
