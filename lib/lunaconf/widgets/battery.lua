@@ -119,7 +119,6 @@ local function create(_, screen)
 	icon_widget:set_resize(true)
 
 	bar = wibox.widget {
-		ticks = true,
 		max_value = 100,
 		value = 0,
 		forced_width = lunaconf.dpi.x(60, screen),
