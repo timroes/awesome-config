@@ -12,6 +12,8 @@ local bar = {}
 
 local theme = lunaconf.theme.get()
 
+local last_shown_dialog
+
 local function recalculate_sizes(self)
 	local screen = self._widget.screen
 	self._widget.height = lunaconf.dpi.y(50, screen)
@@ -49,7 +51,17 @@ function bar:set_value(value)
 	self._progress:set_value(value)
 end
 
+function bar:hide()
+	self._widget.visible = false
+end
+
 function bar:show()
+	-- If a dialog is already open, hide that one
+	if last_shown_dialog and last_shown_dialog ~= self then
+		last_shown_dialog:hide()
+	end
+	last_shown_dialog = self
+
 	self._widget.screen = lunaconf.screens.primary()
 
 	-- Recalculate all sizes on the new screen
@@ -99,7 +111,7 @@ local function new(_, icon_name, timeout)
 	}
 
 	self._timeout = gears.timer.start_new(timeout or 3, function()
-		self._widget.visible = false
+		self:hide()
 	end)
 
 	return self
