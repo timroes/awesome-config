@@ -1,7 +1,7 @@
 local awful = require('awful')
 local lunaconf = require('lunaconf')
 
-local dialog = lunaconf.dialogs.bar('display-brightness-symbolic', 1)
+local dialog = lunaconf.dialogs.bar('preferences-system-brightness-lock', 1)
 
 local function brightness_control(which)
 	awful.spawn.easy_async(lunaconf.utils.scriptpath() .. 'brightness.sh ' .. which, function(out)
