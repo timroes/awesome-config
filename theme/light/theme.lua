@@ -29,6 +29,7 @@ theme.border_marked = "#339933"
 theme.dialog_bg = '#FFFFFF'
 theme.dialog_fg = dark_text
 theme.dialog_bar_fg = highlight_color
+theme.dialog_bar_disabled_fg = '#AAAAAA'
 theme.dialog_bar_bg = '#E0E0E0'
 
 -- Notifications

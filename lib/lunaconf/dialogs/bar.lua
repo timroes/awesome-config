@@ -36,6 +36,15 @@ local function recalculate_sizes(self)
 	self._icon_margin.margins = lunaconf.dpi.x(4, screen)
 end
 
+function bar.set_disabled(self, disabled)
+	self._progress.color = disabled and theme.dialog_bar_disabled_fg or theme.dialog_bar_fg
+end
+
+function bar.set_icon(self, icon_name)
+	local icon = lunaconf.icons.lookup_icon(icon_name)
+	self._icon:set_image(icon)
+end
+
 function bar.set_value(self, value)
 	self._progress:set_value(value)
 end

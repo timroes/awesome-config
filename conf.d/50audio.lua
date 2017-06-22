@@ -1,17 +1,13 @@
 local awful = require('awful')
 local lunaconf = require('lunaconf')
 
+local dialog = lunaconf.dialogs.bar('audio-volume-high', 1)
+
 local function show_volume_notification(is_muted, volume)
-	-- Number of blocks to draw for volume (0 volume = 0, 1-9 = 1, ..., 90-99 = 10, 100 = 11)
-	local volume_rounded = volume == 0 and 0 or math.floor(volume / 10) + 1
-	-- Depending on mute state use different shaded block drawing chars to paint a bar
-	local volume_blocks = string.rep(is_muted and '▒' or '█', volume_rounded) .. string.rep('░', 11 - volume_rounded)
-	lunaconf.notify.show_or_update('audio.volume', {
-		title = 'Volume' .. (is_muted and ' (off)' or ' (' .. tostring(volume) .. '%)'),
-		text = '[' .. volume_blocks .. ']',
-		icon = is_muted and 'audio-volume-muted' or 'audio-volume-high',
-		timeout = 2
-	})
+	dialog:set_value(volume)
+	dialog:set_disabled(is_muted)
+	dialog:set_icon(is_muted and 'audio-volume-muted' or 'audio-volume-high')
+	dialog:show()
 end
 
 local function toggle_mute()
