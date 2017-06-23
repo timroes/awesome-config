@@ -41,32 +41,6 @@ screen.connect_signal('list', rename_screen_tags)
 screen.connect_signal('property::geometry', rename_screen_tags)
 rename_screen_tags()
 
-local function focus_screen(screen_position)
-	local t = awful.tag.find_by_name(nil, tostring(screen_position))
-	-- Ignore key presses if there is no screen tag with that name
-	if t then
-		if client.focus and client.focus.screen == t.screen then
-			-- If the currently focused client is on the same screen as the tag,
-			-- focus the next client on that screen.
-			awful.client.focus.byidx(1)
-			if client.focus then client.focus:raise() end
-		else
-			-- Focus last focused client on this screen (which also might be on a different)
-			-- tag than the primary one.
-			local focus = awful.client.focus.history.get(t.screen, 0)
-			if focus then client.focus = focus end
-		end
-	end
-end
-
--- Add hotkeys to navigate to screens between 1 and 9
-for i = 1, 9 do
-	local key = awful.key({ lunaconf.config.MOD }, '#' .. i + 9, function()
-		focus_screen(i)
-	end)
-	lunaconf.keys.globals(key)
-end
-
 --- This method will move the currently focused client to the tag with the specified
 --- name. If there isn't a tag with that name yet, it will create it and show it.
 -- Optionally specify a screen onto which the tag should be created and the client
@@ -115,6 +89,85 @@ local function move_in_direction(direction)
 				move_to_tag(c.first_tag.name, new_screen)
 			end
 		end
+	end
+end
+
+--- Returns the list of visible tags on the current focused screen. It will
+--- also return the index of the currently focused tag within that list.
+local function visible_tags()
+	if not client.focus then
+		return nil
+	end
+
+	local tags = {}
+	local index = 0, current_focused_index
+	for i,t in ipairs(client.focus.screen.tags) do
+		if t.selected then
+			table.insert(tags, t)
+			index = index + 1
+			if client.focus.first_tag == t then
+				current_focused_index = index
+			end
+		end
+	end
+	return tags, current_focused_index
+end
+
+--- Focuses the "next" client. That is the next client on the currently
+--- active tag on the screen that client.focus is on.
+local function focus_next(previous)
+	if not client.focus then
+		return
+	end
+
+	local s = client.focus.screen
+	local cur_tag = client.focus.first_tag
+	local clients = client.get(s)
+
+	-- Sort all clients by their tag, so we have a table that has as a key the tag
+	-- and as a value an array of all clients on this tag (in the order they also
+	-- appear in the tasklist)
+	local clients_per_tag = {}
+	local index = 0, current_focused_index
+	for i,c in ipairs(clients) do
+		-- Exclude all clients, that shouldn't get the focus
+		if not c.hidden and not c.minimized then
+			-- Create the list for that tag if it doesn't exist
+			if not clients_per_tag[c.first_tag] then
+				clients_per_tag[c.first_tag] = {}
+			end
+			-- Insert the client for that tag in the list
+			table.insert(clients_per_tag[c.first_tag], c)
+			-- We only want to count index for the current tag, since we use it
+			-- to determin the index of the currently focused client
+			if c.first_tag == cur_tag then
+				index = index + 1
+			end
+			if c == client.focus then
+				current_focused_index = index
+			end
+		end
+	end
+
+	local new_index = current_focused_index + (previous and -1 or 1)
+
+	if new_index < 1 or new_index > #clients_per_tag[cur_tag] then
+		-- If index is outside current clients list, jump to next/previous tag
+		local previous_tag = new_index < 1
+		local tags, cur_tag_index = visible_tags()
+		local offset = 0
+		-- Try to find a tag, that actually has a focusable client on it
+		-- Cycle through all tags, until an index has been found, where the clients_per_tag
+		-- list isn't nil (i.e. has focusable clients)
+		local new_tag_clients
+		repeat
+			offset = offset + (previous_tag and -1 or 1)
+			new_tag_index = gears.math.cycle(#tags, cur_tag_index + offset)
+			new_tag_clients = clients_per_tag[tags[new_tag_index]]
+		until new_tag_clients
+		client.focus = new_tag_clients[previous and #new_tag_clients or 1]
+	else
+		client.focus = clients_per_tag[cur_tag][new_index]
 	end
 end
 
@@ -187,6 +240,32 @@ for _, letter in ipairs(tag_keys) do
 	lunaconf.keys.globals(move_hotkey, toggle_tag_hotkey)
 end
 
+local function focus_screen(screen_position)
+	local t = awful.tag.find_by_name(nil, tostring(screen_position))
+	-- Ignore key presses if there is no screen tag with that name
+	if t then
+		if client.focus and client.focus.screen == t.screen then
+			-- If the currently focused client is on the same screen as the tag,
+			-- focus the next client on that screen.
+			focus_next()
+			if client.focus then client.focus:raise() end
+		else
+			-- Focus last focused client on this screen (which also might be on a different)
+			-- tag than the primary one.
+			local focus = awful.client.focus.history.get(t.screen, 0)
+			if focus then client.focus = focus end
+		end
+	end
+end
+
+-- Add hotkeys to navigate to screens between 1 and 9
+for i = 1, 9 do
+	local key = awful.key({ lunaconf.config.MOD }, '#' .. i + 9, function()
+		focus_screen(i)
+	end)
+	lunaconf.keys.globals(key)
+end
+
 	-- Switch layouts for the current screen
 local switch_layout = awful.key({ lunaconf.config.MOD }, "s", function()
 	-- Only allow split screen on screen tags
@@ -201,7 +280,9 @@ lunaconf.keys.globals(switch_layout,
 	awful.key({ lunaconf.config.MOD }, "Right", function() move_in_direction('right') end),
 	awful.key({ lunaconf.config.MOD }, "Left", function() move_in_direction('left') end),
 	awful.key({ lunaconf.config.MOD }, "Down", function() move_in_direction('down') end),
-	awful.key({ lunaconf.config.MOD }, "Up", function() move_in_direction('up') end)
+	awful.key({ lunaconf.config.MOD }, "Up", function() move_in_direction('up') end),
+	awful.key({ lunaconf.config.MOD }, "Page_Up", function() focus_next(true) end),
+	awful.key({ lunaconf.config.MOD }, "Page_Down", function() focus_next(false) end)
 )
 
 client.connect_signal('focus', function(c)

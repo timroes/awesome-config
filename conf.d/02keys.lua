@@ -13,15 +13,5 @@ lunaconf.keys.globals(
 
 	-- Screenshots
 	awful.key({ 'Mod1' }, "Print", function() awful.spawn.spawn(lunaconf.utils.scriptpath() .. "screenshot win") end),
-	awful.key({ MOD }, "Print", function() awful.spawn.spawn(lunaconf.utils.scriptpath() .. "screenshot scr") end),
-
-	-- MOD + PageUp/PageDown switches through clients on current tag and screen
-	awful.key({ MOD }, "Page_Up", function()
-		awful.client.focus.byidx(-1)
-		if client.focus then client.focus:raise() end
-	end),
-	awful.key({ MOD }, "Page_Down", function()
-		awful.client.focus.byidx(1)
-		if client.focus then client.focus:raise() end
-	end)
+	awful.key({ MOD }, "Print", function() awful.spawn.spawn(lunaconf.utils.scriptpath() .. "screenshot scr") end)
 )
