@@ -192,6 +192,8 @@ local function taglist(screen, tag)
 		layout = wibox.layout.fixed.horizontal
 	}
 
+	taglist_widget._screentag_name = tag_name
+
 	return taglist_widget
 end
 
@@ -203,6 +205,10 @@ local function taglist_update(screen, container, buttons, label, data, tags)
 		local cache = data[t]
 		if not cache then
 			data[t] = taglist(screen, t)
+		else
+			-- If we already have created a list for that screen only change screentag name
+			-- This happens when the screen order changes and we are updated because of that
+			data[t]._screentag_name.text = t.name:upper()
 		end
 		container:add(data[t])
 	end
