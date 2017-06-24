@@ -5,8 +5,6 @@ local tasklist = require('lunaconf.widgets.tasklist')
 local gears = require('gears')
 local lunaconf = require('lunaconf')
 
-local bars = {}
-
 local bar_height = 32
 
 local function margin(widget, left, right, top, bottom, screen)
@@ -56,10 +54,10 @@ end
 local function update_primary_bar()
 	-- Remove primary widgets from all current screens.
 	for s in screen do
-		bars[s].widget:set_right(nil)
+		s.bar.widget:set_right(nil)
 	end
 	-- Create new widgets and attach them on the current primary
-	local primary_bar = bars[lunaconf.screens.primary()]
+	local primary_bar = lunaconf.screens.primary().bar
 	create_primaryscreen_widgets(function(widgets)
 		primary_bar.widget:set_right(widgets)
 	end)
@@ -71,18 +69,15 @@ awful.screen.connect_for_each_screen(function(s)
 	layout:set_left(lunaconf.widgets.tasklist(s, function(tag) return not tag.invisible end))
 	layout:set_middle(margin(lunaconf.widgets.clienttitle(s), 12, 4, 0, 0))
 
-	bars[s] = awful.wibar {
+	local bar = awful.wibar {
 		position = "top",
 		screen = s,
 		height = lunaconf.dpi.y(bar_height, s),
 		bg = lunaconf.theme.get().screenbar_bg
 	}
-	bars[s]:set_widget(layout)
+	bar:set_widget(layout)
 
-	-- Delete bar when screen is removed
-	s:connect_signal('removed', function()
-		bars[s] = nil
-	end)
+	s.bar = bar
 end)
 
 -- Whenever the primary change move the widgets to the new primary bar
