@@ -23,7 +23,9 @@ local display_icon = lunaconf.icons.lookup_icon('preferences-desktop-display')
 local function apply_and_hide(self)
 	if self.has_multiple_displays then
 		-- If we detected multiple displays apply the chosen configuration
-		awful.spawn.spawn(script .. ' ' .. modes[self.current]:lower())
+		if self.current > 0 then
+			awful.spawn.spawn(script .. ' ' .. modes[self.current]:lower())
+		end
 	else
 		-- If there is only a single display detected execute the auto setup on
 		-- closing of the displayswitcher, so you can use it to reset possibly unplugged
