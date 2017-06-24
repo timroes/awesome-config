@@ -64,7 +64,7 @@ end
 local function on_key(mod, key, event)
 	if key == 'Escape' and event == 'press' then
 		hide()
-	elseif event == 'press' and key >= 'a' and key <= 'z' then
+	elseif event == 'press' and ((key >= 'a' and key <= 'z') or (key >= '0' and key <= '9')) then
 		find_client_hotkey(key)
 	end
 end
@@ -152,9 +152,10 @@ local function create_client_widget(cl)
 end
 
 local function name_for_hotkey(client)
-	return lunaconf.strings.lpad(client.name or '', max_hotkey_length, 'x'):lower()
+	local name = client.name or ''
+	name = name:gsub('%W', '')
+	return lunaconf.strings.lpad(name, max_hotkey_length, 'x'):lower()
 end
-
 
 local function calculate_hotkey(client)
 	local hotkey_length = 1
