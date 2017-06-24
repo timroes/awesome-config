@@ -2,7 +2,6 @@ local awful = require('awful')
 local naughty = require('naughty')
 local gears = require('gears')
 local lunaconf = require('lunaconf')
-local MOD = lunaconf.config.MOD
 
 -- Requires setxkbmap to be installed
 
@@ -18,7 +17,7 @@ end
 set_current_layout()
 
 lunaconf.keys.globals(awful.key({ "Mod1" }, "Shift_L", function()
-	current_layout = ((current_layout) % #keyboard_layouts) + 1
+	current_layout = gears.math.cycle(#keyboard_layouts, current_layout + 1)
 	set_current_layout()
 	lunaconf.notify.show_or_update('keyboard_layout::switch', {
 		title = "Changed keyboard layout",
