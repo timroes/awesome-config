@@ -2,6 +2,7 @@ return {
 	audio = require('lunaconf.audio'),
 	cairo = require('lunaconf.cairo'),
 	clients = require('lunaconf.clients'),
+	clientswitcher = require('lunaconf.clientswitcher'),
 	config = require('lunaconf.config'),
 	dbus = require('lunaconf.dbus'),
 	dialogs = require('lunaconf.dialogs'),

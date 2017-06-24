@@ -12,6 +12,6 @@ else
 end
 
 lunaconf.keys.globals(
-	awful.key({ lunaconf.config.MOD }, "space", launcher_function),
+	awful.key({ lunaconf.config.MOD, 'Control' }, "space", launcher_function),
 	awful.key({ lunaconf.config.MOD }, "KP_Insert", launcher_function)
 )

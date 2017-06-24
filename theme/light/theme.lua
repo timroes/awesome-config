@@ -25,6 +25,11 @@ theme.border_normal = "#333333"
 theme.border_focus  = highlight_color
 theme.border_marked = "#339933"
 
+-- Clientswitcher
+theme.clientswitcher_font = theme.large_font
+theme.clientswitcher_hotkey_font = 'monospace 16'
+theme.clientswitcher_hotkey_bg = highlight_color
+
 -- Dialogs
 theme.dialog_bg = '#FFFFFF'
 theme.dialog_fg = dark_text
