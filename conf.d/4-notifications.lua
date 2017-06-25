@@ -9,6 +9,12 @@ naughty.config.defaults.position = 'top_right'
 
 -- Notifications should have rounded corners
 naughty.config.defaults.shape = function(cr, width, height) gears.shape.rounded_rect(cr, width, height, 6) end
+-- Register a callback to preprocess all notifications
+naughty.config.notify_callback = function(args)
+	-- Lookup the icon using our own icon lookup implementation
+	args.icon = lunaconf.icons.lookup_icon(args.icon)
+	return args
+end
 
 -- Always show notifications on primary screen
 local function update_notification_screen()
