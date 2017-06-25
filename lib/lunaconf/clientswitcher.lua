@@ -274,12 +274,12 @@ local function show()
 			end
 		end
 	end
+	keygrabber.run(on_key)
 	-- Show the switcher on all connected screens
 	for s in screen do
 		show_on_screen(s, clients[s])
 	end
 	query = ''
-	keygrabber.run(on_key)
 end
 
 local function new(_, modifiers, key)
