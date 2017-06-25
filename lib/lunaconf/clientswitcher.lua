@@ -71,12 +71,14 @@ end
 
 --- Returns the screenshot of a client in a way, that can be used in an
 --- wibox.widget.imagebox
-local function get_screenshot(client)
+local function get_screenshot(client, max_width)
 	local raw_surface = gears.surface(client.content)
 	-- Determin the dimensions of the raw screenshot
 	local width, height = gears.surface.get_size(raw_surface)
+	-- Determine the scale factor based on the width of the surface and max width required
+	local scale_factor = max_width / width
 	-- Create a new cairo ImageSurface with the same dimensions
-	local img_surface = cairo.ImageSurface(cairo.Format.RGB24, width, height)
+	local img_surface = cairo.ImageSurface(cairo.Format.RGB24, width * scale_factor, height * scale_factor)
 	-- Draw the raw surface onto the new image surface
 	local cr = cairo.Context(img_surface)
 	cr:set_source_surface(raw_surface, 0, 0)
@@ -88,13 +90,13 @@ local function get_screenshot(client)
 	return img_surface
 end
 
-local function create_client_widget(cl)
+local function create_client_widget(cl, max_widget_width)
 	local widget = wibox.widget {
 		{
 			nil, -- nil as first widget in align layout so the screenshot will be in center and expanded
 			{
 				{
-					image = get_screenshot(cl),
+					image = get_screenshot(cl, max_widget_width),
 					widget = wibox.widget.imagebox
 				},
 				{
@@ -219,8 +221,11 @@ local function setup_widget(screen, clients)
 		expand = true,
 		layout = wibox.layout.grid
 	}
+
+	local max_client_widget_width = screen.geometry.width / num_rows
+
 	for i,c in ipairs(clients) do
-		local client_widget = create_client_widget(c)
+		local client_widget = create_client_widget(c, max_client_widget_width)
 		layout:add(client_widget)
 		client_widgets[c] = client_widget
 	end
