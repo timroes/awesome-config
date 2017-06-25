@@ -1,4 +1,5 @@
 local awful = require('awful')
+local cairo = require('lgi').cairo
 local common = require('awful.widget.common')
 local gears = require('gears')
 local wibox = require('wibox')
@@ -50,6 +51,22 @@ local tasklist_buttons = gears.table.join(
 	end)
 )
 
+--- Draws a replacement icon for the given client, that doesn't have client.
+local function replacement_icon(client)
+	math.randomseed(client.window)
+	local r = math.random()
+	local g = math.random()
+	local b = math.random()
+	math.randomseed(os.time())
+	local img_surface = cairo.ImageSurface(cairo.Format.ARGB32, 100, 100)
+	-- Draw the raw surface onto the new image surface
+	local cr = cairo.Context(img_surface)
+	cr:set_source_rgb(r, g, b)
+	cr:arc(50, 50, 50, 0, 2 * math.pi)
+	cr:fill()
+	return img_surface
+end
+
 local function list_update(screen, container, buttons, label, data, clients)
 	-- update the widgets, creating them if needed
 	container:reset()
@@ -88,7 +105,7 @@ local function list_update(screen, container, buttons, label, data, clients)
 			if ic then
 				cl.replacement_icon = ic
 			else
-				-- TODO: Draw a replacement icon (circle with letter or similar)
+				cl.replacement_icon = replacement_icon(cl)
 			end
 		end
 
