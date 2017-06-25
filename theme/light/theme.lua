@@ -73,6 +73,7 @@ theme.bg_systray = theme.screenbar_bg
 theme.tasklist_bg_normal = '#00000000'
 theme.tasklist_bg_focus = '#F5F5F5EE'
 
+theme.tag_name_font = 'monospace 11'
 theme.tag_color_bg = '#CCCCCC'
 theme.tag_color_selected_bg = highlight_color
 

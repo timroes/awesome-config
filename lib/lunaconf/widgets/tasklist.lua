@@ -158,7 +158,7 @@ local function taglist(screen, tag)
 
 	local tag_name = wibox.widget {
 		text = tag.name:upper(),
-		font = 'monospace 11', -- TODO: use theme variable
+		font = theme.tag_name_font,
 		widget = wibox.widget.textbox
 	}
 	local tag_name_box = wibox.container.background(margin(tag_name, 4, 4, 2, 2, screen))
