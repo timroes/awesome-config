@@ -40,14 +40,9 @@ local tasklist_buttons = gears.table.join(
 		c:raise()
 	end),
 	awful.button({ }, 2, function(c) c:kill() end),
-	awful.button({ }, 3, function(c) c.floating = not c.floating end),
-	awful.button({ }, 4, function()
-		awful.client.focus.byidx(-1)
-		if client.focus then client.focus:raise() end
-	end),
-	awful.button({ }, 5, function()
-		awful.client.focus.byidx(1)
-		if client.focus then client.focus:raise() end
+	awful.button({ }, 3, function(c)
+		client.focus = c
+		c.floating = not c.floating
 	end)
 )
 
