@@ -5,8 +5,8 @@ local naughty = require('naughty')
 
 function dbg(string)
 	naughty.notify({
-		preset = naughty.config.presets.critical,
-		title = 'Debug output',
+		icon = 'preferences-system',
+		timeout = 0,
 		text = tostring(string)
 	})
 end
