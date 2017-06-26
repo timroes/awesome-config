@@ -212,25 +212,34 @@ local function calculate_hotkey(client)
 end
 
 local function setup_widget(screen, clients)
-	local num_cols = math.ceil(math.sqrt(#clients))
-	local num_rows = math.ceil(#clients / num_cols)
+	local layout
 
-	local layout = wibox.widget {
-		homogeneous = true,
-		forced_num_rows = num_rows,
-		forced_num_cols = num_cols,
-		spacing = lunaconf.dpi.x(20, screen),
-		orientation = 'horizontal',
-		expand = true,
-		layout = wibox.layout.grid
-	}
+	if #clients == 0 then
+		layout = wibox.widget {
+			wibox.widget.textbox('No clients on this screen'),
+			widget = wibox.container.place
+		}
+	else
+		local num_cols = math.ceil(math.sqrt(#clients))
+		local num_rows = math.ceil(#clients / num_cols)
 
-	local max_client_widget_width = screen.geometry.width / num_cols
+		layout = wibox.widget {
+			homogeneous = true,
+			forced_num_rows = num_rows,
+			forced_num_cols = num_cols,
+			spacing = lunaconf.dpi.x(20, screen),
+			orientation = 'horizontal',
+			expand = true,
+			layout = wibox.layout.grid
+		}
 
-	for i,c in ipairs(clients) do
-		local client_widget = create_client_widget(c, max_client_widget_width)
-		layout:add(client_widget)
-		client_widgets[c] = client_widget
+		local max_client_widget_width = screen.geometry.width / num_cols
+
+		for i,c in ipairs(clients) do
+			local client_widget = create_client_widget(c, max_client_widget_width)
+			layout:add(client_widget)
+			client_widgets[c] = client_widget
+		end
 	end
 
 	local widget = wibox.widget {
