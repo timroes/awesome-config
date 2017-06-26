@@ -91,10 +91,10 @@ local function update_battery()
 			check_critical(status)
 
 			local time = status.State == 1 -- Charging
-				and 'Charging time:\t<b>' .. to_time_string(status.TimeToFull) .. '</b>'
+				and 'Time to full:\t<b>' .. to_time_string(status.TimeToFull) .. '</b>'
 				or 'Remaining:\t<b>' .. to_time_string(status.TimeToEmpty) .. '</b>'
 			tooltip.markup = string.format(
-				'Status:\t\t\t<b>%s</b>\n' ..
+				'Status:\t\t<b>%s</b>\n' ..
 				'Percentage:\t<b>%.0f%%</b>\n%s\n' ..
 				'Energy rate:\t<b>%.2f W</b>',
 				state_strings[status.State],
