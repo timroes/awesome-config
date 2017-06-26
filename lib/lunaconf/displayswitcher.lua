@@ -2,6 +2,7 @@ local awful = require('awful')
 local gears = require('gears')
 local wibox = require('wibox')
 local lunaconf = {
+	config = require('lunaconf.config'),
 	dpi = require('lunaconf.dpi'),
 	icons = require('lunaconf.icons'),
 	keys = require('lunaconf.keys'),
@@ -20,17 +21,36 @@ local theme = lunaconf.theme.get()
 local script = lunaconf.utils.scriptpath() .. 'displayswitcher.py'
 local display_icon = lunaconf.icons.lookup_icon('preferences-desktop-display')
 
+local function set_mode(mode)
+	-- Pass the configured dpi to the screen so it can use these instead
+	-- of the ones it determined from xrandr infos
+	local dpis = lunaconf.config.get('dpi', nil)
+	local dpi_arg = ''
+	if dpis then
+		local dpi_strings = {}
+		for k,v in pairs(dpis) do
+			table.insert(dpi_strings, k .. '=' .. tostring(v))
+		end
+		if #dpi_strings > 0 then
+			dpi_arg = ' --dpi ' .. table.concat(dpi_strings, ',')
+		end
+	end
+
+	local cmd = string.format('%s %s %s', script, mode, dpi_arg)
+	awful.spawn.spawn(cmd)
+end
+
 local function apply_and_hide(self)
 	if self.has_multiple_displays then
 		-- If we detected multiple displays apply the chosen configuration
 		if self.current > 0 then
-			awful.spawn.spawn(script .. ' ' .. modes[self.current]:lower())
+			set_mode(modes[self.current]:lower())
 		end
 	else
 		-- If there is only a single display detected execute the auto setup on
 		-- closing of the displayswitcher, so you can use it to reset possibly unplugged
 		-- displays.
-		awful.spawn.spawn(script .. ' auto')
+		set_mode('auto')
 	end
 	self.widget.visible = false
 end
@@ -76,7 +96,7 @@ local function show(self)
 	-- Center the widget in the screen
 	awful.placement.centered(self.widget)
 
-	awful.spawn.easy_async(script, function(out, err, reason, code)
+	awful.spawn.easy_async(script .. ' query', function(out, err, reason, code)
 		if code ~= 0 then
 			self.has_multiple_displays = false
 			self.label.text = 'Display only @ ' .. lunaconf.strings.trim(out)
@@ -120,6 +140,10 @@ local function new(self, modifiers, key)
 	lunaconf.keys.globals(awful.key(modifiers, key, function() show(self) end))
 
 	self.key = key
+
+	-- When initializin this widget (usually at awesome reload) update dpis on all
+	-- displays via this script.
+	set_mode('dpi-only')
 
 	return nil
 end

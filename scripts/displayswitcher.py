@@ -1,6 +1,27 @@
 #! /usr/bin/env python3
 
-import subprocess, re, sys
+import argparse, subprocess, re, sys
+
+def update_dpis(displays, dpis):
+  '''
+    Updates the dpi settings at some well known places (e.g. xdpyinfo)
+    for all displays. This will either use the ones passed via the --dpi
+    parameter or otherwise set auto determined ones.
+  '''
+  if not dpis:
+    dpis = {}
+  for display in displays['connected']:
+    dpi = None
+    if display['id'] in dpis:
+      dpi = dpis[display['id']]
+    elif 'default' in dpis:
+      dpi = dpis['default']
+    elif 'dpi' in display:
+      dpi = display['dpi']['x']
+
+    if dpi:
+      # TODO: Find out more places we can set the dpi value to
+      subprocess.call(['xrandr', '--dpi', '{}/{}'.format(dpi, display['id'])])
 
 def display_infos():
   xrandr = subprocess.check_output(['xrandr', '--verbose']).decode('utf-8')
@@ -63,13 +84,11 @@ def off_all_disconnected(disconnected):
     args.extend(['--output', display['id'], '--off'])
   return args
 
-def layout_extend():
+def layout_extend(displays):
   '''
     Extends layout chains all displays right-of the previous display and give
     them their auto resolution.
   '''
-  displays = display_infos()
-
   if len(displays['connected']) > 0:
     args = [
         'xrandr', '--output', displays['connected'][0]['id'],
@@ -83,12 +102,10 @@ def layout_extend():
 
     subprocess.call(args)
 
-def layout_clone():
+def layout_clone(displays):
   '''
     Clone layout will make all outputs show the same picture.
   '''
-  displays = display_infos()
-
   # Find the display with the lowest preferred resolution
   min_res_display = min(displays['connected'], key=lambda d: d['preferred']['x'] * d['preferred']['y'])
   min_resolution = '{}x{}'.format(min_res_display['preferred']['x'], min_res_display['preferred']['y'])
@@ -106,8 +123,7 @@ def layout_clone():
 
     subprocess.call(args)
 
-def print_state():
-  infos = display_infos()
+def print_state(infos):
   print(', '.join([x['id'] for x in infos['connected']]), end='')
   if len(infos['connected']) > 1:
     sys.exit(0)
@@ -115,11 +131,25 @@ def print_state():
     # If there is only one display connected exit with exit code 26
     sys.exit(26)
 
+def parse_dpi_args(arg):
+  return dict(item.split('=') for item in arg.split(','))
+
 if __name__ == '__main__':
-  what = '' if len(sys.argv) < 2 else sys.argv[1]
-  if what == 'clone':
-    layout_clone()
-  elif what == 'extend' or what == 'auto':
-    layout_extend()
+  parser = argparse.ArgumentParser(description='Configures your displays')
+  parser.add_argument('mode', choices=['auto', 'extend', 'clone', 'dpi-only', 'query'])
+  parser.add_argument('-d', '--dpi', type=parse_dpi_args, help='Force the dpi for the specific monitor')
+
+  args = parser.parse_args()
+
+  displays = display_infos()
+
+  if args.mode == 'clone':
+    layout_clone(displays)
+    update_dpis(displays, args.dpi)
+  elif args.mode == 'extend' or args.mode == 'auto':
+    layout_extend(displays)
+    update_dpis(displays, args.dpi)
+  elif args.mode == 'dpi-only':
+    update_dpis(displays, args.dpi)
   else:
-    print_state()
+    print_state(displays)
