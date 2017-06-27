@@ -25,8 +25,8 @@ local function refresh_titlebar(c)
 	local titlebar_height = lunaconf.dpi.y(30, s)
 	local color_indicator_size = lunaconf.dpi.y(10, s)
 
-	local titlebar = awful.titlebar(c)
-	if titlebar and previous_titlebar_heights[c.window] == titlebar_height then
+	local bar = awful.titlebar(c, { size = titlebar_height })
+	if bar and previous_titlebar_heights[c.window] == titlebar_height then
 			-- If titlebar height hasn't changed, when changing screen, don't redraw anything
 			return
 	end
@@ -71,7 +71,6 @@ local function refresh_titlebar(c)
 
 	titlebar:buttons(buttons)
 
-	local bar = awful.titlebar(c, { size = titlebar_height })
 	bar:set_widget(titlebar)
 end
 
