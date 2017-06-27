@@ -33,14 +33,6 @@ function utils.run_once(cmd, pidof)
 	end)
 end
 
---- Returns the user that owns the process with the given pid.
---- Will return nil if the user cannot be found.
-function utils.user_of_pid(pid)
-	-- TODO: requires refactor for awesome 4 to async
-	if not pid or pid == 0 then return nil end
-	return strings.trim(awful.util.pread('ps -o user ' .. math.floor(pid) .. ' | sed 1d'))
-end
-
 --- Merges one table into another.
 -- @param table_to_merge_into the table into which the other should be merged
 -- @param merging_table the table that will be merged into the first
