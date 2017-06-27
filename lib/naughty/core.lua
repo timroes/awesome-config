@@ -677,7 +677,8 @@ function naughty.notify(args)
         -- if we have an icon, use it
         if icon then
             iconbox = wibox.widget.imagebox()
-            iconmargin = wibox.container.margin(iconbox, margin, margin, margin, margin)
+            local icon_placement = wibox.container.place(iconbox)
+            iconmargin = wibox.container.margin(icon_placement, margin, margin, margin, margin)
             if icon_size then
                 local scaled = cairo.ImageSurface(cairo.Format.ARGB32, icon_size, icon_size)
                 local cr = cairo.Context(scaled)
