@@ -1,30 +1,12 @@
+-- Require the luarocks loader for luarocks dependencies
+require('luarocks.loader')
+
 -- Standard awesome library
-local awful = require('awful')
 local gears = require('gears')
 
--- Helper function to read output of program synchronously
--- Required to get the luarock pathes
-local function pread_sync(cmd)
-	if cmd and cmd ~= "" then
-			local f, err = io.popen(cmd, 'r')
-			if f then
-					local s = f:read("*all")
-					f:close()
-					return s
-			else
-					return err
-			end
-	end
-end
-
--- Read out the luarocks paths and append them to the package.path/cpath
-local luarockPath = pread_sync('luarocks path --lr-path')
-local luarockCpath = pread_sync('luarocks path --lr-cpath')
-
--- Set path configuration
+-- Add our lib folder to the require lookup path
 local configpath = gears.filesystem.get_configuration_dir()
-package.path = configpath .. "/lib/?.lua;" .. configpath .. "/lib/?/init.lua;" .. ";" .. luarockPath .. package.path
-package.cpath = luarockCpath .. ";" .. package.cpath
+package.path = configpath .. "/lib/?.lua;" .. configpath .. "/lib/?/init.lua;" .. package.path
 
 local naughty = require('naughty')
 
@@ -57,6 +39,7 @@ end
 inspect = require('inspect')
 
 local log = require('lunaconf.log')
+local awful = require('awful')
 
 -- Clear all shortcuts before including any config files
 root.keys({ })
