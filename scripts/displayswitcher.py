@@ -4,6 +4,23 @@ import argparse, subprocess, re, sys, shutil
 
 DEFAULT_API = 96
 
+def set_display_dpi(display_id, dpi):
+  '''
+    Set the dpi for a specific display. This should that the dpi to all
+    places that support a screen individual dpi setting.
+  '''
+  subprocess.call(['xrandr', '--dpi', '{}/{}'.format(dpi, display_id)])
+
+def set_global_dpi(dpi):
+  '''
+    Set the global dpi. This should apply yhe given dpi to all places, that
+    doesn't support screen individual dpi settings.
+  '''
+  # Set the xresource Xft.dpi (e.g. used by chromium) if xrdb is installed
+  if shutil.which('xrdb'):
+    p = subprocess.Popen(['xrdb', '-merge'], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+    p.communicate(input='Xft.dpi: {}'.format(dpi).encode())
+
 def update_dpis(displays, dpis):
   '''
     Updates the dpi settings at some well known places (e.g. xdpyinfo)
@@ -25,15 +42,12 @@ def update_dpis(displays, dpis):
       dpi = DEFAULT_DPI
 
     actual_dpis.append(dpi)
-    subprocess.call(['xrandr', '--dpi', '{}/{}'.format(dpi, display['id'])])
+    set_display_dpi(display['id'], dpi)
 
   # Now use the minimum dpi of all displays in placed where no multi-display
   # dpis are supported
   min_dpi = min(actual_dpis)
-  # Set the xresource Xft.dpi (e.g. used by chromium) if xrdb is installed
-  if shutil.which('xrdb'):
-    p = subprocess.Popen(['xrdb', '-merge'], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-    p.communicate(input='Xft.dpi: {}'.format(min_dpi).encode())
+  set_global_dpi(min_dpi)
 
 def display_infos():
   xrandr = subprocess.check_output(['xrandr', '--verbose']).decode('utf-8')
