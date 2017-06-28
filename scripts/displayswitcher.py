@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 
 import argparse, subprocess, re, sys, shutil
+from math import floor
 
 DEFAULT_API = 96
 
@@ -127,6 +128,11 @@ def layout_extend(displays):
     args.extend(off_all_disconnected(displays['disconnected']))
 
     subprocess.call(args)
+
+    # With more than 2 screens mark the middle screen as primary
+    if len(displays['connected']) > 2:
+      primary_index = floor(len(displays['connected']) / 2)
+      subprocess.call(['xrandr', '--output', displays['connected'][primary_index]['id'], '--primary'])
 
 def layout_clone(displays):
   '''
