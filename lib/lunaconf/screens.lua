@@ -1,5 +1,4 @@
 local awful = require('awful')
-local log = require('lunaconf.log')
 local screen = screen
 
 local screens = {}
