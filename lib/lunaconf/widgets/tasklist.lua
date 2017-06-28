@@ -177,7 +177,7 @@ local function taglist(screen, tag)
 
 	local tasklist = awful.widget.tasklist(screen, filter_clients_for_tag(tag), tasklist_buttons, nil, function(...)
 		list_update(screen, ...)
-	end)
+	end, wibox.layout.fixed.horizontal())
 
 	local tasklist_container = wibox.widget {
 		tag_stripe,
