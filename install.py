@@ -23,7 +23,8 @@ OPT_PKG_DEPS = {
   'upower': 'required for battery widget',
   'xf86-input-synaptics': 'required for better touchpad behavior',
   'xorg-xinput': 'required to configure mouse and trackpads',
-  'xorg-xrandr': 'required for displayswitcher'
+  'xorg-xrandr': 'required for displayswitcher',
+  'xorg-xrdb': 'required to set dpi for some applications in displayswitcher'
 }
 
 # List all packages that should be installed via luarocks

@@ -1,6 +1,8 @@
 #! /usr/bin/env python3
 
-import argparse, subprocess, re, sys
+import argparse, subprocess, re, sys, shutil
+
+DEFAULT_API = 96
 
 def update_dpis(displays, dpis):
   '''
@@ -8,6 +10,7 @@ def update_dpis(displays, dpis):
     for all displays. This will either use the ones passed via the --dpi
     parameter or otherwise set auto determined ones.
   '''
+  actual_dpis = []
   if not dpis:
     dpis = {}
   for display in displays['connected']:
@@ -18,10 +21,19 @@ def update_dpis(displays, dpis):
       dpi = dpis['default']
     elif 'dpi' in display:
       dpi = display['dpi']['x']
+    else:
+      dpi = DEFAULT_DPI
 
-    if dpi:
-      # TODO: Find out more places we can set the dpi value to
-      subprocess.call(['xrandr', '--dpi', '{}/{}'.format(dpi, display['id'])])
+    actual_dpis.append(dpi)
+    subprocess.call(['xrandr', '--dpi', '{}/{}'.format(dpi, display['id'])])
+
+  # Now use the minimum dpi of all displays in placed where no multi-display
+  # dpis are supported
+  min_dpi = min(actual_dpis)
+  # Set the xresource Xft.dpi (e.g. used by chromium) if xrdb is installed
+  if shutil.which('xrdb'):
+    p = subprocess.Popen(['xrdb', '-merge'], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+    p.communicate(input='Xft.dpi: {}'.format(min_dpi).encode())
 
 def display_infos():
   xrandr = subprocess.check_output(['xrandr', '--verbose']).decode('utf-8')
@@ -132,7 +144,10 @@ def print_state(infos):
     sys.exit(26)
 
 def parse_dpi_args(arg):
-  return dict(item.split('=') for item in arg.split(','))
+  dpis = dict(item.split('=') for item in arg.split(','))
+  for k in dpis:
+    dpis[k] = int(dpis[k])
+  return dpis
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Configures your displays')
