@@ -83,6 +83,10 @@ function icons.lookup_icon(icon_file)
 		return ""
 	end
 
+	if type(icon_file) ~= 'string' then
+		return icon_file
+	end
+
 	local from_cache = icon_cache[icon_file]
 	if from_cache ~= nil then
 		return from_cache
