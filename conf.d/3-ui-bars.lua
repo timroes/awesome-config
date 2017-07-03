@@ -31,7 +31,8 @@ local function create_primaryscreen_widgets(callback)
 			widgets:add(margin(lunaconf.widgets.battery(primary), 4, 4, 0, 0))
 		end
 
-		widgets:add(wibox.widget.systray())
+		local systray = wibox.widget.systray()
+		widgets:add(margin(systray, 2, 2, 8, 8))
 
 		-- Add widget to disable screensaver
 		widgets:add(lunaconf.widgets.screensaver(primary))
