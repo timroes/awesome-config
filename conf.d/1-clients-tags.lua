@@ -197,15 +197,22 @@ local function toggle_tag(tagname)
 	end
 
 	if random_tag.selected then
-		-- Unselect all tags
-		for screen, tag in pairs(tags) do
-			tag.selected = false
-		end
+		-- If the current focused client is not on this tag, focus a client of the tag
+		-- otherwise (if the current focused client is on the tag) hide the tag
+		if client.focus and client.focus.first_tag.name ~= tagname then
+			local tag_to_focus = tags[client.focus.screen] and tags[client.focus.screen] or random_tag
+			client.focus = tag_to_focus:clients()[1]
+		else
+			-- Unselect all tags
+			for screen, tag in pairs(tags) do
+				tag.selected = false
+			end
 
-		-- If we had a focused client before and now don't it was on a tag that got
-		-- hidden, so select another client on that screen it was on from history.
-		if not client.focus and focused_before then
-			client.focus = awful.client.focus.history.get(focused_before.screen, 0)
+			-- If we had a focused client before and now don't it was on a tag that got
+			-- hidden, so select another client on that screen it was on from history.
+			if not client.focus and focused_before then
+				client.focus = awful.client.focus.history.get(focused_before.screen, 0)
+			end
 		end
 	else
 		-- Select all found tags
