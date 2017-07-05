@@ -230,11 +230,19 @@ end
 
 local function focus_fallback(oldfocus)
 	if not client.focus then
-		local fallback = awful.client.focus.history.get(oldfocus.screen, 0)
-		if fallback then
-			client.focus = fallback
+		if oldfocus:isvisible() then
+			client.focus = oldfocus
+		else
+			local fallback = awful.client.focus.history.get(oldfocus.screen, 0)
+			if fallback then
+				client.focus = fallback
+			end
 		end
 	end
+end
+
+local function focus_fallback_delayed(...)
+	gears.timer.delayed_call(focus_fallback, ...)
 end
 
 for _, letter in ipairs(tag_keys) do
@@ -305,9 +313,17 @@ client.connect_signal('manage', function(c)
 		c:tags({ c.screen.primary_tag })
 end)
 
+-- Only allow clients to be on one tag. If a client requets to be added to multiple tags
+-- instead only add it to the primary tag of its screen.
+client.connect_signal('request::tag', function(c, tags)
+	if #c:tags() > 1 then
+		c:tags({ c.screen.primary_tag })
+	end
+end)
+
 -- Whenever a client is unmanaged or possibliy loses focus otherwise, make sure
 -- another client will receive the focus.
-client.connect_signal('unmanage', focus_fallback)
-client.connect_signal('untagged', focus_fallback)
-client.connect_signal('property::minimized', focus_fallback)
-client.connect_signal('property::hidden', focus_fallback)
+client.connect_signal('unmanage', focus_fallback_delayed)
+client.connect_signal('untagged', focus_fallback_delayed)
+client.connect_signal('property::minimized', focus_fallback_delayed)
+client.connect_signal('property::hidden', focus_fallback_delayed)
