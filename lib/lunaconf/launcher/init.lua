@@ -1,6 +1,7 @@
 local awful = require('awful')
 local wibox = require('wibox')
 local menubar = require('menubar')
+local gears = require('gears')
 local config = require('lunaconf.config')
 local icons = require('lunaconf.icons')
 local xdg = require('lunaconf.xdg')
@@ -9,10 +10,10 @@ local theme = require('lunaconf.theme')
 local dpi = require('lunaconf.dpi')
 local utils = require('lunaconf.utils')
 local badge = require('lunaconf.layouts.badge')
-local inifile = require('inifile')
 local screens = require('lunaconf.screens')
 local tostring = tostring
 local lfs = require('lfs')
+local yaml = require('lyaml')
 
 local listitem = require('lunaconf.launcher.listitem')
 
@@ -24,6 +25,7 @@ local inspect = require('inspect')
 local launcher = {}
 
 local hotkeys = {}
+local settings = {}
 
 local launcher_screen = screens.primary()
 
@@ -32,7 +34,7 @@ local width = dpi.x(450, launcher_screen)
 
 local max_results_shown = 4
 
-local config_file = awful.util.get_cache_dir() .. '/lunaconf.launcher.ini'
+local config_file = gears.filesystem.get_cache_dir() .. '/lunaconf.launcher.yml'
 
 local default_icon = icons.lookup_icon('image-missing')
 local default_search_placeholder = "or search ..."
@@ -52,6 +54,18 @@ local active_keygrabber
 local current_search = ""
 local current_shown_results = {}
 local current_selected_result = nil
+
+local function load_hotkeys()
+	local cache_file = io.open(config_file, 'r')
+	local hotkeys = {}
+	if cache_file then
+		local cache_yaml = cache_file:read('*all')
+		cache_file:close()
+		settings = yaml.load(cache_yaml) or {}
+		hotkeys = settings['hotkeys'] or {}
+	end
+	return hotkeys
+end
 
 local function hotkey_badge(text)
 	local hk_label = wibox.widget.textbox(text:upper())
@@ -149,12 +163,7 @@ local function on_query_changed(self)
 end
 
 local function reload_hotkeys()
-	local ini = {}
-	if awful.util.file_readable(config_file) then
-		ini = inifile.parse(config_file)
-	end
-
-	ini['Hotkeys'] = ini['Hotkeys'] or {}
+	local hotkey_files = load_hotkeys()
 
 	for i,v in ipairs(hotkey_rows) do
 		v:reset()
@@ -166,8 +175,8 @@ local function reload_hotkeys()
 
 		local widget
 
-		local hotkeyDesktopPath = ini['Hotkeys'][tostring(key)]
-		if hotkeyDesktopPath and awful.util.file_readable(hotkeyDesktopPath) then
+		local hotkeyDesktopPath = hotkey_files[tostring(key)]
+		if hotkeyDesktopPath and gears.filesystem.file_readable(hotkeyDesktopPath) then
 			local desktop = menubar.utils.parse_desktop_file(hotkeyDesktopPath)
 			hotkeys[tostring(key)] = desktop
 
@@ -207,15 +216,17 @@ end
 -- this.
 -- The method will update the config file for this hotkey and reload the panel.
 local function save_hotkey(self, key, desktop_entry)
-	local ini = {}
-	if awful.util.file_readable(config_file) then
-		ini = inifile.parse(config_file)
+	if not settings['hotkeys'] then
+		settings['hotkeys'] = {}
 	end
-	ini['Hotkeys'] = ini['Hotkeys'] or {}
-	ini['Hotkeys'][tostring(key)] = desktop_entry.file
-	-- Create cache folder if it doesn't exist yet
-	lfs.mkdir(awful.util.get_cache_dir())
-	inifile.save(config_file, ini, 'io')
+	settings['hotkeys'][tostring(key)] = desktop_entry.file
+	lfs.mkdir(gears.filesystem.get_cache_dir())
+	local cache_file = io.open(config_file, 'w')
+	if cache_file then
+		local yaml_string = yaml.dump({ settings })
+		cache_file:write(yaml_string)
+		cache_file:close()
+	end
 	reload_hotkeys()
 	current_search = ""
 	on_query_changed(self)
