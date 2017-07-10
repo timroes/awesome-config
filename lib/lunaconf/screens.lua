@@ -21,7 +21,9 @@ function screens.xdpi(screen)
 		return nil
 	end
 	local output = get_first_output(screen)
-	return (screen.geometry.width * 25.4) / output.mm_width
+	if output then
+		return (screen.geometry.width * 25.4) / output.mm_width
+	end
 end
 
 function screens.ydpi(screen)
@@ -29,7 +31,9 @@ function screens.ydpi(screen)
 		return nil
 	end
 	local output = get_first_output(screen)
-	return (screen.geometry.height * 25.4) / output.mm_height
+	if output then
+		return (screen.geometry.height * 25.4) / output.mm_height
+	end
 end
 
 function screens.output_name(screen)

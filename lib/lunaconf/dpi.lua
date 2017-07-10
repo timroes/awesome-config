@@ -31,18 +31,18 @@ local function refresh_dpi_for_screen(s)
 	local xdpi = force_dpi(s)
 	if not xdpi then
 		xdpi = screens.xdpi(s)
-		if xdpi == nil then
-			xdpi = default_dpi
-		end
+	end
+	if not xdpi then
+		xdpi = default_dpi
 	end
 	scale_x_cache[s] = xdpi / default_dpi
 	-- Calculate y dpi for each screen
 	local ydpi = force_dpi(s)
 	if not ydpi then
 		ydpi = screens.ydpi(s)
-		if ydpi == nil then
-			ydpi = default_dpi
-		end
+	end
+	if not ydpi then
+		ydpi = default_dpi
 	end
 	scale_y_cache[s] = ydpi / default_dpi
 	-- Pass the lower dpi to awesome as dpi for that screen
