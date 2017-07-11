@@ -197,15 +197,22 @@ local function toggle_tag(tagname)
 	end
 
 	if random_tag.selected then
-		-- Unselect all tags
-		for screen, tag in pairs(tags) do
-			tag.selected = false
-		end
+		-- If the current focused client is not on this tag, focus a client of the tag
+		-- otherwise (if the current focused client is on the tag) hide the tag
+		if client.focus and client.focus.first_tag.name ~= tagname then
+			local tag_to_focus = tags[client.focus.screen] and tags[client.focus.screen] or random_tag
+			client.focus = tag_to_focus:clients()[1]
+		else
+			-- Unselect all tags
+			for screen, tag in pairs(tags) do
+				tag.selected = false
+			end
 
-		-- If we had a focused client before and now don't it was on a tag that got
-		-- hidden, so select another client on that screen it was on from history.
-		if not client.focus and focused_before then
-			client.focus = awful.client.focus.history.get(focused_before.screen, 0)
+			-- If we had a focused client before and now don't it was on a tag that got
+			-- hidden, so select another client on that screen it was on from history.
+			if not client.focus and focused_before then
+				client.focus = awful.client.focus.history.get(focused_before.screen, 0)
+			end
 		end
 	else
 		-- Select all found tags
@@ -223,11 +230,19 @@ end
 
 local function focus_fallback(oldfocus)
 	if not client.focus then
-		local fallback = awful.client.focus.history.get(oldfocus.screen, 0)
-		if fallback then
-			client.focus = fallback
+		if oldfocus:isvisible() then
+			client.focus = oldfocus
+		else
+			local fallback = awful.client.focus.history.get(oldfocus.screen, 0)
+			if fallback then
+				client.focus = fallback
+			end
 		end
 	end
+end
+
+local function focus_fallback_delayed(...)
+	gears.timer.delayed_call(focus_fallback, ...)
 end
 
 for _, letter in ipairs(tag_keys) do
@@ -298,9 +313,17 @@ client.connect_signal('manage', function(c)
 		c:tags({ c.screen.primary_tag })
 end)
 
+-- Only allow clients to be on one tag. If a client requets to be added to multiple tags
+-- instead only add it to the primary tag of its screen.
+client.connect_signal('request::tag', function(c, tags)
+	if #c:tags() > 1 then
+		c:tags({ c.screen.primary_tag })
+	end
+end)
+
 -- Whenever a client is unmanaged or possibliy loses focus otherwise, make sure
 -- another client will receive the focus.
-client.connect_signal('unmanage', focus_fallback)
-client.connect_signal('untagged', focus_fallback)
-client.connect_signal('property::minimized', focus_fallback)
-client.connect_signal('property::hidden', focus_fallback)
+client.connect_signal('unmanage', focus_fallback_delayed)
+client.connect_signal('untagged', focus_fallback_delayed)
+client.connect_signal('property::minimized', focus_fallback_delayed)
+client.connect_signal('property::hidden', focus_fallback_delayed)
