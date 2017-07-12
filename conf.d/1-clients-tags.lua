@@ -228,12 +228,12 @@ local function toggle_tag(tagname)
 	end
 end
 
-local function focus_fallback(oldfocus)
+local function focus_fallback(oldfocus, screen)
 	if not client.focus then
-		if oldfocus:isvisible() then
+		if oldfocus.valid and oldfocus:isvisible() then
 			client.focus = oldfocus
 		else
-			local fallback = awful.client.focus.history.get(oldfocus.screen, 0)
+			local fallback = awful.client.focus.history.get(screen, 0)
 			if fallback then
 				client.focus = fallback
 			end
@@ -241,8 +241,8 @@ local function focus_fallback(oldfocus)
 	end
 end
 
-local function focus_fallback_delayed(...)
-	gears.timer.delayed_call(focus_fallback, ...)
+local function focus_fallback_delayed(c)
+	gears.timer.delayed_call(focus_fallback, c, c.screen)
 end
 
 for _, letter in ipairs(tag_keys) do
