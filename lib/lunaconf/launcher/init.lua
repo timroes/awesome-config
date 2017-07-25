@@ -12,7 +12,6 @@ local utils = require('lunaconf.utils')
 local badge = require('lunaconf.layouts.badge')
 local screens = require('lunaconf.screens')
 local tostring = tostring
-local lfs = require('lfs')
 local yaml = require('lyaml')
 
 local listitem = require('lunaconf.launcher.listitem')
@@ -220,7 +219,7 @@ local function save_hotkey(self, key, desktop_entry)
 		settings['hotkeys'] = {}
 	end
 	settings['hotkeys'][tostring(key)] = desktop_entry.file
-	lfs.mkdir(gears.filesystem.get_cache_dir())
+	gears.filesystem.make_parent_directories(config_file)
 	local cache_file = io.open(config_file, 'w')
 	if cache_file then
 		local yaml_string = yaml.dump({ settings })
