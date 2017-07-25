@@ -1,8 +1,6 @@
 local Gio = require('lgi').Gio
 local GLib = require('lgi').GLib
-local lunaconf = {
-	strings = require('lunaconf.strings')
-}
+local gears = require('gears')
 local awesome_dbus = dbus
 
 local dbus = {}
@@ -21,7 +19,7 @@ function dbus.system(dest, path, interface, method, params, callback)
 	if params then
 		local variants = {}
 		for i, param in ipairs(params) do
-			local fields = lunaconf.strings.split(param, ':')
+			local fields = gears.string.split(param, ':')
 			table.insert(variants, GLib.Variant(fields[1], fields[2]))
 		end
 		arguments = GLib.Variant.new_tuple(variants, #variants)
