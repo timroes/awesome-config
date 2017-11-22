@@ -48,6 +48,7 @@ buttons = gears.table.join(
 			-- On any non tiling screen we make the client floating and start resize mode
 			if not c.unresizeable then
 				c.floating = true
+				client.focus = c
 				awful.mouse.client.resize(c)
 			end
 		end
