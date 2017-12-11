@@ -3,7 +3,7 @@
 import argparse, subprocess, re, sys, shutil
 from math import floor
 
-DEFAULT_API = 96
+DEFAULT_DPI = 96
 
 def set_display_dpi(display_id, dpi):
   '''
