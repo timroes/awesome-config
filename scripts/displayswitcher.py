@@ -143,16 +143,21 @@ def layout_clone(displays):
   min_resolution = '{}x{}'.format(min_res_display['preferred']['x'], min_res_display['preferred']['y'])
 
   if len(displays['connected']) > 1:
-    args = ['xrandr', '--output', min_res_display['id'], '--auto']
+    prepare_args = ['xrandr', '--output', min_res_display['id'], '--auto']
+    args = ['xrandr']
 
     for display in filter(lambda d: d['id'] != min_res_display['id'], displays['connected']):
+      prepare_args.extend(['--output', display['id'], '--auto', '--same-as', min_res_display['id']])
       pref_res = '{}x{}'.format(display['preferred']['x'], display['preferred']['y'])
-      args.extend(['--output', display['id'], '--same-as', min_res_display['id'],
-        '--mode', pref_res, '--scale', pref_res, '--scale-from', min_resolution])
+      args.extend(['--output', display['id'], '--mode', pref_res, '--scale', pref_res,
+          '--scale-from', min_resolution])
 
     # Switch all disconnected displays off
-    args.extend(off_all_disconnected(displays['disconnected']))
+    prepare_args.extend(off_all_disconnected(displays['disconnected']))
 
+    # We need to first switch all displays on/off and set thenm to same-as before we can switch the screen resolution
+    # since X might freeze on some graphic cards if we use a single command for --same-as and the scaling.
+    subprocess.call(prepare_args)
     subprocess.call(args)
 
 def print_state(infos):
