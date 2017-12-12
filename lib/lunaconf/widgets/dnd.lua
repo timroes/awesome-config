@@ -22,6 +22,8 @@ local icon_dnd = gears.color.recolor_image(lunaconf.icons.lookup_icon('notificat
 
 local function toggle()
 	naughty.toggle()
+	-- TODO: Move before toggle as soon as https://github.com/awesomeWM/awesome/issues/2138 is fixed
+	naughty.destroy_all_notifications()
 	imagebox:set_image(naughty.is_suspended() and icon_dnd or icon_active)
 end
 

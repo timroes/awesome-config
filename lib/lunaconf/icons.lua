@@ -7,8 +7,8 @@ local glib = require("lgi").GLib
 local theme = require("lunaconf.theme")
 local awful_util = require("awful.util")
 local inifile = require('inifile')
-local strings = require('lunaconf.strings')
 local utils = require('lunaconf.utils')
+local gears = require('gears')
 
 local icons = {}
 
@@ -61,7 +61,7 @@ local function get_icon_lookup_path()
 			local index_file_name = icon_theme_path .. 'index.theme'
 			if awful_util.file_readable(index_file_name) then
 				local theme_index = inifile.parse(index_file_name)
-				local directories = strings.split(theme_index['Icon Theme'].Directories, ",")
+				local directories = gears.string.split(theme_index['Icon Theme'].Directories, ",")
 				for j,dir in ipairs(directories) do
 					table.insert(icon_lookup_path, 1, icon_theme_path .. dir .. '/')
 				end

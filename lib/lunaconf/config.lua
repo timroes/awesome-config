@@ -1,9 +1,6 @@
 local io = require('io')
 local yaml = require('lyaml')
 local gears = require('gears')
-local lunaconf = {
-	strings = require('lunaconf.strings')
-}
 
 local config = {}
 
@@ -18,7 +15,7 @@ end
 
 function config.get(key, default)
 	local level = settings
-	for i,k in pairs(lunaconf.strings.split(key, '.')) do
+	for i,k in pairs(gears.string.split(key, '[.]')) do
 		if not level then return default end
 		level = level[k]
 	end
