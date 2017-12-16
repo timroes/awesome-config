@@ -1,8 +1,11 @@
 local awful = require("awful")
 local gears = require('gears')
 local lunaconf = {
-	theme = require('lunaconf.theme')
+	config = require('lunaconf.config'),
+	theme = require('lunaconf.theme'),
+	utils = require('lunaconf.utils')
 }
+local naughty = require('naughty')
 
 local theme = lunaconf.theme.get()
 
@@ -103,6 +106,16 @@ function calendar.register(_, widget)
 		awful.button({ }, 4, function() show(-1) end),
 		awful.button({ }, 5, function() show(1) end)
 	))
+
+	local cal_action = lunaconf.config.get('calendar.action', nil)
+	if cal_action then
+		widget:buttons(gears.table.join(
+			widget:buttons(),
+			awful.button({ }, 1, function()
+				lunaconf.utils.spawn("dex '" .. cal_action .. "'")
+			end)
+		))
+	end
 end
 
 return setmetatable(calendar, { __call = calendar.register })

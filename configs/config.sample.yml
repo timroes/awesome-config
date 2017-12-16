@@ -30,6 +30,10 @@ screensaver:
   # Configure how many minutes before the screen will be locked (Default: 10)
   timeout: 10
 
+calendar:
+  # Specify a path to a .desktop file to execute when clicking the clock in the bar
+  action:
+
 # A YML list of keyboard layouts, that the user can switch through.
 # The first one in this list will be used when starting awesome.
 keyboard_layouts:
