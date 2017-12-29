@@ -3,6 +3,7 @@ local gears = require('gears')
 local wibox = require('wibox')
 local lunaconf = {
 	config = require('lunaconf.config'),
+	dialogs = require('lunaconf.dialogs'),
 	dpi = require('lunaconf.dpi'),
 	icons = require('lunaconf.icons'),
 	keys = require('lunaconf.keys'),
@@ -52,7 +53,7 @@ local function apply_and_hide(self)
 		-- displays.
 		set_mode('auto')
 	end
-	self.widget.visible = false
+	self._dialog:hide()
 end
 
 local function next_mode(self)
@@ -77,24 +78,17 @@ end
 
 local function show(self)
 	-- If the switcher is already shown don't do anything
-	if self.widget.visible then
+	if self._dialog:is_visible() then
 		return
 	end
 
-	local screen = lunaconf.screens.primary()
-	-- Before showing it, place it on the main screen
-	self.widget.screen = screen
-
-	-- Recalculate values that are dpi dependant
-	self.widget.width = lunaconf.dpi.x(250, screen)
-	self.widget.height = lunaconf.dpi.y(50, screen)
-	self.icon_margin.top = lunaconf.dpi.y(4, screen)
-	self.icon_margin.bottom = lunaconf.dpi.y(4, screen)
-	self.icon_margin.left = lunaconf.dpi.y(4, screen)
-	self.icon_margin.right = lunaconf.dpi.y(10, screen)
-
-	-- Center the widget in the screen
-	awful.placement.centered(self.widget)
+	self._dialog:recalculate_sizes(function (screen)
+		-- Recalculate values that are dpi dependant
+		self.icon_margin.top = lunaconf.dpi.y(4, screen)
+		self.icon_margin.bottom = lunaconf.dpi.y(4, screen)
+		self.icon_margin.left = lunaconf.dpi.y(4, screen)
+		self.icon_margin.right = lunaconf.dpi.y(10, screen)
+	end)
 
 	awful.spawn.easy_async(script .. ' query', function(out, err, reason, code)
 		if code ~= 0 then
@@ -105,7 +99,7 @@ local function show(self)
 			self.label.text = 'Displays @ ' .. lunaconf.strings.trim(out)
 			self.current = 0
 		end
-		self.widget.visible = true
+		self._dialog:show()
 		setup_keygrabber(self)
 	end)
 
@@ -125,16 +119,10 @@ local function new(self, modifiers, key)
 		layout = wibox.layout.fixed.horizontal
 	}
 
-	self.widget = wibox {
+	self._dialog = lunaconf.dialogs.base {
 		widget = container,
-		screen = lunaconf.screens.primary(),
-		bg = theme.dialog_bg or theme.bg_normal,
-		fg = theme.dialog_fg or theme.fg_normal,
-		visible = false,
-		opacity = 0.9,
-		ontop = true,
-		shape = function(cr, width, height) gears.shape.rounded_rect(cr, width, height, 6) end,
-		type = 'notification'
+		width = 250,
+		height = 50
 	}
 
 	lunaconf.keys.globals(awful.key(modifiers, key, function() show(self) end))

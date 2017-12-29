@@ -1,25 +1,19 @@
-local awful = require('awful')
 local gears = require('gears')
 local wibox = require('wibox')
 local lunaconf = {
 	dpi = require('lunaconf.dpi'),
 	icons = require('lunaconf.icons'),
-	screens = require('lunaconf.screens'),
-	theme = require('lunaconf.theme')
+	theme = require('lunaconf.theme'),
+	dialogs = {
+		base = require('lunaconf.dialogs.base')
+	}
 }
 
 local bar = {}
 
 local theme = lunaconf.theme.get()
 
-local last_shown_dialog
-
-local function recalculate_sizes(self)
-	local screen = self._widget.screen
-	self._widget.height = lunaconf.dpi.y(50, screen)
-	self._widget.width = lunaconf.dpi.x(250, screen)
-
-	-- self._progress.paddings = lunaconf.dpi.x(2, screen)
+local function recalculate_sizes(self, screen)
 	self._progress.margins = {
 		top = lunaconf.dpi.y(10, screen),
 		bottom = lunaconf.dpi.y(10, screen),
@@ -29,10 +23,6 @@ local function recalculate_sizes(self)
 	-- Modify rounded corners
 	self._progress.shape = function(cr, width, height)
 		gears.shape.rounded_rect(cr, width, height, lunaconf.dpi.x(2, screen))
-	end
-
-	self._widget.shape = function(cr, width, height)
-		gears.shape.rounded_rect(cr, width, height, lunaconf.dpi.x(4, screen))
 	end
 
 	self._icon_margin.margins = lunaconf.dpi.x(4, screen)
@@ -51,29 +41,14 @@ function bar:set_value(value)
 	self._progress:set_value(value)
 end
 
-function bar:hide()
-	self._widget.visible = false
-end
-
 function bar:show()
-	-- If a dialog is already open, hide that one
-	if last_shown_dialog and last_shown_dialog ~= self then
-		last_shown_dialog:hide()
-	end
-	last_shown_dialog = self
-
-	self._widget.screen = lunaconf.screens.primary()
-
 	-- Recalculate all sizes on the new screen
-	recalculate_sizes(self)
-
-	-- Center dialog in screen
-	awful.placement.centered(self._widget)
+	self._base:recalculate_sizes(function (screen)
+		recalculate_sizes(self, screen)
+	end)
 
 	-- Show dialog
-	self._widget.visible = true
-	-- Reset hide timer again
-	self._timeout:again()
+	self._base:show()
 end
 
 local function new(_, icon_name, timeout)
@@ -100,19 +75,12 @@ local function new(_, icon_name, timeout)
 		layout = wibox.layout.fixed.horizontal
 	}
 
-	self._widget = wibox {
+	self._base = lunaconf.dialogs.base {
 		widget = container,
-		bg = theme.dialog_bg or theme.bg_normal,
-		fg = theme.dialog_fg or theme.fg_normal,
-		visible = false,
-		opacity = 0.9,
-		ontop = true,
-		type = 'notification'
+		width = 250,
+		height = 50,
+		timeout = timeout or 3
 	}
-
-	self._timeout = gears.timer.start_new(timeout or 3, function()
-		self:hide()
-	end)
 
 	return self
 end
