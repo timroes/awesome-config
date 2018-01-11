@@ -20,6 +20,14 @@ function base:recalculate_sizes(callback)
 	self._widget.height = lunaconf.dpi.y(self._height, screen)
 	self._widget.width = lunaconf.dpi.x(self._width, screen)
 
+	-- Set dialog margins
+	if self._margin then
+		self._margin_widget.top = lunaconf.dpi.y(self._margin, screen)
+		self._margin_widget.bottom = lunaconf.dpi.y(self._margin, screen)
+		self._margin_widget.left = lunaconf.dpi.x(self._margin, screen)
+		self._margin_widget.right = lunaconf.dpi.x(self._margin, screen)
+	end
+
 	self._widget.shape = function(cr, width, height)
 		gears.shape.rounded_rect(cr, width, height, lunaconf.dpi.x(4, screen))
 	end
@@ -31,6 +39,13 @@ function base:recalculate_sizes(callback)
 	if callback then
 		callback(screen)
 	end
+end
+
+function base:set_raw_dimensions(width, height)
+	self._widget.height = height + 2 * lunaconf.dpi.y(self._margin, self._widget.screen)
+	self._widget.width = width + 2 * lunaconf.dpi.x(self._margin, self._widget.screen)
+
+	awful.placement.centered(self._widget)
 end
 
 function base:is_visible()
@@ -65,8 +80,11 @@ local function new(_, params)
 	self._height = params.height
 	self._timeout = params.timeout
 
+	self._margin = params.margin
+	self._margin_widget = wibox.layout.margin(params.widget)
+
 	self._widget = wibox {
-		widget = params.widget,
+		widget = self._margin_widget,
 		bg = theme.dialog_bg or theme.bg_normal,
 		fg = theme.dialog_fg or theme.fg_normal,
 		visible = false,

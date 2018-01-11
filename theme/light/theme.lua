@@ -2,6 +2,7 @@
 local theme = {}
 
 local highlight_color   = '#2196F3'
+local highlight_color_light = '#9CCFF7'
 local text_on_highlight = '#FFFFFF'
 local error_color       = '#F44336'
 
@@ -36,6 +37,8 @@ theme.dialog_fg = dark_text
 theme.dialog_bar_fg = highlight_color
 theme.dialog_bar_disabled_fg = '#AAAAAA'
 theme.dialog_bar_bg = '#E0E0E0'
+theme.dialog_chooser_highlight = highlight_color_light
+theme.dialog_chooser_highlight_border = highlight_color
 
 -- Notifications
 theme.notification_bg = "#FFFFFF"
