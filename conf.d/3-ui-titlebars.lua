@@ -11,7 +11,7 @@ local ontop_color = lunaconf.theme.get().ontop_indicator
 if ontop_color then ontop_color = gears.color(ontop_color) end
 
 local function should_show_titlebar(c)
-	return not c.skip_taskbar and c.floating
+	return not c.skip_taskbar and c.floating and not c.skip_titlebar
 end
 
 local function refresh_titlebar(c)
