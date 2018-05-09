@@ -1,5 +1,5 @@
 #!/bin/bash
-# 
+#
 # Requires: Imagemagick
 #
 # Script to make a screenshot of the whole screen, a window or a region.
@@ -13,11 +13,17 @@ DIR="/tmp"
 DATE="$(date +%Y%m%d-%H%M%S)"
 NAME="${DIR}/screenshot-${DATE}.png"
 
-# Check if the dir to store the screenshots exists, else create it: 
-if [ ! -d "${DIR}" ]; then mkdir -p "${DIR}"; fi 
+# Check if the dir to store the screenshots exists, else create it:
+if [ ! -d "${DIR}" ]; then mkdir -p "${DIR}"; fi
 
 # Screenshot a selected window
-if [ "$1" = "win" ]; then import +repage "${NAME}"; fi
+if [ "$1" = "win" ]; then
+	tmp_file=$(mktemp)
+	import +repage "$tmp_file"
+	# Remove one pixel from image, since import often captures its own black selectbox
+	convert $tmp_file -shave 1x1 "${NAME}"
+	rm "$tmp_file"
+fi
 
 # Screenshot the entire screen
 if [ "$1" = "scr" ]; then import -window root "${NAME}"; fi
