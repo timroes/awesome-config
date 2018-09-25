@@ -8,7 +8,6 @@ local lunaconf = {
 		base = require('lunaconf.dialogs.base')
 	}
 }
-local naughty = require('naughty')
 
 local chooser = {}
 

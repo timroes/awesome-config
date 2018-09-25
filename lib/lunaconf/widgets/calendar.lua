@@ -5,7 +5,6 @@ local lunaconf = {
 	theme = require('lunaconf.theme'),
 	utils = require('lunaconf.utils')
 }
-local naughty = require('naughty')
 
 local theme = lunaconf.theme.get()
 

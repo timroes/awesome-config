@@ -1,5 +1,4 @@
 local awful = require('awful')
-local naughty = require('naughty')
 local gears = require('gears')
 local lunaconf = require('lunaconf')
 
