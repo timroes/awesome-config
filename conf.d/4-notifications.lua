@@ -13,7 +13,10 @@ naughty.config.notify_callback = function(args)
 		return null
 	end
 
-	if args.icon then
+	if args.freedesktop_hints and args.freedesktop_hints['image-path'] then
+		-- Freedesktop image hint has higher priority than args.icon
+		args.icon = lunaconf.icons.lookup_icon(args.freedesktop_hints['image-path'])
+	elseif args.icon then
 		-- Lookup the icon in case it was an icon name and not a path
 		args.icon = lunaconf.icons.lookup_icon(args.icon)
 	else
