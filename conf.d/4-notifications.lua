@@ -4,11 +4,8 @@ local naughty = require('naughty')
 
 local theme = lunaconf.theme.get()
 
-naughty.config.defaults.icon_size = 48
 naughty.config.defaults.position = 'top_right'
 
--- Notifications should have rounded corners
-naughty.config.defaults.shape = function(cr, width, height) gears.shape.rounded_rect(cr, width, height, 6) end
 -- Register a callback to preprocess all notifications
 naughty.config.notify_callback = function(args)
 	-- Cancel notifications if dnd widget is enabled
@@ -30,6 +27,11 @@ naughty.config.notify_callback = function(args)
 		end
 	end
 
+	-- Limit text of notification to max 200 chars
+	if string.len(args.text) > 200 then
+		args.text = args.text:sub(0, 200) .. '…'
+	end
+
 	return args
 end
 
@@ -37,9 +39,11 @@ end
 local function update_notification_screen()
 	local screen = lunaconf.screens.primary()
 	naughty.config.defaults.screen = screen
+	naughty.config.defaults.icon_size = lunaconf.dpi.x(theme.notification_icon_size, screen)
 	naughty.config.spacing = lunaconf.dpi.y(theme.notification_spacing or 1, screen)
 	naughty.config.padding = lunaconf.dpi.y(theme.notification_padding or 4, screen)
 	naughty.config.defaults.margin = lunaconf.dpi.x(theme.notification_margin or 4, screen)
+	naughty.config.defaults.width = lunaconf.dpi.x(theme.notification_width, screen)
 end
 
 -- Change notification screen if primary or available screens change

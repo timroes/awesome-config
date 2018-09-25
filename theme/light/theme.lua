@@ -48,6 +48,8 @@ theme.notification_margin = 7
 theme.notification_spacing = 7
 theme.notification_padding = 5
 theme.notification_opacity = 0.9
+theme.notification_width = 320
+theme.notification_icon_size = 42
 
 -- Calendar
 theme.cal_today_bg = highlight_color

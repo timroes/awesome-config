@@ -8,6 +8,7 @@ local theme = require("lunaconf.theme")
 local awful_util = require("awful.util")
 local inifile = require('inifile')
 local utils = require('lunaconf.utils')
+local strings = require('lunaconf.strings')
 local gears = require('gears')
 
 local icons = {}
@@ -82,17 +83,21 @@ function icons.lookup_icon(icon_file)
 	if not icon_file or icon_file == "" then
 		return ""
 	end
-
+	
+	
 	if type(icon_file) ~= 'string' then
 		return icon_file
 	end
+	
+	-- Remove any possible file:// at the beginning, e.g. Chrome is setting this
+	icon_file, _ = icon_file:gsub('^file://', '')
 
 	local from_cache = icon_cache[icon_file]
 	if from_cache ~= nil then
 		return from_cache
 	end
 
-	if icon_file:sub(1, 1) == '/' and is_format_supported(icon_file) then
+	if icon_file:sub(1, 1) == '/' then
 		-- If the path to the icon is absolute and its format is
 		-- supported, do not perform a lookup.
 		local result = awful_util.file_readable(icon_file) and icon_file or nil
