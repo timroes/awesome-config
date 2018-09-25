@@ -27,7 +27,7 @@ if [ "$touchpad" ]; then
 	else
 		if [ ! `pidof syndaemon` ]; then
 			logger -t $TAG "Starting syndaemon."
-			syndaemon -i 0.9 -d -k
+			syndaemon -i 0.2 -d -k
 		fi
 	fi
 fi
