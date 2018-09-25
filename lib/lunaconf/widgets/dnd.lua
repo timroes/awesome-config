@@ -17,14 +17,21 @@ local widget
 
 local theme = lunaconf.theme.get()
 
+local mute_notifications = false
+
 local icon_active = gears.color.recolor_image(lunaconf.icons.lookup_icon('notification-symbolic'), theme.screenbar_inactive_fg)
 local icon_dnd = gears.color.recolor_image(lunaconf.icons.lookup_icon('notification-disabled-symbolic'), theme.screenbar_fg)
 
+function dnd.is_enabled()
+	return mute_notifications
+end
+
 local function toggle()
-	naughty.toggle()
-	-- TODO: Move before toggle as soon as https://github.com/awesomeWM/awesome/issues/2138 is fixed
-	naughty.destroy_all_notifications()
-	imagebox:set_image(naughty.is_suspended() and icon_dnd or icon_active)
+	mute_notifications = not mute_notifications
+	if mute_notifications then
+		naughty.destroy_all_notifications()
+	end
+	imagebox:set_image(mute_notifications and icon_dnd or icon_active)
 end
 
 local function create(_, screen, mod, key)

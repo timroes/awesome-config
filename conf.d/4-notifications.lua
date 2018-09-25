@@ -11,6 +11,11 @@ naughty.config.defaults.position = 'top_right'
 naughty.config.defaults.shape = function(cr, width, height) gears.shape.rounded_rect(cr, width, height, 6) end
 -- Register a callback to preprocess all notifications
 naughty.config.notify_callback = function(args)
+	-- Cancel notifications if dnd widget is enabled
+	if lunaconf.widgets.dnd.is_enabled() then
+		return null
+	end
+
 	if args.icon then
 		-- Lookup the icon in case it was an icon name and not a path
 		args.icon = lunaconf.icons.lookup_icon(args.icon)
