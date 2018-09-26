@@ -6,6 +6,10 @@ local theme = lunaconf.theme.get()
 
 naughty.config.defaults.position = 'top_right'
 
+local function mutateChromeNotification(args)
+	args.text = args.text:gsub('^([^\n]*)(.*)', '<span size="small" color="#888888">%1</span>%2')
+end
+
 -- Register a callback to preprocess all notifications
 naughty.config.notify_callback = function(args)
 	-- Cancel notifications if dnd widget is enabled
@@ -33,6 +37,11 @@ naughty.config.notify_callback = function(args)
 	-- Limit text of notification to max 200 chars
 	if string.len(args.text) > 200 then
 		args.text = args.text:sub(0, 200) .. '…'
+	end
+
+	if args.appname == 'Chromium' then
+		-- Give chromium notifications a bit of special formatting
+		mutateChromeNotification(args)
 	end
 
 	return args
