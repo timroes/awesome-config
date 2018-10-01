@@ -4,6 +4,9 @@ local naughty = require('naughty')
 
 local theme = lunaconf.theme.get()
 
+-- Need to refresh the xdg list on start, so that notifications can lookup desktop entry files
+lunaconf.xdg.refresh()
+
 naughty.config.defaults.position = 'top_right'
 
 local function mutateChromeNotification(args)
@@ -28,6 +31,9 @@ naughty.config.notify_callback = function(args)
 		if args.freedesktop_hints and args.freedesktop_hints['desktop-entry'] then
 			local desktop_id = args.freedesktop_hints['desktop-entry']
 			local desktop_entry = lunaconf.xdg.get_entry(desktop_id)
+			if not desktop_entry then
+				desktop_entry = lunaconf.xdg.get_entry(desktop_id:lower())
+			end
 			if desktop_entry then
 				args.icon = lunaconf.icons.lookup_icon(desktop_entry.Icon)
 			end
