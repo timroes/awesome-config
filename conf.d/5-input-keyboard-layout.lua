@@ -27,8 +27,8 @@ if #keyboard_layouts > 1 then
 	local dialog = lunaconf.dialogs.chooser()
 	dialog:set_items(layout_items)
 
-	lunaconf.keys.globals(awful.key({ "Mod1" }, "Shift_L", function()
-		dialog:show("Shift_L", function(item)
+	lunaconf.keys.globals(awful.key({ "Ctrl", "Shift" }, "space", function()
+		dialog:show("space", function(item)
 			set_layout(item.value)
 		end, true)
 	end))
