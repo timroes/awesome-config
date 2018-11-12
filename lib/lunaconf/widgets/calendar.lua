@@ -12,11 +12,13 @@ local calendar = {
 	text_color = theme.cal_fg or theme.tooltip_fg or "#FFFFFF",
 	today_color = theme.cal_today or theme.fg_urgent or "#00FF00",
 	today_bg = theme.cal_today_bg or theme.bg_urgent or '#FFFFFF',
+	highlight_colors = gears.string.split(theme.cal_highlights or '#8BC34A;#673AB7;#CDDC39;#FF9800', ';'),
 	font = theme.cal_font or 'monospace 11'
 }
 
 local tooltip = nil
 local offset = 0
+local highlights = {}
 
 local function pop_spaces(s1, s2, maxsize)
 	 local sps = ""
@@ -54,18 +56,30 @@ local function create_calendar()
 			result = result .. "   "
 	 end
 
-	 local this_month = false
+	 local highlight_legend = ''
+	 local highlight_color_counter = 1
 	 for day = 1, last_day do
 			local last_in_week = (day + first_day_in_week) % 7 == 0
-			local day_str = pop_spaces("", day, 2)
-			if cal_month == now.month and cal_year == now.year and day == now.day then
-				 this_month = true
-				 result = result ..
-						string.format('<span weight="bold" foreground="%s" background="%s">%s</span>',
-													calendar.today_color, calendar.today_bg, day_str)
-			else
-				 result = result .. day_str
+
+			local is_today = cal_month == now.month and cal_year == now.year and day == now.day
+			local highlight = highlights[cal_year .. '-' .. cal_month .. '-' .. day]
+			local highlight_color = '#FFFFFF'
+
+			if highlight then
+				highlight_color = calendar.highlight_colors[gears.math.cycle(highlight_color_counter, #calendar.highlight_colors)]
+				highlight_color_counter = highlight_color_counter + 1
+				highlight_legend = highlight_legend .. string.format('\n<span weight="bold" foreground="%s">█</span> %s', highlight_color, highlight)
 			end
+
+			result = result .. string.format(
+				'<span weight="%s" foreground="%s" background="%s" underline="%s" underline_color="%s">%s</span>',
+				is_today and 'bold' or 'normal',
+				is_today and calendar.today_color or calendar.text_color,
+				is_today and calendar.today_bg or '#FFFFFF00',
+				highlight and 'double' or 'none',
+				highlight_color,
+				pop_spaces("", day, 2)
+			)
 			if not last_in_week then
 				result = result .. ' '
 			end
@@ -74,8 +88,11 @@ local function create_calendar()
 			end
 	 end
 
-	 return string.format('<span font="%s" foreground="%s">%s\n%s</span>',
-																calendar.font, calendar.text_color, os.date("%B %Y", first_day), result)
+	 return string.format(
+		 '<span font="%s" foreground="%s">%s\n%s%s</span>',
+			calendar.font, calendar.text_color, os.date("%B %Y", first_day), result,
+			#highlight_legend > 0 and string.format('<span size="xx-small">\n  </span>%s', highlight_legend) or ''
+		)
 end
 
 local function show(inc_offset)
@@ -105,6 +122,8 @@ function calendar.register(_, widget)
 		awful.button({ }, 4, function() show(-1) end),
 		awful.button({ }, 5, function() show(1) end)
 	))
+
+	highlights = lunaconf.config.get('calendar.highlights', {})
 
 	local cal_action = lunaconf.config.get('calendar.action', nil)
 	if cal_action then
