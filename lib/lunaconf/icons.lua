@@ -39,7 +39,7 @@ local function get_icon_lookup_path()
 
 		-- Add all directories which could contain icon themes to paths list
 		local paths = glib.get_system_data_dirs()
-		table.insert(paths, 1, glib.get_user_data_dir() .. '/')
+		table.insert(paths, 1, glib.get_user_data_dir())
 
 
 		-- Note: We add first the hicolor themes, since we will reverse the order
@@ -48,12 +48,12 @@ local function get_icon_lookup_path()
 		-- hicolor here first.
 		-- Add all hicolor themes as fallback
 		for k,dir in ipairs(paths)do
-			table.insert(icon_theme_paths, dir..'icons/hicolor/') -- fallback theme
+			table.insert(icon_theme_paths, dir..'/icons/hicolor/') -- fallback theme
 		end
 		-- If the user set an icon theme add all that folders to the list to look for index.theme files later
 		if icon_theme then
 			for k,dir in ipairs(paths) do
-				table.insert(icon_theme_paths, dir .. 'icons/' .. icon_theme .. '/')
+				table.insert(icon_theme_paths, dir .. '/icons/' .. icon_theme .. '/')
 			end
 		end
 
