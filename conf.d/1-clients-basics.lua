@@ -99,8 +99,17 @@ awful.rules.rules = {
 	{
 		rule_any = { type = { 'dialog' }, role = { 'pop-up' } },
 		properties = {
-			floating = true,
-			placement = awful.placement.centered
+			callback = function (c)
+				local wa = screen[c.screen].workarea
+				-- If a popup or dialog has the exact same size then the workarea its in
+				-- don't make it floating, otherwise make it floating
+				if c.width == wa.width and c.height == wa.height and c.x == wa.x and c.y == wa.y then
+					c.floating = false
+				else
+					c.floating = true
+					awful.placement.centered(c)
+				end
+			end
 		}
 	}
 }
@@ -114,7 +123,7 @@ end)
 client.connect_signal("manage", function(c, startup)
 
 	-- Special behavior for chromium browser, so you can pull out tabs easily
-	if c.class == 'chromium-browser-chromium' then
+	if c.class == 'Chromium' then
 		local under_mouse = awful.mouse.client_under_pointer()
 		-- If the new window is a chromium browser and the window currently under
 		-- the mouse cursor is from the same process it is likely we just pulled
