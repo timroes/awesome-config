@@ -20,6 +20,7 @@ OPT_PKG_DEPS = {
   'compton': 'required if you want compositing effects (e.g. shadow)',
   'imagemagick': 'required to make screenshots',
   'light-locker': 'required to lock screen properly',
+  'numlockx': 'install to enable numlock on start',
   'upower': 'required for battery widget',
   'xf86-input-synaptics': 'required for better touchpad behavior',
   'xorg-xinput': 'required to configure mouse and trackpads',
