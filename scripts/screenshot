@@ -18,7 +18,7 @@ if [ ! -d "${DIR}" ]; then mkdir -p "${DIR}"; fi
 
 # Screenshot a selected window
 if [ "$1" = "win" ]; then
-	tmp_file=$(mktemp)
+	tmp_file="$(mktemp).png"
 	import +repage "$tmp_file"
 	# Remove one pixel from image, since import often captures its own black selectbox
 	convert $tmp_file -shave 1x1 "${NAME}"
