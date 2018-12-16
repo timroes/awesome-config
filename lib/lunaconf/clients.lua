@@ -1,4 +1,5 @@
 local awful = require("awful")
+local gears = require("gears")
 local screen = screen
 local client = client
 local mouse = mouse
@@ -9,6 +10,10 @@ local table = table
 local clients = {}
 
 local attributes = {}
+
+function clients.add_rules(rules)
+	awful.rules.rules = gears.table.join(awful.rules.rules, rules)
+end
 
 --- Start moving the client in a "smart" way.
 --- If the client is floating it will immediately move (and snap to other clients).

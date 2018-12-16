@@ -1,8 +1,6 @@
-local awful = require('awful')
-local gears = require('gears')
 local lunaconf = require('lunaconf')
 
-awful.rules.rules = gears.table.join(awful.rules.rules, {
+lunaconf.clients.add_rules({
 	{
 		rule = { class = "Peek" },
 		properties = {
