@@ -73,5 +73,5 @@ update_notification_screen()
 
 -- Allow dismissing all notifications via Modifier + d
 lunaconf.keys.globals(
-	awful.key({ lunaconf.config.MOD }, "d", function() naughty.destroy_all_notifications() end),
+	awful.key({ lunaconf.config.MOD }, "d", function() naughty.destroy_all_notifications() end)
 )
