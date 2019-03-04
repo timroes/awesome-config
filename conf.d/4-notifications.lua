@@ -1,3 +1,4 @@
+local awful = require('awful')
 local gears = require('gears')
 local lunaconf = require('lunaconf')
 local naughty = require('naughty')
@@ -69,3 +70,8 @@ screen.connect_signal('primary_changed', update_notification_screen)
 screen.connect_signal('list', update_notification_screen)
 -- Set notification screen initially
 update_notification_screen()
+
+-- Allow dismissing all notifications via Modifier + d
+lunaconf.keys.globals(
+	awful.key({ lunaconf.config.MOD }, "d", function() naughty.destroy_all_notifications() end),
+)

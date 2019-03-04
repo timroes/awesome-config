@@ -37,7 +37,7 @@ local function create_primaryscreen_widgets(callback)
 		-- Add widget to disable screensaver
 		widgets:add(lunaconf.widgets.screensaver(primary))
 		-- Add do not disturb widget with hotkey
-		widgets:add(lunaconf.widgets.dnd(primary, { lunaconf.config.MOD }, 'd'))
+		widgets:add(lunaconf.widgets.dnd(primary, { lunaconf.config.MOD, 'Control' }, 'd'))
 
 		-- Add textclock
 		local clock = wibox.widget.textclock("%H:%M")
