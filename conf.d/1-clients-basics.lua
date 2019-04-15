@@ -29,7 +29,7 @@ buttons = gears.table.join(
 	awful.button({ MOD }, 2, function(c) c:kill() end),
 	awful.button({ MOD }, 3, function(c)
 		-- Resizing of clients on modifier + right mouse button
-		if lunaconf.strings.starts_with(awful.layout.get(c.screen).name, "tile") then
+		if gears.string.startswith(awful.layout.get(c.screen).name, "tile") then
 			-- If client on a split screen is tried to rescale we modify the split factor instead
 			mousegrabber.run(function(ev)
 				local s = screen[c.screen] -- current screen
