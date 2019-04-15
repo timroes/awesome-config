@@ -76,7 +76,8 @@ keys = gears.table.join(
 		end
 	end),
 	-- toggle client always on top
-	awful.key({ MOD }, "t", toggle_ontop)
+	awful.key({ MOD }, "t", toggle_ontop),
+	awful.key({ MOD }, "f", function(c) c.fullscreen = not c.fullscreen end)
 )
 
 awful.rules.rules = {
