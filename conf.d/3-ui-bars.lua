@@ -21,7 +21,7 @@ end
 --- Create the widgets, that should only be shown on the primary screen.
 --- The widgets will be passed to the specified callback once they are created.
 local function create_primaryscreen_widgets(callback)
-	lunaconf.pacman.installed('upower', function(upower_installed)
+	lunaconf.utils.command_exists('upower', function(upower_installed)
 
 		local primary = lunaconf.screens.primary()
 		local widgets = wibox.layout.fixed.horizontal()
