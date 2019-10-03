@@ -22,6 +22,7 @@ OPT_PKG_DEPS = {
   'light-locker': 'required to lock screen properly',
   'numlockx': 'install to enable numlock on start',
   'upower': 'required for battery widget',
+  'xbacklight': 'required for controlling screen brightness',
   'xf86-input-synaptics': 'required for better touchpad behavior',
   'xorg-xinput': 'required to configure mouse and trackpads',
   'xorg-xrandr': 'required for displayswitcher',
