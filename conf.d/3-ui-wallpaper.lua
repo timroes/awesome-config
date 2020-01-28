@@ -7,7 +7,7 @@ local function set_wallpaper(s)
 	if wallpaper then
 		gears.wallpaper.tiled(wallpaper, s)
 	else
-		gears.wallpaper.set(lunaconf.theme.get().wallpaper or '#FFFFFF')
+		gears.wallpaper.set(lunaconf.theme.get().wallpaper or '#000000')
 	end
 end
 

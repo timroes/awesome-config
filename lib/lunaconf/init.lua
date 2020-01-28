@@ -12,7 +12,6 @@ return {
 	layouts = require('lunaconf.layouts'),
 	log = require('lunaconf.log'),
 	notify = require('lunaconf.notify'),
-	pacman = require('lunaconf.pacman'),
 	screens = require('lunaconf.screens'),
 	strings = require('lunaconf.strings'),
 	theme = require('lunaconf.theme'),

@@ -1,7 +1,7 @@
 local lunaconf = require('lunaconf')
 
-lunaconf.pacman.installed('xorg-xrandr', function(is_installed)
-	if is_installed then
+lunaconf.utils.command_exists('xrandr', function(xrandr_exists)
+	if xrandr_exists then
 		lunaconf.displayswitcher({ lunaconf.config.MOD }, 'p')
 	end
 end)

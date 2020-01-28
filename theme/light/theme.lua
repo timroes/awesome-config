@@ -94,7 +94,7 @@ theme.tooltip_bg = theme.notification_bg
 theme.tooltip_fg = theme.notification_fg
 
 -- Wallpaper color if no wallpaper is set in config
-theme.wallpaper = '#F1F1F1'
+theme.wallpaper = '#131b2b'
 
 theme.icon_theme = "Paper"
 
