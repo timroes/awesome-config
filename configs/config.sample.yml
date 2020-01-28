@@ -8,7 +8,7 @@ theme:
   # A path to a wallpaper to use.
   wallpaper:
 
-# Disable the use of a compositor when set to true. Otherwise compton will be started.
+# Disable the use of a compositor when set to true. Otherwise picom will be started.
 disable_compositor:
 
 # Configure dpi settings for the displays

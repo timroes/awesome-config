@@ -17,10 +17,10 @@ PKG_DEPS = {
 # All optional dependencies. These won't be installed automatically, but information
 # will be printed out at the end of this script.
 OPT_PKG_DEPS = {
-  'compton': 'required if you want compositing effects (e.g. shadow)',
   'imagemagick': 'required to make screenshots',
   'light-locker': 'required to lock screen properly',
   'numlockx': 'install to enable numlock on start',
+  'picom': 'required if you want compositing effects (e.g. shadow)',
   'upower': 'required for battery widget',
   'xf86-input-synaptics': 'required for better touchpad behavior',
   'xorg-xinput': 'required to configure mouse and trackpads',
