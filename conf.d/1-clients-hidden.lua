@@ -10,8 +10,6 @@ local hidden_tag = awful.tag.add("Hidden Clients", {
 	invisible = true -- Mark the tag as invisible (custom flag) that will be filtered for in the tag list
 })
 
-local hidden_count_textbox = nil
-
 -- Hide the currently focused client.
 local function hide_client()
 	if not client.focus then return end
