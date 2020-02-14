@@ -9,7 +9,7 @@ lunaconf.keys.globals(
 	end),
 
 	-- Start programs
-	awful.key({ MOD }, "z", function() lunaconf.utils.spawn("xdg-open $HOME") end),
+	awful.key({ MOD }, "e", function() lunaconf.utils.spawn("xdg-open $HOME") end),
 
 	-- Screenshots
 	awful.key({ 'Mod1' }, "Print", function() awful.spawn.spawn(lunaconf.utils.scriptpath() .. "screenshot win") end),
