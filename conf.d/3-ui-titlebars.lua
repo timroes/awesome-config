@@ -11,7 +11,7 @@ local ontop_color = lunaconf.theme.get().ontop_indicator
 if ontop_color then ontop_color = gears.color(ontop_color) end
 
 local function should_show_titlebar(c)
-	return not c.requests_no_titlebar and not c.skip_taskbar and c.floating and not c.skip_titlebar
+	return not c.requests_no_titlebar and not c.skip_taskbar and c.floating and not c.skip_titlebar and not c.is_docked
 end
 
 local function refresh_titlebar(c)
@@ -85,6 +85,7 @@ client.connect_signal("manage", function(c, startup)
 	c:connect_signal("property::screen", refresh_titlebar)
 	c:connect_signal("property::floating", refresh_titlebar)
 	c:connect_signal("property::requests_no_titlebar", refresh_titlebar)
+	c:connect_signal("property::is_docked", refresh_titlebar)
 
 	refresh_titlebar(c)
 end)

@@ -24,7 +24,9 @@ end)
 buttons = gears.table.join(
 	awful.button({ }, 1, function(c) client.focus = c; c:raise() end),
 	awful.button({ MOD }, 1, function(c)
-		lunaconf.clients.smart_move(c)
+		if not c.is_docked then
+			lunaconf.clients.smart_move(c)
+		end
 	end),
 	awful.button({ MOD }, 2, function(c) c:kill() end),
 	awful.button({ MOD }, 3, function(c)
