@@ -15,6 +15,7 @@ end
 
 local dock_tag = awful.tag.add('Dock', {
 	screen = screen.primary,
+	layout = awful.layout.suit.max,
 	invisible = true, -- Mark the tag as invisible (custom flag) that will be filtered for in the tag list
 })
 
@@ -61,6 +62,7 @@ local function resize_to_dock(c)
 end
 
 dock_tag:connect_signal('tagged', function(t, c)
+	c.floating = true
 	c.above = true
 	c.unresizeable = true
 	c.is_docked = true

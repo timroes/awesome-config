@@ -78,7 +78,7 @@ end
 --- screen.
 local function move_in_direction(direction)
 	local c = client.focus
-	if c then
+	if c and not c.is_docked then
 		local new_screen = c.screen:get_next_in_direction(direction)
 		if new_screen then
 			-- Determine whether we need to move to primary tag or the same named tag
