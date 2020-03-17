@@ -20,7 +20,7 @@ pidfile=/run/lightdm.suspend.pid
 
 case "$1" in
   suspend)
-    sleep $suspend_delay && rm $pidfile && systemctl suspend &
+    sleep $suspend_delay && rm $pidfile && systemctl suspend-then-hibernate &
     echo $! > $pidfile
     ;;
   kill)
