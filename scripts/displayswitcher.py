@@ -60,15 +60,18 @@ def display_infos():
   size_regex = re.compile(r'^[^\n]*?(?P<width>\d+)mm x (?P<height>\d+)mm')
 
   displays = []
+  primary = None
+
   # Ignore first entry, since it is the screen line
   for display_str in xrandr_displays[1:]:
 
     match = screen_regex.match(display_str)
+    is_primary = match.group(0).find('primary') > -1
 
     display = {
       'id': match.group('id'),
       'state': match.group('state'),
-      'primary': match.group(0).find('primary') > -1
+      'primary': is_primary
     }
 
     preferred = preferred_regex.search(display_str)
@@ -98,11 +101,15 @@ def display_infos():
         'y': round((display['resolution']['y'] * 25.4) / display['size_mm']['height'])
       }
 
+    if is_primary:
+      primary = display
+
     displays.append(display)
 
   return {
     'connected': [x for x in displays if x['state'] == 'connected'],
-    'disconnected': [x for x in displays if x['state'] == 'disconnected']
+    'disconnected': [x for x in displays if x['state'] == 'disconnected'],
+    'primary': primary
   }
 
 def off_all_disconnected(disconnected):
@@ -160,6 +167,25 @@ def layout_clone(displays):
     subprocess.call(prepare_args)
     subprocess.call(args)
 
+def layout_game(displays):
+  '''
+    Switch to 'Game' mode, i.e. only the primary display active all others switched off
+  '''
+  if len(displays['connected']) > 0 and displays['primary']:
+    primary_id = displays['primary']['id']
+    args = [
+      'xrandr', '--output', primary_id, 
+      '--auto', '--transform', '1,0,0,0,1,0,0,0,1']
+
+  # Switch all other displays off
+  for display in displays['connected']:
+    if display['id'] != primary_id:
+      args.extend(['--output', display['id'], '--off'])
+
+  args.extend(off_all_disconnected(displays['disconnected']))
+
+  subprocess.call(args)
+
 def print_state(infos):
   print(', '.join([x['id'] for x in infos['connected']]), end='')
   if len(infos['connected']) > 1:
@@ -176,7 +202,7 @@ def parse_dpi_args(arg):
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Configures your displays')
-  parser.add_argument('mode', choices=['auto', 'extend', 'clone', 'dpi-only', 'query'])
+  parser.add_argument('mode', choices=['auto', 'extend', 'clone', 'dpi-only', 'query', 'game'])
   parser.add_argument('-d', '--dpi', type=parse_dpi_args, help='Force the dpi for the specific monitor')
 
   args = parser.parse_args()
@@ -188,6 +214,9 @@ if __name__ == '__main__':
     update_dpis(displays, args.dpi)
   elif args.mode == 'extend' or args.mode == 'auto':
     layout_extend(displays)
+    update_dpis(displays, args.dpi)
+  elif args.mode == 'game':
+    layout_game(displays)
     update_dpis(displays, args.dpi)
   elif args.mode == 'dpi-only':
     update_dpis(displays, args.dpi)

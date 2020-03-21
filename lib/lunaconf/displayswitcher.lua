@@ -15,7 +15,7 @@ local lunaconf = {
 
 local switcher = {}
 
-local modes = { 'Extend', 'Clone' }
+local modes = { 'Extend', 'Clone', 'Game' }
 
 local theme = lunaconf.theme.get()
 
@@ -91,13 +91,14 @@ local function show(self)
 	end)
 
 	awful.spawn.easy_async(script .. ' query', function(out, err, reason, code)
+		local connected_display_count = #gears.string.split(out, ',')
 		if code ~= 0 then
 			self.has_multiple_displays = false
 			self.label.text = 'Display only @ ' .. lunaconf.strings.trim(out)
 		else
 			self.has_multiple_displays = true
-			self.label.text = 'Displays @ ' .. lunaconf.strings.trim(out)
 			self.current = 0
+			self.label.text = tostring(connected_display_count) .. ' displays connected'
 		end
 		self._dialog:show()
 		setup_keygrabber(self)
