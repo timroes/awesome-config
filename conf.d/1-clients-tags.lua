@@ -41,6 +41,14 @@ screen.connect_signal('list', rename_screen_tags)
 screen.connect_signal('property::geometry', rename_screen_tags)
 rename_screen_tags()
 
+-- Whenever a tag is removed (due to its screen being removed) we move all clients
+-- from that tag to the primary tag on the (new) primary screen
+tag.connect_signal('removal-pending', function (t)
+	for _, c in pairs(t:clients()) do
+		c:move_to_tag(lunaconf.screens.primary().primary_tag)
+	end
+end)
+
 --- This method will move the currently focused client to the tag with the specified
 --- name. If there isn't a tag with that name yet, it will create it and show it.
 -- Optionally specify a screen onto which the tag should be created and the client
