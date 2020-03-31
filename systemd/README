@@ -1,4 +1,0 @@
-This folder contains several systemd units that can be used if the system supports
-systemd. These units are not copied anywhere by themself. You need to copy them to
-the appropriate places. See each file for detailed explanation on that file and
-where to copy it.
