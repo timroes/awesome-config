@@ -66,7 +66,7 @@ local function refresh_titlebar(c)
 
 	local buttons = awful.util.table.join(
 		awful.button({ }, 1, function() lunaconf.clients.smart_move(c) end),
-		awful.button({ }, 2, function() c:kill() end)
+		awful.button({ }, 2, nil, function() c:kill() end)
 	)
 
 	titlebar:buttons(buttons)
