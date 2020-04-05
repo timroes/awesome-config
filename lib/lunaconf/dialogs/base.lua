@@ -81,7 +81,7 @@ local function new(_, params)
 	self._timeout = params.timeout
 
 	self._margin = params.margin
-	self._margin_widget = wibox.layout.margin(params.widget)
+	self._margin_widget = wibox.container.margin(params.widget)
 
 	self._widget = wibox {
 		widget = self._margin_widget,

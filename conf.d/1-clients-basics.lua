@@ -127,7 +127,7 @@ client.connect_signal("manage", function(c, startup)
 
 	-- Special behavior for chromium browser, so you can pull out tabs easily
 	if c.class == 'Chromium' then
-		local under_mouse = awful.mouse.client_under_pointer()
+		local under_mouse = mouse.current_client
 		-- If the new window is a chromium browser and the window currently under
 		-- the mouse cursor is from the same process it is likely we just pulled
 		-- out a tab, so make it floating, so chromium can control its position
