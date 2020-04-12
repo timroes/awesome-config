@@ -17,7 +17,7 @@ end
 -- Register a callback to preprocess all notifications
 naughty.config.notify_callback = function(args)
 	-- Cancel notifications if dnd widget is enabled
-	if lunaconf.widgets.dnd.is_enabled() then
+	if lunaconf.sidebar.is_dnd_enabled() then
 		return null
 	end
 

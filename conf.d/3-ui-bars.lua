@@ -7,6 +7,14 @@ local lunaconf = require('lunaconf')
 
 local bar_height = 32
 
+local sidebar = lunaconf.sidebar {}
+
+lunaconf.keys.globals(
+	awful.key({ lunaconf.config.MOD, 'Control' }, 'd', function ()
+		sidebar:toggle_dnd()
+	end)
+)
+
 local function margin(widget, left, right, top, bottom, screen)
 	if not screen then
 		screen = lunaconf.screens.primary()
@@ -34,15 +42,13 @@ local function create_primaryscreen_widgets(callback)
 		local systray = wibox.widget.systray()
 		widgets:add(margin(systray, 2, 2, 8, 8))
 
-		-- Add widget to disable screensaver
-		widgets:add(lunaconf.widgets.screensaver(primary))
-		-- Add do not disturb widget with hotkey
-		widgets:add(lunaconf.widgets.dnd(primary, { lunaconf.config.MOD, 'Control' }, 'd'))
-
 		-- Add textclock
 		local clock = wibox.widget.textclock("%H:%M")
 		lunaconf.widgets.calendar(clock) -- Attach calendar to clock
-		widgets:add(margin(clock, 4, 8, 0, 0))
+		widgets:add(margin(clock, 4, 4, 0, 0))
+
+		-- Add the trigger for the sidebar to it
+		widgets:add(sidebar.trigger)
 
 		callback(widgets)
 	end)

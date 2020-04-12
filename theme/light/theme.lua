@@ -1,12 +1,21 @@
 -- The style of the interface
 local theme = {}
 
-local highlight_color   = '#2196F3'
-local highlight_color_light = '#9CCFF7'
-local text_on_highlight = '#FFFFFF'
-local error_color       = '#F44336'
+-- Define the color palette to use
+local colors = {
+	text = {
+		dark = '#343741'
+	},
+	bg = {
+		blue = '#006BB4',
+		red = '#BD271E'
+	} 
+}
 
-local dark_text         = '#333333'
+local highlight_color = colors.bg.blue
+local highlight_color_light = '#9CCFF7'
+
+local panel_bg = '#343741'
 
 theme.font          = "Source Sans Pro Light 11"
 theme.large_font   = "Source Sans Pro 14"
@@ -28,7 +37,7 @@ theme.border_marked = "#339933"
 
 -- Dialogs
 theme.dialog_bg = '#FFFFFF'
-theme.dialog_fg = dark_text
+theme.dialog_fg = colors.text.dark
 theme.dialog_bar_fg = highlight_color
 theme.dialog_bar_disabled_fg = '#AAAAAA'
 theme.dialog_bar_bg = '#E0E0E0'
@@ -37,7 +46,7 @@ theme.dialog_chooser_highlight_border = highlight_color
 
 -- Notifications
 theme.notification_bg = "#FFFFFF"
-theme.notification_fg = dark_text
+theme.notification_fg = colors.text.dark
 theme.notitication_border_width = 0
 theme.notification_margin = 7
 theme.notification_spacing = 7
@@ -48,21 +57,21 @@ theme.notification_icon_size = 42
 
 -- Calendar
 theme.cal_today_bg = highlight_color
-theme.cal_today = text_on_highlight
+theme.cal_today = '#FFFFFF'
 
 -- Battery widget
 theme.battery_bar_color = highlight_color
-theme.battery_warning_color = error_color
+theme.battery_warning_color = colors.bg.red
 
 -- Titlebar
 theme.titlebar_bg_normal = "#F5F5F5"
 theme.titlebar_bg_focus = "#F5F5F5"
 theme.titlebar_fg_normal = "#AAAAAA"
 theme.titlebar_fg_focus = "#555555"
-theme.ontop_indicator = '#E57373'
+theme.ontop_indicator = '#E7664C'
 
 -- Screenbar (the bar on top of each screen)
-theme.screenbar_bg = '#454545'
+theme.screenbar_bg = panel_bg
 theme.screenbar_fg = '#E0E0E0'
 theme.screenbar_inactive_fg = '#888888'
 
@@ -81,7 +90,18 @@ theme.tag_color_selected_bg = highlight_color
 theme.taglist_bg_normal = '#00000000'
 theme.taglist_badge_bg = '#455A6466'
 theme.taglist_badge_fg = '#FFFFFF'
-theme.taglist_screentag_bg_focus = '#78909C'
+
+-- Sidebar
+theme.sidebar_bg = panel_bg
+theme.sidebar_trigger_color = '#69707D'
+theme.sidebar_panel_bg = '#40434f'
+theme.sidebar_dnd_color = '#EE789D'
+theme.sidebar_screensleep_color = '#D6BF57'
+
+-- Switches
+theme.switch_bg = '#98A2B3'
+theme.switch_bg_active = highlight_color
+theme.switch_handle = '#F5F7FA'
 
 -- Tooltips
 theme.tooltip_border_width = 0

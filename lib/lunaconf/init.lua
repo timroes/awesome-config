@@ -13,6 +13,7 @@ return {
 	log = require('lunaconf.log'),
 	notify = require('lunaconf.notify'),
 	screens = require('lunaconf.screens'),
+	sidebar = require('lunaconf.sidebar'),
 	strings = require('lunaconf.strings'),
 	theme = require('lunaconf.theme'),
 	widgets = require('lunaconf.widgets'),
