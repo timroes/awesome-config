@@ -8,7 +8,9 @@ local colors = {
 	},
 	bg = {
 		blue = '#006BB4',
-		red = '#BD271E'
+		red = '#E7664C',
+		pink = '#EE789D',
+		yellow = '#D6BF57'
 	} 
 }
 
@@ -68,12 +70,11 @@ theme.titlebar_bg_normal = "#F5F5F5"
 theme.titlebar_bg_focus = "#F5F5F5"
 theme.titlebar_fg_normal = "#AAAAAA"
 theme.titlebar_fg_focus = "#555555"
-theme.ontop_indicator = '#E7664C'
+theme.ontop_indicator = colors.bg.red
 
 -- Screenbar (the bar on top of each screen)
 theme.screenbar_bg = panel_bg
 theme.screenbar_fg = '#E0E0E0'
-theme.screenbar_inactive_fg = '#888888'
 
 -- Systray
 theme.bg_systray = theme.screenbar_bg
@@ -86,17 +87,12 @@ theme.tag_name_font = 'monospace 11'
 theme.tag_color_bg = '#CCCCCC'
 theme.tag_color_selected_bg = highlight_color
 
--- Taglist
-theme.taglist_bg_normal = '#00000000'
-theme.taglist_badge_bg = '#455A6466'
-theme.taglist_badge_fg = '#FFFFFF'
-
 -- Sidebar
 theme.sidebar_bg = panel_bg
 theme.sidebar_trigger_color = '#69707D'
 theme.sidebar_panel_bg = '#40434f'
-theme.sidebar_dnd_color = '#EE789D'
-theme.sidebar_screensleep_color = '#D6BF57'
+theme.sidebar_dnd_color = colors.bg.pink
+theme.sidebar_screensleep_color = colors.bg.yellow
 
 -- Switches
 theme.switch_bg = '#98A2B3'
