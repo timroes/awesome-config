@@ -18,6 +18,9 @@ local sidebar = lunaconf.sidebar {
 lunaconf.keys.globals(
 	awful.key({ lunaconf.config.MOD, 'Control' }, 'd', function ()
 		sidebar:toggle_dnd()
+	end),
+	awful.key({ lunaconf.config.MOD , 'Shift' }, 'd', function ()
+		sidebar:toggle_dnd()
 	end)
 )
 
