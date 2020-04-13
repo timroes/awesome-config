@@ -62,11 +62,43 @@ local function toggle(self)
 	end
 end
 
-function sidebar:toggle_screensleep()
-	keepscreenawake = not keepscreenawake
+-- Do prevent screen sleep while a client that matches any of the given rules on startup
+-- is still managed.
+local function set_screensleep_rules(self, rules)
+	self._keepalive_clients = {}
+	self._count_keepalive_clients = 0
+	client.connect_signal('manage', function (c)
+		if awful.rules.matches_list(c, rules) then
+			self._keepalive_clients[c.window] = true
+			self._count_keepalive_clients = self._count_keepalive_clients + 1
+			self:set_screensleep(true)
+		end
+	end)
+
+	client.connect_signal('unmanage', function (c)
+		if self._keepalive_clients[c.window] then
+			self._keepalive_clients[c.window] = nil
+			self._count_keepalive_clients = self._count_keepalive_clients - 1
+			if self._count_keepalive_clients == 0 then
+				self:set_screensleep(false)
+			end
+		end
+	end)
+end
+
+function sidebar:set_screensleep(keepalive)
+	-- If we're already in the right state, don't do anything
+	if keepscreenawake == keepalive then
+		return
+	end
+	keepscreenawake = keepalive
 	self._screensleep:set_state(keepscreenawake)
 	self.trigger:emit_signal('widget::redraw_needed')
 	awful.spawn.spawn(lunaconf.utils.scriptpath() .. '/screensaver.sh ' .. (keepscreenawake and 'pause' or 'resume'))
+end
+
+function sidebar:toggle_screensleep()
+	self:set_screensleep(not keepscreenawake)
 end
 
 function sidebar:toggle_dnd()
@@ -243,6 +275,10 @@ local function new(_, args)
 			toggle(self)
 		end)
 	)
+
+	if args.screen_keepalive then
+		set_screensleep_rules(self, args.screen_keepalive)
+	end
 
 	return self
 end

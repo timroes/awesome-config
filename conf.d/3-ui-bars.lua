@@ -7,7 +7,13 @@ local lunaconf = require('lunaconf')
 
 local bar_height = 32
 
-local sidebar = lunaconf.sidebar {}
+local sidebar = lunaconf.sidebar {
+	-- Keep screen automatically alive when one of the following programs is running
+	screen_keepalive = {
+		-- Zoom, but try to catch only the actual meeting window and not the main windows, settings, etc.
+		{ rule = { name = '^Zoom$', class = 'zoom' } }
+	}
+}
 
 lunaconf.keys.globals(
 	awful.key({ lunaconf.config.MOD, 'Control' }, 'd', function ()
