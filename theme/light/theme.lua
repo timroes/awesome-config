@@ -9,6 +9,7 @@ local colors = {
 	bg = {
 		green = '#54B399',
 		blue = '#006BB4',
+		light_blue = '#79AAD9',
 		red = '#E7664C',
 		pink = '#EE789D',
 		rose = '#E4A6C7',
@@ -17,7 +18,7 @@ local colors = {
 }
 
 local highlight_color = colors.bg.blue
-local highlight_text_bg = '#9CCFF7'
+local highlight_text_bg = colors.bg.light_blue
 local highlight_text_color = colors.text.dark
 
 local panel_bg = '#343741'
@@ -94,7 +95,7 @@ theme.sidebar_dnd_color = colors.bg.pink
 theme.sidebar_screensleep_color = colors.bg.yellow
 
 -- Calendar
-theme.calendar_today = colors.bg.green
+theme.calendar_today = highlight_text_bg
 theme.calendar_hover = highlight_text_bg
 theme.calendar_hover_text = highlight_text_color
 theme.calendar_highlight = colors.bg.rose
