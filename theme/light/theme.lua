@@ -16,8 +16,8 @@ local colors = {
 }
 
 local highlight_color = colors.bg.blue
-local highlight_color_light = '#9CCFF7'
-local highlight_color_light_text = colors.text.dark
+local highlight_text_bg = '#9CCFF7'
+local highlight_text_color = colors.text.dark
 
 local panel_bg = '#343741'
 
@@ -45,7 +45,7 @@ theme.dialog_fg = colors.text.dark
 theme.dialog_bar_fg = highlight_color
 theme.dialog_bar_disabled_fg = '#AAAAAA'
 theme.dialog_bar_bg = '#E0E0E0'
-theme.dialog_chooser_highlight = highlight_color_light
+theme.dialog_chooser_highlight = highlight_text_bg
 theme.dialog_chooser_highlight_border = highlight_color
 
 -- Notifications
@@ -94,8 +94,8 @@ theme.sidebar_screensleep_color = colors.bg.yellow
 
 -- Calendar
 theme.calendar_today = colors.bg.green
-theme.calendar_hover = highlight_color_light
-theme.calendar_hover_text = highlight_color_light_text
+theme.calendar_hover = highlight_text_bg
+theme.calendar_hover_text = highlight_text_color
 
 -- Switches
 theme.switch_bg = '#98A2B3'

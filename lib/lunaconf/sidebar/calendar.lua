@@ -30,6 +30,7 @@ local function render_month(self)
 		if i < first_weekday_in_month or i >= first_weekday_in_month + last_day_in_month then
 			widget.visible = false
 		else
+			widget._date = os.time { year = current_year, month = current_month, day = i - first_weekday_in_month + 1 }
 			widget.visible = true
 			widget:get_children_by_id('text')[1].text = tostring(i - first_weekday_in_month + 1)
 			if now.year == current_year and now.month == current_month and (i - first_weekday_in_month + 1) == now.day then
@@ -47,6 +48,27 @@ local function weekday_name(name)
 		text = name,
 		align = 'center'
 	}
+end
+
+local function calculate_datediff(self, daybox)
+	local diff = math.floor(os.difftime(os.time(), daybox._date) // (24 * 60 * 60))
+	local diffstr
+	if diff == 0 then
+		diffstr = 'today'
+	else
+		local diffabs = math.abs(diff)
+		if diffabs < 7 then
+			diffstr = tostring(diffabs) .. ' days'
+		else
+			diffstr = math.floor(diffabs / 7) .. ' weeks'
+			if diffabs % 7 ~= 0 then
+				diffstr = diffstr .. ' and ' .. (diffabs % 7) .. ' days'
+			end
+		end
+		diffstr = diff < 0 and ('in ' .. diffstr) or (diffstr .. ' ago')
+	end
+	self._datediff.widget.text = diffstr
+	self._datediff.visible = true
 end
 
 local function daybox(self, nr)
@@ -72,9 +94,13 @@ local function daybox(self, nr)
 		self._highlighted_day = daybox
 		daybox.bg = lunaconf.theme.get().calendar_hover
 		daybox.fg = lunaconf.theme.get().calendar_hover_text
+		if daybox.visible then
+			calculate_datediff(self, daybox)
+		end
 	end)
 	daybox:connect_signal('mouse::leave', function()
 		self._highlighted_day = nil
+		self._datediff.visible = false
 		daybox.bg = nil
 		daybox.fg = nil
 	end)
@@ -100,6 +126,11 @@ function calendar:next_month()
 		current_year = current_year + 1
 	end
 	render_month(self)
+	-- If a day was highlighted before scrolling we need to reemit the focus event
+	-- to calculate the difference to the new day
+	if self._highlighted_day then
+		self._highlighted_day:emit_signal('mouse::enter')
+	end
 end
 
 function calendar:previous_month()
@@ -109,6 +140,11 @@ function calendar:previous_month()
 		current_year = current_year - 1
 	end
 	render_month(self)
+	-- If a day was highlighted before scrolling we need to reemit the focus event
+	-- to calculate the difference to the new day
+	if self._highlighted_day then
+		self._highlighted_day:emit_signal('mouse::enter')
+	end
 end
 
 local function new(_, args)
@@ -118,7 +154,8 @@ local function new(_, args)
 		forced_num_rows = 7,
 		spacing = lunaconf.dpi.x(2, args.screen),
 		expand = true,
-		homogeneous = true
+		homogeneous = true,
+		superpose = true
 	}
 
 	self._screen = args.screen
@@ -128,7 +165,20 @@ local function new(_, args)
 		align = 'center'
 	}
 
+	self._datediff = wibox.widget {
+		widget = wibox.container.background,
+		shape = gears.shape.rounded_rect,
+		bg = lunaconf.theme.get().calendar_hover,
+		fg = lunaconf.theme.get().calendar_hover_text,
+		visible = false,
+		{
+			widget = wibox.widget.textbox,
+			align = 'center'
+		}
+	}
+
 	self:add_widget_at(self._month_name, 1, 1, 1, 7)
+	self:add_widget_at(self._datediff, 1, 1, 1, 7)
 	self:add_widget_at(weekday_name('Mo'), 2, 1)
 	self:add_widget_at(weekday_name('Tu'), 2, 2)
 	self:add_widget_at(weekday_name('We'), 2, 3)
