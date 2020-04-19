@@ -11,6 +11,7 @@ local colors = {
 		blue = '#006BB4',
 		red = '#E7664C',
 		pink = '#EE789D',
+		rose = '#E4A6C7',
 		yellow = '#D6BF57'
 	} 
 }
@@ -96,6 +97,8 @@ theme.sidebar_screensleep_color = colors.bg.yellow
 theme.calendar_today = colors.bg.green
 theme.calendar_hover = highlight_text_bg
 theme.calendar_hover_text = highlight_text_color
+theme.calendar_highlight = colors.bg.rose
+theme.calendar_highlight_text = highlight_text_color
 
 -- Switches
 theme.switch_bg = '#98A2B3'

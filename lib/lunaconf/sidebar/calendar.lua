@@ -1,16 +1,32 @@
 local wibox = require('wibox')
 local gears = require('gears')
 local lunaconf = {
+	config = require('lunaconf.config'),
 	dpi = require('lunaconf.dpi'),
 	theme = require('lunaconf.theme')
 }
 
 local calendar = {}
 
+local highlights = lunaconf.config.get('calendar.highlights', {})
+
 local day_widgets = {}
 
 local current_month
 local current_year
+
+local function recolor_daybox(self, daybox)
+	if daybox._highlight then
+		daybox.bg = lunaconf.theme.get().calendar_highlight
+		daybox.fg = lunaconf.theme.get().calendar_highlight_text
+	elseif self._highlighted_day == daybox then
+		daybox.bg = lunaconf.theme.get().calendar_hover
+		daybox.fg = lunaconf.theme.get().calendar_hover_text
+	else
+		daybox.bg = nil
+		daybox.fg = nil
+	end
+end
 
 local function render_month(self)
 	local now = os.date('*t')
@@ -27,10 +43,13 @@ local function render_month(self)
 	end
 
 	for i, widget in ipairs(day_widgets) do
+		widget._highlight = nil
+
 		if i < first_weekday_in_month or i >= first_weekday_in_month + last_day_in_month then
 			widget.visible = false
 		else
 			widget._date = os.time { year = current_year, month = current_month, day = i - first_weekday_in_month + 1 }
+			widget._highlight = highlights[os.date('%Y-%m-%d', widget._date)]
 			widget.visible = true
 			widget:get_children_by_id('text')[1].text = tostring(i - first_weekday_in_month + 1)
 			if now.year == current_year and now.month == current_month and (i - first_weekday_in_month + 1) == now.day then
@@ -38,6 +57,7 @@ local function render_month(self)
 			else
 				widget.shape_border_width = 0
 			end
+			recolor_daybox(self, widget)
 		end
 	end
 end
@@ -68,7 +88,7 @@ local function calculate_datediff(self, daybox)
 		diffstr = diff < 0 and ('in ' .. diffstr) or (diffstr .. ' ago')
 	end
 	self._datediff.widget.text = diffstr
-	self._datediff.visible = true
+	self._hover_line.visible = true
 end
 
 local function daybox(self, nr)
@@ -92,17 +112,21 @@ local function daybox(self, nr)
 	}
 	daybox:connect_signal('mouse::enter', function()
 		self._highlighted_day = daybox
-		daybox.bg = lunaconf.theme.get().calendar_hover
-		daybox.fg = lunaconf.theme.get().calendar_hover_text
+		recolor_daybox(self, daybox)
+		if daybox._highlight then
+			self._highlight_label.visible = true
+			self._highlight_label:get_children_by_id('text')[1].text = daybox._highlight
+		end
 		if daybox.visible then
 			calculate_datediff(self, daybox)
 		end
 	end)
 	daybox:connect_signal('mouse::leave', function()
 		self._highlighted_day = nil
-		self._datediff.visible = false
-		daybox.bg = nil
-		daybox.fg = nil
+		self._hover_line.visible = false
+		self._highlight_label.visible = false
+		self._highlight_label:get_children_by_id('text')[1].text = ''
+		recolor_daybox(self, daybox)
 	end)
 	return daybox
 end
@@ -129,7 +153,9 @@ function calendar:next_month()
 	-- If a day was highlighted before scrolling we need to reemit the focus event
 	-- to calculate the difference to the new day
 	if self._highlighted_day then
-		self._highlighted_day:emit_signal('mouse::enter')
+		local prev_highlighted = self._highlighted_day
+		prev_highlighted:emit_signal('mouse::leave')
+		prev_highlighted:emit_signal('mouse::enter')
 	end
 end
 
@@ -143,7 +169,9 @@ function calendar:previous_month()
 	-- If a day was highlighted before scrolling we need to reemit the focus event
 	-- to calculate the difference to the new day
 	if self._highlighted_day then
-		self._highlighted_day:emit_signal('mouse::enter')
+		local prev_highlighted = self._highlighted_day
+		prev_highlighted:emit_signal('mouse::leave')
+		prev_highlighted:emit_signal('mouse::enter')
 	end
 end
 
@@ -167,18 +195,40 @@ local function new(_, args)
 
 	self._datediff = wibox.widget {
 		widget = wibox.container.background,
-		shape = gears.shape.rounded_rect,
 		bg = lunaconf.theme.get().calendar_hover,
 		fg = lunaconf.theme.get().calendar_hover_text,
-		visible = false,
 		{
 			widget = wibox.widget.textbox,
 			align = 'center'
 		}
 	}
 
+	self._highlight_label = wibox.widget {
+		widget = wibox.container.background,
+		bg = lunaconf.theme.get().calendar_highlight,
+		fg = lunaconf.theme.get().calendar_highlight_text,
+		visible = false,
+		{
+			widget = wibox.container.margin,
+			left = lunaconf.dpi.x(6, self._screen),
+			right = lunaconf.dpi.x(6, self._screen),
+			{
+				widget = wibox.widget.textbox,
+				id = 'text'
+			}
+		}
+	}
+
+	self._hover_line = wibox.widget {
+		widget = wibox.container.background,
+		shape = gears.shape.rounded_rect,
+		shape_clip = true,
+		visible = false,
+		wibox.layout.align.horizontal(self._highlight_label, self._datediff)
+	}
+
 	self:add_widget_at(self._month_name, 1, 1, 1, 7)
-	self:add_widget_at(self._datediff, 1, 1, 1, 7)
+	self:add_widget_at(self._hover_line, 1, 1, 1, 7)
 	self:add_widget_at(weekday_name('Mo'), 2, 1)
 	self:add_widget_at(weekday_name('Tu'), 2, 2)
 	self:add_widget_at(weekday_name('We'), 2, 3)
