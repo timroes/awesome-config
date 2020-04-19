@@ -42,6 +42,7 @@ end
 local function hide(self, stop_keygrabber)
 	self._popup.visible = false
 	self._calendar:set_to_now()
+	self._calendar:hide_hover()
 	if stop_keygrabber then
 		self._keygrabber:stop()
 	end
@@ -160,7 +161,9 @@ local function new(_, args)
 		end
 	}
 
-	self._calendar = calendar()
+	self._calendar = calendar {
+		screen = screen.primary
+	}
 
 	self._dnd_switch = switch {
 		screen = screen.primary,
@@ -181,7 +184,7 @@ local function new(_, args)
 	self._popup = awful.popup {
 		widget = {
 			widget = wibox.container.margin,
-			forced_width = dx(450),
+			forced_width = dx(400),
 			left = dx(20),
 			right = dx(20),
 			top = dy(20),
@@ -255,6 +258,7 @@ local function new(_, args)
 			{{}, 's', function() self:toggle_screensleep() end},
 			{{}, 'Up', function() self._calendar:previous_month() end},
 			{{}, 'Down', function() self._calendar:next_month() end},
+			{{}, 'Home', function() self._calendar:set_to_now() end},
 			{{ lunaconf.config.MOD }, '\\', function(keygrabber) keygrabber:stop() end}
 		},
 		stop_key = 'Escape',

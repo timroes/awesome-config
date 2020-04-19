@@ -1,5 +1,9 @@
 local wibox = require('wibox')
 local gears = require('gears')
+local lunaconf = {
+	dpi = require('lunaconf.dpi'),
+	theme = require('lunaconf.theme')
+}
 
 local calendar = {}
 
@@ -9,6 +13,7 @@ local current_month
 local current_year
 
 local function render_month(self)
+	local now = os.date('*t')
 	local first_day_in_month = os.time { year = current_year, month = current_month, day = 1 }
 	local last_day_in_month = tonumber(os.date("%d", os.time { year = current_year,	month = current_month + 1, day = 1 } - 86400))
 	local first_weekday_in_month = math.floor((os.date("%w", first_day_in_month) - 1) % 7 + 1)
@@ -26,7 +31,12 @@ local function render_month(self)
 			widget.visible = false
 		else
 			widget.visible = true
-			widget.widget.text = tostring(i - first_weekday_in_month + 1)
+			widget:get_children_by_id('text')[1].text = tostring(i - first_weekday_in_month + 1)
+			if now.year == current_year and now.month == current_month and (i - first_weekday_in_month + 1) == now.day then
+				widget.shape_border_width = lunaconf.dpi.x(2, self._screen)
+			else
+				widget.shape_border_width = 0
+			end
 		end
 	end
 end
@@ -39,17 +49,36 @@ local function weekday_name(name)
 	}
 end
 
-local function daybox(nr)
-	return wibox.widget {
+local function daybox(self, nr)
+	local daybox = wibox.widget {
 		layout = wibox.container.background,
-		bg = '#79AAD9',
-		shape = gears.shape.rounded_rect,
+		shape = gears.shape.circle,
+		shape_border_color = lunaconf.theme.get().calendar_today,
 		{
-			widget = wibox.widget.textbox,
-			align = 'center',
-			valign = 'center'
+			widget = wibox.container.margin,
+			top = lunaconf.dpi.y(4, self._screen),
+			bottom = lunaconf.dpi.y(4, self._screen),
+			right = lunaconf.dpi.x(4, self._screen),
+			left = lunaconf.dpi.x(4, self._screen),
+			{
+				widget = wibox.widget.textbox,
+				id = 'text',
+				align = 'center',
+				valign = 'center'
+			}
 		}
 	}
+	daybox:connect_signal('mouse::enter', function()
+		self._highlighted_day = daybox
+		daybox.bg = lunaconf.theme.get().calendar_hover
+		daybox.fg = lunaconf.theme.get().calendar_hover_text
+	end)
+	daybox:connect_signal('mouse::leave', function()
+		self._highlighted_day = nil
+		daybox.bg = nil
+		daybox.fg = nil
+	end)
+	return daybox
 end
 
 function calendar:set_to_now()
@@ -57,6 +86,12 @@ function calendar:set_to_now()
 	current_month = now.month
 	current_year = now.year
 	render_month(self)
+end
+
+function calendar:hide_hover()
+	if self._highlighted_day then
+		self._highlighted_day:emit_signal('mouse::leave')
+	end
 end
 
 function calendar:next_month()
@@ -82,10 +117,12 @@ local function new(_, args)
 		layout = wibox.layout.grid,
 		forced_num_cols = 7,
 		forced_num_rows = 7,
-		spacing = 10,
+		spacing = lunaconf.dpi.x(2, args.screen),
 		expand = true,
 		homogeneous = true
 	}
+
+	self._screen = args.screen
 
 	self._month_name = wibox.widget {
 		widget = wibox.widget.textbox,
@@ -102,7 +139,7 @@ local function new(_, args)
 	self:add_widget_at(weekday_name('Su'), 2, 7)
 
 	for i=1, 7*6 do
-		day_widgets[i] = daybox(i)
+		day_widgets[i] = daybox(self, i)
 		self:add_widget_at(day_widgets[i], (i - 1) // 7 + 3, (i - 1) % 7 + 1)
 	end
 

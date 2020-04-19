@@ -7,6 +7,7 @@ local colors = {
 		dark = '#343741'
 	},
 	bg = {
+		green = '#54B399',
 		blue = '#006BB4',
 		red = '#E7664C',
 		pink = '#EE789D',
@@ -16,10 +17,11 @@ local colors = {
 
 local highlight_color = colors.bg.blue
 local highlight_color_light = '#9CCFF7'
+local highlight_color_light_text = colors.text.dark
 
 local panel_bg = '#343741'
 
-theme.font          = "Source Sans Pro Light 11"
+theme.font          = "Source Sans Pro 11"
 theme.large_font   = "Source Sans Pro 14"
 
 theme.bg_normal     = "#F5F5F5AA"
@@ -27,7 +29,7 @@ theme.bg_focus      = "#BEBEBE"
 theme.bg_urgent     = "linear:0,0:0,28:0,#99CC00:1,#739900"
 theme.bg_minimize   = "#111111"
 
-theme.fg_normal     = "#FFFFFF"
+theme.fg_normal     = "#D3DAE6"
 theme.fg_focus      = "#000000"
 theme.fg_urgent     = "#000000"
 theme.fg_minimize   = "#666666"
@@ -56,10 +58,6 @@ theme.notification_padding = 5
 theme.notification_opacity = 0.9
 theme.notification_width = 320
 theme.notification_icon_size = 42
-
--- Calendar
-theme.cal_today_bg = highlight_color
-theme.cal_today = '#FFFFFF'
 
 -- Battery widget
 theme.battery_bar_color = highlight_color
@@ -93,6 +91,11 @@ theme.sidebar_trigger_color = '#69707D'
 theme.sidebar_panel_bg = '#40434f'
 theme.sidebar_dnd_color = colors.bg.pink
 theme.sidebar_screensleep_color = colors.bg.yellow
+
+-- Calendar
+theme.calendar_today = colors.bg.green
+theme.calendar_hover = highlight_color_light
+theme.calendar_hover_text = highlight_color_light_text
 
 -- Switches
 theme.switch_bg = '#98A2B3'

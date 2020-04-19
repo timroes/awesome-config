@@ -52,8 +52,15 @@ local function create_primaryscreen_widgets(callback)
 		widgets:add(margin(systray, 2, 2, 8, 8))
 
 		-- Add textclock
-		local clock = wibox.widget.textclock("%H:%M")
-		lunaconf.widgets.calendar(clock) -- Attach calendar to clock
+		local clock = wibox.widget.textclock('%H:%M')
+		local cal_action = lunaconf.config.get('calendar.action', nil)
+		if cal_action then
+			clock:buttons(
+				awful.button({}, 1, function()
+					lunaconf.utils.spawn("dex '" .. cal_action .. "'")
+				end)
+			)
+		end
 		widgets:add(margin(clock, 4, 4, 0, 0))
 
 		-- Add the trigger for the sidebar to it
