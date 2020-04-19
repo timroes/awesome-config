@@ -45,9 +45,21 @@ local function hide(self, stop_keygrabber)
 	if stop_keygrabber then
 		self._keygrabber:stop()
 	end
+	-- Restore focus to the previously focused client if it's still valid
+	-- and haven't been destroyed in between
+	if self._prev_focused_client and self._prev_focused_client.valid then
+		client.focus = self._prev_focused_client
+	end
+	self._prev_focused_client = nil
 end
 
 local function show(self)
+	-- Store the current focused client to focus it later again
+	if client.focus then
+		self._prev_focused_client = client.focus
+		-- Remove focus from that client while sidebar is opened
+		client.focus = nil
+	end
 	self._popup.screen = screen.primary
 	placement_fn(self._popup)
 	self._keygrabber:start()
@@ -266,6 +278,13 @@ local function new(_, args)
 			hide(self, false)
 		end
 	}
+
+	-- Hide the popup if a client gains focus while it's open
+	client.connect_signal('focus', function()
+		if self._popup.visible then
+			hide(self, true)
+		end
+	end)
 
 	-- Whenever the primary screen change move the popup to that screen (this only works while it's open)
 	screen.connect_signal('primary_changed', function ()
