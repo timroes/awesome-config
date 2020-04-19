@@ -83,14 +83,13 @@ end
 
 function calendar:set_to_now()
 	local now = os.date('*t')
-	current_month = now.month
-	current_year = now.year
-	render_month(self)
-end
-
-function calendar:hide_hover()
-	if self._highlighted_day then
-		self._highlighted_day:emit_signal('mouse::leave')
+	if current_month ~= now.month or current_year ~= now.year then
+		current_month = now.month
+		current_year = now.year
+		if self._highlighted_day then
+			self._highlighted_day:emit_signal('mouse::leave')
+		end
+		render_month(self)
 	end
 end
 

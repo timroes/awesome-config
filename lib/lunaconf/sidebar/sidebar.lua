@@ -42,7 +42,6 @@ end
 local function hide(self, stop_keygrabber)
 	self._popup.visible = false
 	self._calendar:set_to_now()
-	self._calendar:hide_hover()
 	if stop_keygrabber then
 		self._keygrabber:stop()
 	end
