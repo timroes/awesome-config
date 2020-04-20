@@ -71,7 +71,9 @@ local function weekday_name(name)
 end
 
 local function calculate_datediff(self, daybox)
-	local diff = math.floor(os.difftime(os.time(), daybox._date) // (24 * 60 * 60))
+	local now = os.date('*t')
+	local beginning_of_today = os.time { year = now.year, month = now.month, day = now.day }
+	local diff = math.floor(os.difftime(beginning_of_today, daybox._date) // (24 * 60 * 60))
 	local diffstr
 	if diff == 0 then
 		diffstr = 'today'
