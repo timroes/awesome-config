@@ -15,9 +15,13 @@ end
 -- to check in other files whether we can use it
 awesome.register_xproperty('_PICOM_NO_SHADOW', 'boolean')
 
+function awful.client.object.set_disable_shadow(c, value)
+	c:set_xproperty('_PICOM_NO_SHADOW', value)
+end
+
 if not lunaconf.config.get('disable_compositor', false) then
 	local function set_shadow_hint(c)
-		c:set_xproperty("_PICOM_NO_SHADOW", not c.floating)
+		c.disable_shadow = not c.floating
 	end
 
 	-- Shadow handling of picom

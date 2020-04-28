@@ -17,9 +17,6 @@ lunaconf.clients.add_rules({
 			callback = function(c)
 				c.screen = lunaconf.screens.primary()
 
-				-- Disable shadow for tilda clients
-				c:set_xproperty("_PICOM_NO_SHADOW", true)
-		
 				-- Set property of tilda whenever it changes (prevent its own scaling mechanism)
 				c:connect_signal('property::geometry', set_position)
 				-- Fix geometry when the screen of tilda changes

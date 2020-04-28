@@ -1,8 +1,5 @@
-local awful = require('awful')
-local gears = require('gears')
-
 client.connect_signal('manage', function(c)
 	if c.class == 'Ulauncher' then
-		c:set_xproperty("_PICOM_NO_SHADOW", true)
+		c.disable_shadow = true
 	end
 end)
