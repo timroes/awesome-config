@@ -44,6 +44,10 @@ local function toggle_client()
 	if c.first_tag == dock_tag then
 		c:move_to_tag(c.screen.primary_tag)
 	else
+		local prev_docked_clients = dock_tag:clients()
+		for _,pc in pairs(prev_docked_clients) do
+			pc:move_to_tag(pc.screen.primary_tag)
+		end
 		c:move_to_tag(dock_tag)
 	end
 end
