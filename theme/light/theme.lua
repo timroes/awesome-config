@@ -4,7 +4,8 @@ local theme = {}
 -- Define the color palette to use
 local colors = {
 	text = {
-		dark = '#343741'
+		dark = '#343741',
+		gray = '#69707D'
 	},
 	bg = {
 		green = '#54B399',
@@ -86,7 +87,8 @@ theme.tag_color_selected_bg = highlight_color
 
 -- Sidebar
 theme.sidebar_bg = panel_bg
-theme.sidebar_trigger_color = '#69707D'
+theme.sidebar_shaded_text = colors.text.gray
+theme.sidebar_trigger_color = colors.text.gray
 theme.sidebar_panel_bg = '#40434f'
 theme.sidebar_dnd_color = colors.bg.pink
 theme.sidebar_screensleep_color = colors.bg.yellow

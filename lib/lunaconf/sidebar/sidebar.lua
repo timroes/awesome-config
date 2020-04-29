@@ -178,14 +178,6 @@ local function new(_, args)
 		self._trigger_squares,
 	}
 
-	-- Only add the battery widget if upower is installed
-	lunaconf.utils.command_exists('upower', function(upower_installed)
-		if upower_installed then
-			self._battery = battery(screen.primary)
-			self.trigger:insert(1, self._battery.quick_status)
-		end
-	end)
-
 	self._calendar = calendar {
 		screen = screen.primary
 	}
@@ -259,6 +251,25 @@ local function new(_, args)
 						bottom = dy(10),
 						self._calendar
 					}
+				},
+				{
+					widget = wibox.layout.fixed.vertical,
+					spacing = dy(10),
+					{
+						widget = wibox.container.background,
+						bg = theme.sidebar_panel_bg,
+						shape = gears.shape.rounded_rect,
+						{
+							id = 'stats_panel',
+							widget = wibox.layout.fixed.vertical,
+							spacing = dy(2),
+							spacing_widget = {
+								widget = wibox.widget.separator,
+								color = theme.sidebar_bg,
+								span_ratio = 0.95
+							}
+						}
+					}
 				}
 			}
 		},
@@ -269,6 +280,23 @@ local function new(_, args)
 		type = 'dock',
 		visible = false
 	}
+
+	-- Only add the battery widget if upower is installed
+	lunaconf.utils.command_exists('upower', function(upower_installed)
+		if upower_installed then
+			self._battery = battery(screen.primary)
+			self.trigger:insert(1, self._battery.quick_status)
+			local battery_stats = wibox.widget {
+				widget = wibox.container.margin,
+				left = dx(10),
+				right = dx(10),
+				top = dy(10),
+				bottom = dy(10),
+				self._battery.full_status
+			}
+			self._popup.widget:get_children_by_id('stats_panel')[1]:add(battery_stats)
+		end
+	end)
 
 	-- Mouse button mappings
 	self._popup:buttons(gears.table.join(

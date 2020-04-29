@@ -1,20 +1,19 @@
-local awful = require('awful')
 local wibox = require('wibox')
 local gears = require('gears')
 local inspect = require('inspect')
 local lunaconf = {
 	dbus = require('lunaconf.dbus'),
 	dpi = require('lunaconf.dpi'),
-	icons = require('lunaconf.icons'),
 	notify = require('lunaconf.notify'),
 	theme = require('lunaconf.theme')
 }
+
+local stats_panel = require('lunaconf.sidebar.stats_panel')
 
 local battery = {}
 
 local theme = lunaconf.theme.get()
 
-local dbus_dest = 'org.freedesktop.UPower'
 local empty_percentage = 30
 local critical_time_left_minutes = 15
 
@@ -40,6 +39,9 @@ local state_strings = {
 local function to_time_string(time)
 	local hours = math.floor(time / 3600)
 	local minutes = math.floor((time - hours * 3600) / 60)
+	if hours == 0 and minutes == 0 then
+		return ''
+	end
 	return string.format('%sh %sm', hours, minutes)
 end
 
@@ -47,17 +49,27 @@ local function set_color(self, color)
 	if color ~= self._quick_status_bar.color then
 		self._quick_status_bar.color = color
 		self._quick_status_bar.border_color = color
+		self._stats_panel:set_color(color)
 	end
 end
 
 local function update_battery(self)
-	lunaconf.dbus.system(dbus_dest,
+	lunaconf.dbus.system('org.freedesktop.UPower',
 		'/org/freedesktop/UPower/devices/DisplayDevice',
 		'org.freedesktop.DBus.Properties',
 		'GetAll',
 		{ 's:org.freedesktop.UPower.Device' },
 		function(status)
 			self._quick_status_bar:set_value(status.Percentage)
+			self._stats_panel:set_percentage(status.Percentage)
+			self._stats_panel:set_title('Battery (' .. state_strings[status.State] .. ')')
+			local time = status.State == 1
+				and to_time_string(status.TimeToFull)
+				or to_time_string(status.TimeToEmpty)
+			local format_string = time == ''
+				and '%.1f%% / %.2f W'
+				or '%.1f%% / %.2f W / %s'
+			self._stats_panel:set_value(string.format(format_string, status.Percentage, status.EnergyRate, time))
 
 			if status.State == 4 then
 				self._battery_warning_shown = false
@@ -83,19 +95,6 @@ local function update_battery(self)
 					set_color(self, colors.bat_good)
 				end
 			end
-
-			local time = status.State == 1 -- Charging
-				and 'Time to full:\t<b>' .. to_time_string(status.TimeToFull) .. '</b>'
-				or 'Remaining:\t<b>' .. to_time_string(status.TimeToEmpty) .. '</b>'
-			tooltip.markup = string.format(
-				'Status:\t\t<b>%s</b>\n' ..
-				'Percentage:\t<b>%.0f%%</b>\n%s\n' ..
-				'Energy rate:\t<b>%.2f W</b>',
-				state_strings[status.State],
-				status.Percentage,
-				time,
-				status.EnergyRate
-			)
 		end)
 end
 
@@ -125,16 +124,17 @@ local function new(_, screen)
 		bar_shape = gears.shape.rounded_bar
 	}
 
-	tooltip = awful.tooltip {
-		mode = 'outside',
-		objects = { self._quick_status_bar }
+	self._stats_panel = stats_panel {
+		screen = screen,
+		title = 'Battery',
+		color = colors.fully_charged
 	}
 
 	lunaconf.dbus.properties_changed('/org/freedesktop/UPower/devices/DisplayDevice', function() update_battery(self) end)
-
 	update_battery(self)
 
 	self.quick_status = self._quick_status_bar
+	self.full_status = self._stats_panel
 
 	return self
 end
