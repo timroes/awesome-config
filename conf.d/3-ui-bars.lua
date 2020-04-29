@@ -37,37 +37,29 @@ end
 
 --- Create the widgets, that should only be shown on the primary screen.
 --- The widgets will be passed to the specified callback once they are created.
-local function create_primaryscreen_widgets(callback)
-	lunaconf.utils.command_exists('upower', function(upower_installed)
+local function create_primaryscreen_widgets()
+	local primary = lunaconf.screens.primary()
+	local widgets = wibox.layout.fixed.horizontal()
 
-		local primary = lunaconf.screens.primary()
-		local widgets = wibox.layout.fixed.horizontal()
+	local systray = wibox.widget.systray()
+	widgets:add(margin(systray, 2, 2, 8, 8))
+	
+	-- Add textclock
+	local clock = wibox.widget.textclock('%H:%M')
+	local cal_action = lunaconf.config.get('calendar.action', nil)
+	if cal_action then
+		clock:buttons(
+			awful.button({}, 1, function()
+				lunaconf.utils.spawn("dex '" .. cal_action .. "'")
+			end)
+		)
+	end
+	widgets:add(margin(clock, 4, 4, 0, 0))
+	
+	-- Add the trigger for the sidebar to it
+	widgets:add(sidebar.trigger)
 
-		-- Add battery widget if upower is installed
-		if upower_installed then
-			widgets:add(margin(lunaconf.widgets.battery(primary), 4, 4, 0, 0))
-		end
-
-		local systray = wibox.widget.systray()
-		widgets:add(margin(systray, 2, 2, 8, 8))
-
-		-- Add textclock
-		local clock = wibox.widget.textclock('%H:%M')
-		local cal_action = lunaconf.config.get('calendar.action', nil)
-		if cal_action then
-			clock:buttons(
-				awful.button({}, 1, function()
-					lunaconf.utils.spawn("dex '" .. cal_action .. "'")
-				end)
-			)
-		end
-		widgets:add(margin(clock, 4, 4, 0, 0))
-
-		-- Add the trigger for the sidebar to it
-		widgets:add(sidebar.trigger)
-
-		callback(widgets)
-	end)
+	return widgets
 end
 
 --- Function to be executed whenever the primary screen changes.
@@ -81,9 +73,7 @@ local function update_primary_bar()
 	end
 	-- Create new widgets and attach them on the current primary
 	local primary_bar = lunaconf.screens.primary().bar
-	create_primaryscreen_widgets(function(widgets)
-		primary_bar.widget:set_right(widgets)
-	end)
+	primary_bar.widget:set_right(create_primaryscreen_widgets())
 end
 
 -- For all current and future screens create a bar

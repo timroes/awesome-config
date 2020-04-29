@@ -6,6 +6,7 @@ local naughty = require('naughty')
 -- Internal widgets
 local switch = require('lunaconf.sidebar.switch')
 local calendar = require('lunaconf.sidebar.calendar')
+local battery = require('lunaconf.sidebar.battery')
 
 local lunaconf = {
 	config = require('lunaconf.config'),
@@ -105,7 +106,7 @@ function sidebar:set_screensleep(keepalive)
 	end
 	keepscreenawake = keepalive
 	self._screensleep:set_state(keepscreenawake)
-	self.trigger:emit_signal('widget::redraw_needed')
+	self._trigger_squares:emit_signal('widget::redraw_needed')
 	awful.spawn.spawn(lunaconf.utils.scriptpath() .. '/screensaver.sh ' .. (keepscreenawake and 'pause' or 'resume'))
 end
 
@@ -116,7 +117,7 @@ end
 function sidebar:toggle_dnd()
 	dnd_enabled = not dnd_enabled
 	self._dnd_switch:set_state(dnd_enabled)
-	self.trigger:emit_signal('widget::redraw_needed')
+	self._trigger_squares:emit_signal('widget::redraw_needed')
 	if dnd_enabled then
 		naughty.destroy_all_notifications()
 	end
@@ -132,11 +133,8 @@ local function new(_, args)
 		self[k] = v
 	end
 	
-	self.trigger = wibox.widget {
+	self._trigger_squares = wibox.widget {
 		widget = wibox.widget.base.make_widget,
-		buttons = gears.table.join(
-			awful.button({}, 1, function() toggle(self) end)
-		),
 		fit = function (s, context, width, height)
 			return math.min(height, width), math.min(height, width)
 		end,
@@ -171,6 +169,22 @@ local function new(_, args)
 			cr:fill()
 		end
 	}
+
+	self.trigger = wibox.widget {
+		widget = wibox.layout.fixed.horizontal,
+		buttons = gears.table.join(
+			awful.button({}, 1, function() toggle(self) end)
+		),
+		self._trigger_squares,
+	}
+
+	-- Only add the battery widget if upower is installed
+	lunaconf.utils.command_exists('upower', function(upower_installed)
+		if upower_installed then
+			self._battery = battery(screen.primary)
+			self.trigger:insert(1, self._battery.quick_status)
+		end
+	end)
 
 	self._calendar = calendar {
 		screen = screen.primary

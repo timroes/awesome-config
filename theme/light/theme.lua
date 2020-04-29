@@ -10,10 +10,11 @@ local colors = {
 		green = '#54B399',
 		blue = '#006BB4',
 		light_blue = '#79AAD9',
-		red = '#E7664C',
+		red = '#BD271E',
 		pink = '#EE789D',
 		rose = '#E4A6C7',
-		yellow = '#D6BF57'
+		yellow = '#D6BF57',
+		orange = '#DA8B45'
 	} 
 }
 
@@ -61,16 +62,12 @@ theme.notification_opacity = 0.9
 theme.notification_width = 320
 theme.notification_icon_size = 42
 
--- Battery widget
-theme.battery_bar_color = highlight_color
-theme.battery_warning_color = colors.bg.red
-
 -- Titlebar
 theme.titlebar_bg_normal = "#F5F5F5"
 theme.titlebar_bg_focus = "#F5F5F5"
 theme.titlebar_fg_normal = "#AAAAAA"
 theme.titlebar_fg_focus = "#555555"
-theme.ontop_indicator = colors.bg.red
+theme.ontop_indicator = colors.bg.orange
 
 -- Screenbar (the bar on top of each screen)
 theme.screenbar_bg = panel_bg
@@ -100,6 +97,13 @@ theme.calendar_hover = highlight_text_bg
 theme.calendar_hover_text = highlight_text_color
 theme.calendar_highlight = colors.bg.rose
 theme.calendar_highlight_text = highlight_text_color
+
+-- Battery widget
+theme.battery_charging = colors.bg.light_blue
+theme.battery_fully_charged = colors.bg.blue
+theme.battery_good = colors.bg.green
+theme.battery_empty = colors.bg.orange
+theme.battery_critical = colors.bg.red
 
 -- Switches
 theme.switch_bg = '#98A2B3'

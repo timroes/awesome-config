@@ -52,9 +52,9 @@ function dbus.properties_changed(path, listener)
 end
 
 -- Listen for PropertiesChanged events and call the registered listener for that path.
-awesome_dbus.connect_signal('org.freedesktop.DBus.Properties', function(signal, ...)
+awesome_dbus.connect_signal('org.freedesktop.DBus.Properties', function(signal, respType, response)
 	if signal.member == 'PropertiesChanged' and properties_changed_listener[signal.path] then
-		properties_changed_listener[signal.path](signal, ...)
+		properties_changed_listener[signal.path](response, respType, signal)
 	end
 end)
 
