@@ -96,6 +96,7 @@ theme.sidebar_screensleep_color = colors.bg.yellow
 
 -- Stats
 theme.stats_memory = colors.bg.purple
+theme.stats_cpu = colors.bg.purple
 
 -- Calendar
 theme.calendar_today = highlight_text_bg

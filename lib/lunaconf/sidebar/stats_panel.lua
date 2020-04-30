@@ -14,11 +14,16 @@ function stats_panel:set_title(title)
 end
 
 function stats_panel:set_percentage(percentage)
-	self._bar.value = percentage
+	if percentage ~= self._bar.value then
+		self._bar.value = percentage
+	end
 end
 
 function stats_panel:set_value(value)
-	self._value.markup = '<small>' .. value .. '</small>'
+	if self._last_value ~= value then
+		self._last_value = value
+		self._value.markup = '<small>' .. value .. '</small>'
+	end
 end
 
 function stats_panel:set_color(color)
@@ -53,6 +58,8 @@ local function new(_, args)
 			}
 		}
 	}
+
+	self._last_value = args.value or ''
 
 	self._title = self:get_children_by_id('title_textbox')[1]
 	self._value = self:get_children_by_id('value_textbox')[1]

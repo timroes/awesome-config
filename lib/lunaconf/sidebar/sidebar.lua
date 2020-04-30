@@ -17,6 +17,7 @@ local lunaconf = {
 	utils = require('lunaconf.utils')
 }
 local screen = screen
+local awesome = awesome
 local dx = function (v) return lunaconf.dpi.x(v, screen.primary) end
 local dy = function (v) return lunaconf.dpi.y(v, screen.primary) end
 
@@ -29,20 +30,54 @@ awful.spawn.spawn(lunaconf.utils.scriptpath() .. '/screensaver.sh resume')
 
 local theme = lunaconf.theme.get()
 
-local function calculate_stats(self)
-	-- Load memory stats via `free`
-	awful.spawn.easy_async('free -b', function (stdout)
-		local total, used, free, shared, buffers, available = stdout:match('Mem:%s*(%d+)%s+(%d+)%s+(%d+)%s+(%d+)%s+(%d+)%s+(%d+)')
-		local unfreeable_memory = tonumber(total) - tonumber(available)
-		local mem_percentage = (unfreeable_memory / tonumber(total)) * 100
-		self._memory_stats:set_value(
-			string.format('%s / %s',
-				lunaconf.utils.humanreadable_bytes(unfreeable_memory),
-				lunaconf.utils.humanreadable_bytes(tonumber(total))
+local function start_stats_calculation(self)
+	-- Load memory stats via `free` every 2 seconds
+	local memory_pid = awful.spawn.with_line_callback('free -b -s 2', { 
+		stdout = function (stdout)
+			-- Skip the lines that are not containing the memory output
+			if not gears.string.startswith(stdout, 'Mem:') then
+				return
+			end
+			local total, used, free, shared, buffers, available = stdout:match('Mem:%s*(%d+)%s+(%d+)%s+(%d+)%s+(%d+)%s+(%d+)%s+(%d+)')
+			local unfreeable_memory = tonumber(total) - tonumber(available)
+			local mem_percentage = (unfreeable_memory / tonumber(total)) * 100
+			self._memory_stats:set_value(
+				string.format('%s / %s',
+					lunaconf.utils.humanreadable_bytes(unfreeable_memory),
+					lunaconf.utils.humanreadable_bytes(tonumber(total))
+				)
 			)
-		)
-		self._memory_stats:set_percentage(mem_percentage)
-	end)
+			self._memory_stats:set_percentage(mem_percentage)
+		end
+	})
+
+	local skipped_first_line = false
+	-- Load CPU statistics from `top` batch mode
+	local top_pid = awful.spawn.with_line_callback('top -b -d 1.5 -p 0', {
+		stdout = function (stdout)
+			if not gears.string.startswith(stdout, '%Cpu(s)') then
+				return
+			end
+			-- Skip the first output from top since it's very unreliable values
+			if not skipped_first_line then
+				skipped_first_line = true
+				return
+			end
+			local idle = stdout:match('([0-9.]+) id')
+			local busy_time = 100 - tonumber(idle)
+			self._cpu_stats:set_value(tostring(busy_time) .. '%')
+			self._cpu_stats:set_percentage(busy_time)
+		end
+	})
+
+	return function()
+		-- We're blanking out the percentage value on hiding, since we need some time to calculate
+		-- it the next time we open the panel and we don't want the old value to look like it's still
+		-- valid during calculation.
+		self._cpu_stats:set_value('⋯')
+		awesome.kill(memory_pid, awesome.unix_signal.SIGINT)
+		awesome.kill(top_pid, awesome.unix_signal.SIGINT)
+	end
 end
 
 -- Placement function for the sidebar
@@ -54,7 +89,10 @@ end
 local function hide(self, stop_keygrabber)
 	self._popup.visible = false
 	self._calendar:set_to_now()
-	self._stats_timer:stop()
+	if self._stop_stats_calculation then
+		self._stop_stats_calculation()
+		self._stop_stats_calculation = nil
+	end
 	if stop_keygrabber then
 		self._keygrabber:stop()
 	end
@@ -75,8 +113,7 @@ local function show(self)
 	end
 	self._popup.screen = screen.primary
 	placement_fn(self._popup)
-	calculate_stats(self)
-	self._stats_timer:start()
+	self._stop_stats_calculation = start_stats_calculation(self)
 	self._keygrabber:start()
 	self._popup.visible = true
 end
@@ -212,6 +249,13 @@ local function new(_, args)
 		on_toggle = function() self:toggle_screensleep() end
 	}
 
+	self._cpu_stats = stats_panel {
+		screen = screen.primary,
+		color = theme.stats_cpu,
+		title = 'CPU',
+		value = '⋯'
+	}
+
 	self._memory_stats = stats_panel {
 		screen = screen.primary,
 		color = theme.stats_memory,
@@ -294,6 +338,14 @@ local function new(_, args)
 								right = dx(10),
 								top = dy(10),
 								bottom = dy(10),
+								self._cpu_stats
+							},
+							{
+								widget = wibox.container.margin,
+								left = dx(10),
+								right = dx(10),
+								top = dy(10),
+								bottom = dy(10),
 								self._memory_stats
 							}
 						}
@@ -324,11 +376,11 @@ local function new(_, args)
 		self._popup.widget:get_children_by_id('stats_panel')[1]:add(battery_stats)
 	end)
 
-	self._stats_timer = gears.timer {
-		timeout = 1,
-		autostart = false,
-		callback = function() calculate_stats(self) end
-	}
+	-- self._stats_timer = gears.timer {
+	-- 	timeout = 1,
+	-- 	autostart = false,
+	-- 	callback = function() start_stats_calculation(self) end
+	-- }
 
 	-- Mouse button mappings
 	self._popup:buttons(gears.table.join(
