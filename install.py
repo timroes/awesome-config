@@ -17,6 +17,7 @@ PKG_DEPS = {
 # All optional dependencies. These won't be installed automatically, but information
 # will be printed out at the end of this script.
 OPT_PKG_DEPS = {
+  'cpupower': 'required to show CPU frequency information in sidebar',
   'imagemagick': 'required to make screenshots',
   'light-locker': 'required to lock screen properly',
   'numlockx': 'install to enable numlock on start',

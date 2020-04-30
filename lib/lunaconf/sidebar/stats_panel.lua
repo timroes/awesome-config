@@ -10,7 +10,10 @@ local stats_panel = {}
 local theme = lunaconf.theme.get()
 
 function stats_panel:set_title(title)
-	self._title.markup = '<small>' .. title .. '</small>'
+	if self._last_title ~= value then
+		self._last_title = title
+		self._title.markup = '<small>' .. title .. '</small>'
+	end
 end
 
 function stats_panel:set_percentage(percentage)
@@ -60,6 +63,7 @@ local function new(_, args)
 	}
 
 	self._last_value = args.value or ''
+	self._last_title = args.title or ''
 
 	self._title = self:get_children_by_id('title_textbox')[1]
 	self._value = self:get_children_by_id('value_textbox')[1]

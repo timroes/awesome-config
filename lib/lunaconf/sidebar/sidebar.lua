@@ -70,6 +70,12 @@ local function start_stats_calculation(self)
 		end
 	})
 
+	-- Get information about the CPU frequency if cpupower was installed
+	if self._cpupower_timer then
+		self._cpupower_callback()
+		self._cpupower_timer:start()
+	end
+
 	return function()
 		-- We're blanking out the percentage value on hiding, since we need some time to calculate
 		-- it the next time we open the panel and we don't want the old value to look like it's still
@@ -77,6 +83,9 @@ local function start_stats_calculation(self)
 		self._cpu_stats:set_value('⋯')
 		awesome.kill(memory_pid, awesome.unix_signal.SIGINT)
 		awesome.kill(top_pid, awesome.unix_signal.SIGINT)
+		if self._cpupower_timer then
+			self._cpupower_timer:stop()
+		end
 	end
 end
 
@@ -376,11 +385,19 @@ local function new(_, args)
 		self._popup.widget:get_children_by_id('stats_panel')[1]:add(battery_stats)
 	end)
 
-	-- self._stats_timer = gears.timer {
-	-- 	timeout = 1,
-	-- 	autostart = false,
-	-- 	callback = function() start_stats_calculation(self) end
-	-- }
+	lunaconf.utils.only_if_command_exists('cpupower', function()
+		self._cpupower_callback = function()
+			awful.spawn.easy_async('cpupower frequency-info', function(stdout)
+				local governor = stdout:match('governor "([^"]+)"')
+				local frequency = stdout:match('current CPU frequency: ([0-9.]+ %w+)')
+				self._cpu_stats:set_title('CPU (' .. governor .. ' / ' .. frequency .. ')')
+			end)
+		end
+		self._cpupower_timer = gears.timer {
+			timeout = 2,
+			callback = self._cpupower_callback
+		}
+ end)
 
 	-- Mouse button mappings
 	self._popup:buttons(gears.table.join(
