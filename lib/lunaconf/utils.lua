@@ -12,6 +12,16 @@ function utils.scriptpath()
 	return gears.filesystem.get_configuration_dir() .. '/scripts/'
 end
 
+local byte_units = {"", "K", "M", "G", "T", "P", "E", "Z", "Y"}
+
+--- Returns a number of bytes into a human readable byte string.
+-- @param bytes a number of bytes
+function utils.humanreadable_bytes(bytes)
+	local exponent = math.min(math.floor(math.log(bytes) / math.log(1024)), 8)
+	local value = bytes / math.pow(2, exponent * 10)
+	return string.format('%.1f', value) .. byte_units[exponent + 1]
+end
+
 --- A wrapper around `awful.spawn`, that spawns a process but forwards it's
 --- stdout and stderr to a logfile.
 -- @param cmd the command and all its parameters to run

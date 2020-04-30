@@ -7,18 +7,13 @@ local naughty = require('naughty')
 local switch = require('lunaconf.sidebar.switch')
 local calendar = require('lunaconf.sidebar.calendar')
 local battery = require('lunaconf.sidebar.battery')
+local stats_panel = require('lunaconf.sidebar.stats_panel')
 
 local lunaconf = {
 	config = require('lunaconf.config'),
 	dpi = require('lunaconf.dpi'),
-	icons = require('lunaconf.icons'),
 	keys = require('lunaconf.keys'),
-	notify = require('lunaconf.notify'),
-	screens = require('lunaconf.screens'),
 	theme = require('lunaconf.theme'),
-	dialogs = {
-		base = require('lunaconf.dialogs.base')
-	},
 	utils = require('lunaconf.utils')
 }
 local screen = screen
@@ -34,6 +29,22 @@ awful.spawn.spawn(lunaconf.utils.scriptpath() .. '/screensaver.sh resume')
 
 local theme = lunaconf.theme.get()
 
+local function calculate_stats(self)
+	-- Load memory stats via `free`
+	awful.spawn.easy_async('free -b', function (stdout)
+		local total, used, free, shared, buffers, available = stdout:match('Mem:%s*(%d+)%s+(%d+)%s+(%d+)%s+(%d+)%s+(%d+)%s+(%d+)')
+		local unfreeable_memory = tonumber(total) - tonumber(available)
+		local mem_percentage = (unfreeable_memory / tonumber(total)) * 100
+		self._memory_stats:set_value(
+			string.format('%s / %s',
+				lunaconf.utils.humanreadable_bytes(unfreeable_memory),
+				lunaconf.utils.humanreadable_bytes(tonumber(total))
+			)
+		)
+		self._memory_stats:set_percentage(mem_percentage)
+	end)
+end
+
 -- Placement function for the sidebar
 local function placement_fn(wibox)
 	local p = awful.placement.maximize_vertically + awful.placement.right
@@ -43,6 +54,7 @@ end
 local function hide(self, stop_keygrabber)
 	self._popup.visible = false
 	self._calendar:set_to_now()
+	self._stats_timer:stop()
 	if stop_keygrabber then
 		self._keygrabber:stop()
 	end
@@ -63,6 +75,8 @@ local function show(self)
 	end
 	self._popup.screen = screen.primary
 	placement_fn(self._popup)
+	calculate_stats(self)
+	self._stats_timer:start()
 	self._keygrabber:start()
 	self._popup.visible = true
 end
@@ -198,6 +212,12 @@ local function new(_, args)
 		on_toggle = function() self:toggle_screensleep() end
 	}
 
+	self._memory_stats = stats_panel {
+		screen = screen.primary,
+		color = theme.stats_memory,
+		title = 'Memory'
+	}
+
 	self._popup = awful.popup {
 		widget = {
 			widget = wibox.container.margin,
@@ -267,6 +287,14 @@ local function new(_, args)
 								widget = wibox.widget.separator,
 								color = theme.sidebar_bg,
 								span_ratio = 0.95
+							},
+							{
+								widget = wibox.container.margin,
+								left = dx(10),
+								right = dx(10),
+								top = dy(10),
+								bottom = dy(10),
+								self._memory_stats
 							}
 						}
 					}
@@ -282,21 +310,25 @@ local function new(_, args)
 	}
 
 	-- Only add the battery widget if upower is installed
-	lunaconf.utils.command_exists('upower', function(upower_installed)
-		if upower_installed then
-			self._battery = battery(screen.primary)
-			self.trigger:insert(1, self._battery.quick_status)
-			local battery_stats = wibox.widget {
-				widget = wibox.container.margin,
-				left = dx(10),
-				right = dx(10),
-				top = dy(10),
-				bottom = dy(10),
-				self._battery.full_status
-			}
-			self._popup.widget:get_children_by_id('stats_panel')[1]:add(battery_stats)
-		end
+	lunaconf.utils.only_if_command_exists('upower', function(upower_installed)
+		self._battery = battery(screen.primary)
+		self.trigger:insert(1, self._battery.quick_status)
+		local battery_stats = wibox.widget {
+			widget = wibox.container.margin,
+			left = dx(10),
+			right = dx(10),
+			top = dy(10),
+			bottom = dy(10),
+			self._battery.full_status
+		}
+		self._popup.widget:get_children_by_id('stats_panel')[1]:add(battery_stats)
 	end)
+
+	self._stats_timer = gears.timer {
+		timeout = 1,
+		autostart = false,
+		callback = function() calculate_stats(self) end
+	}
 
 	-- Mouse button mappings
 	self._popup:buttons(gears.table.join(

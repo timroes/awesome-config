@@ -15,7 +15,8 @@ local colors = {
 		pink = '#EE789D',
 		rose = '#E4A6C7',
 		yellow = '#D6BF57',
-		orange = '#DA8B45'
+		orange = '#DA8B45',
+		purple = '#A987D1'
 	} 
 }
 
@@ -92,6 +93,9 @@ theme.sidebar_trigger_color = colors.text.gray
 theme.sidebar_panel_bg = '#40434f'
 theme.sidebar_dnd_color = colors.bg.pink
 theme.sidebar_screensleep_color = colors.bg.yellow
+
+-- Stats
+theme.stats_memory = colors.bg.purple
 
 -- Calendar
 theme.calendar_today = highlight_text_bg
