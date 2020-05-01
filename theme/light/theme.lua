@@ -69,7 +69,7 @@ theme.titlebar_bg_normal = "#F5F5F5"
 theme.titlebar_bg_focus = "#F5F5F5"
 theme.titlebar_fg_normal = "#AAAAAA"
 theme.titlebar_fg_focus = "#555555"
-theme.ontop_indicator = colors.bg.orange
+theme.ontop_indicator = colors.bg.pink
 
 -- Screenbar (the bar on top of each screen)
 theme.screenbar_bg = panel_bg
