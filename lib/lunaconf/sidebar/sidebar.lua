@@ -97,7 +97,6 @@ end
 
 local function hide(self, stop_keygrabber)
 	self._popup.visible = false
-	self._calendar:set_to_now()
 	if self._stop_stats_calculation then
 		self._stop_stats_calculation()
 		self._stop_stats_calculation = nil
@@ -124,6 +123,7 @@ local function show(self)
 	placement_fn(self._popup)
 	self._stop_stats_calculation = start_stats_calculation(self)
 	self._keygrabber:start()
+	self._calendar:set_to_now()
 	self._popup.visible = true
 end
 
