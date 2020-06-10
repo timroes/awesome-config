@@ -36,3 +36,7 @@ calendar:
 # The first one in this list will be used when starting awesome.
 keyboard_layouts:
   - us
+
+## Set this property to enable brightness control. You must make sure to have write permission
+## to this file. See scripts/brightness.sh for more information.
+# brightness_device: /sys/class/backlight/intel_backlight

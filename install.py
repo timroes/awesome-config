@@ -23,7 +23,6 @@ OPT_PKG_DEPS = {
   'numlockx': 'install to enable numlock on start',
   'picom': 'required if you want compositing effects (e.g. shadow)',
   'upower': 'required for battery widget',
-  'xorg-xbacklight': 'required for controlling screen brightness',
   'xf86-input-libinput': 'required for better touchpad behavior',
   'xorg-xinput': 'required to configure mouse and trackpads',
   'xorg-xrandr': 'required for displayswitcher',
