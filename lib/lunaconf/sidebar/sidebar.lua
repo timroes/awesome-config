@@ -65,7 +65,7 @@ local function start_stats_calculation(self)
 			end
 			local idle = stdout:match('([0-9.]+) id')
 			local busy_time = 100 - tonumber(idle)
-			self._cpu_stats:set_value(tostring(busy_time) .. '%')
+			self._cpu_stats:set_value(string.format('%.1f', busy_time) .. '%')
 			self._cpu_stats:set_percentage(busy_time)
 		end
 	})
