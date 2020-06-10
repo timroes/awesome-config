@@ -24,7 +24,7 @@ OPT_PKG_DEPS = {
   'picom': 'required if you want compositing effects (e.g. shadow)',
   'upower': 'required for battery widget',
   'xorg-xbacklight': 'required for controlling screen brightness',
-  'xf86-input-synaptics': 'required for better touchpad behavior',
+  'xf86-input-libinput': 'required for better touchpad behavior',
   'xorg-xinput': 'required to configure mouse and trackpads',
   'xorg-xrandr': 'required for displayswitcher',
   'xorg-xrdb': 'required to set dpi for some applications in displayswitcher'
