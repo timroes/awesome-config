@@ -10,8 +10,10 @@ touchpad=$(xinput list --name-only | grep -i "Synaptics TouchPad")
 # If this device has a Synaptics TouchPad set some reasonable values for it
 if [ "$touchpad" ]; then
 	logger -t $TAG "Setting properties for input device $touchpad"
-	# Enable Palm detection to prevent moving mouse when whole palm is on the touchpda
+	# Enable Palm detection to prevent moving mouse when whole palm is on the touchpad
 	xinput set-prop "$touchpad" 'libinput Click Method Enabled' 0 0
+	# Enable touching on the pad
+	xinput set-prop "$touchpad" 'libinput Tapping Enabled' 1
 	# Set acceleration of trackpad
 	xinput set-prop "$touchpad" 'libinput Accel Speed' 0.7
 fi
