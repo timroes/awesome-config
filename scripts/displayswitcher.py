@@ -32,6 +32,9 @@ def update_dpis(displays, dpis):
   if not dpis:
     dpis = {}
   for display in displays['connected']:
+    # For DPI calculation we can ignore all screens that are connected but not in use (i.e. have no resolution)
+    if not 'resolution' in display:
+      continue
     dpi = None
     if display['id'] in dpis:
       dpi = dpis[display['id']]
