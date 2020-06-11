@@ -18,27 +18,31 @@ if [ -z "$device" ]; then
 fi
 
 if [ "$3" == "small" ]; then
-	step=$(($max/150))	
-else	
-	step=$(($max/15))	
-fi	
-current=`cat $device/brightness`	
+	step=$(($max/150))
+else
+	step=$(($max/15))
+fi
 
-case "$2" in	
-	"up")	
-		new=$(($current+$step))	
-		if [ $new -gt $max ]; then	
-			new=$max	
-		fi	
-		echo $new > $device/brightness	
-		echo $(($new * 100 / $max))	
-		;;	
-	"down")	
-		new=$(($current-$step))	
-		if [ $new -lt 1 ]; then	
-			new=1	
-		fi	
-		echo $new > $device/brightness	
-		echo $(($new * 100 / $max))	
-		;;	
+current=`cat $device/brightness`
+if [ $current -gt $max ]; then
+	current=$max
+fi
+
+case "$2" in
+	"up")
+		new=$(($current+$step))
+		if [ $new -gt $max ]; then
+			new=$max
+		fi
+		echo $new > $device/brightness
+		echo $(($new * 100 / $max))
+		;;
+	"down")
+		new=$(($current-$step))
+		if [ $new -lt 1 ]; then
+			new=1
+		fi
+		echo $new > $device/brightness
+		echo $(($new * 100 / $max))
+		;;
 esac
