@@ -19,14 +19,14 @@ if [ ! -d "${DIR}" ]; then mkdir -p "${DIR}"; fi
 # Screenshot a selected window
 if [ "$1" = "win" ]; then
 	tmp_file="$(mktemp).png"
-	import +repage "$tmp_file"
+	import -silent +repage "$tmp_file"
 	# Remove one pixel from image, since import often captures its own black selectbox
 	convert $tmp_file -shave 1x1 "${NAME}"
 	rm "$tmp_file"
 fi
 
 # Screenshot the entire screen
-if [ "$1" = "scr" ]; then import -window root "${NAME}"; fi
+if [ "$1" = "scr" ]; then import -silent -window root "${NAME}"; fi
 
 chown $USER:$(id -gn $USER) "${NAME}"
 
