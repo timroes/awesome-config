@@ -11,7 +11,8 @@ local sidebar = lunaconf.sidebar {
 	-- Keep screen automatically alive when one of the following programs is running
 	screen_keepalive = {
 		-- Zoom, but try to catch only the actual meeting window and not the main windows, settings, etc.
-		{ rule = { name = '^Zoom$', class = 'zoom' } }
+		{ rule = { name = '^Zoom$', class = 'zoom' } },
+		{ rule = { name = '^Zoom Meeting$', class = 'zoom' } }
 	}
 }
 
