@@ -61,6 +61,7 @@ def display_infos():
   resolution_regex = re.compile(r'^[^\n]*?(?P<x>\d+)x(?P<y>\d+)\+\d+\+\d+.*')
   preferred_regex = re.compile(r'^\s+(?P<x>\d+)x(?P<y>\d+).*preferred.*', re.MULTILINE)
   size_regex = re.compile(r'^[^\n]*?(?P<width>\d+)mm x (?P<height>\d+)mm')
+  connector_type_regex = re.compile(r'ConnectorType: (?P<connectorType>.*)', re.MULTILINE)
 
   displays = []
   primary = None
@@ -71,10 +72,13 @@ def display_infos():
     match = screen_regex.match(display_str)
     is_primary = match.group(0).find('primary') > -1
 
+    ct = connector_type_regex.search(display_str)
+
     display = {
       'id': match.group('id'),
       'state': match.group('state'),
-      'primary': is_primary
+      'primary': is_primary,
+      'connector': ct.group('connectorType').strip() if ct else None
     }
 
     preferred = preferred_regex.search(display_str)
@@ -189,6 +193,39 @@ def layout_game(displays):
 
   subprocess.call(args)
 
+def get_internal_external(displays):
+  external = []
+  internal = []
+  for display in displays['connected']:
+    if display['connector']:
+      external.append(display)
+    else:
+      internal.append(display)
+
+  return {
+    'internal': internal,
+    'external': external
+  }
+
+def layout_internal_external(displays, mode):
+  '''
+    Switch displays to only use internal or external displays (depending on mode specified).
+  '''
+  grouped = get_internal_external(displays)
+
+  if len(grouped[mode]) == 0:
+    return
+  
+  args = ['xrandr']
+
+  for display in grouped[mode]:
+    args.extend(['--output', display['id'], '--auto'])
+  
+  args.extend(off_all_disconnected(grouped['external' if mode == 'internal' else 'internal']))
+  args.extend(off_all_disconnected(displays['disconnected']))
+
+  subprocess.call(args)
+
 def print_state(infos):
   print(', '.join([x['id'] for x in infos['connected']]), end='')
   if len(infos['connected']) > 1:
@@ -205,7 +242,7 @@ def parse_dpi_args(arg):
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Configures your displays')
-  parser.add_argument('mode', choices=['auto', 'extend', 'clone', 'dpi-only', 'query', 'game'])
+  parser.add_argument('mode', choices=['auto', 'extend', 'clone', 'dpi-only', 'query', 'game', 'external', 'internal'])
   parser.add_argument('-d', '--dpi', type=parse_dpi_args, help='Force the dpi for the specific monitor')
 
   args = parser.parse_args()
@@ -220,6 +257,12 @@ if __name__ == '__main__':
     update_dpis(displays, args.dpi)
   elif args.mode == 'game':
     layout_game(displays)
+    update_dpis(displays, args.dpi)
+  elif args.mode == 'external':
+    layout_internal_external(displays, 'external')
+    update_dpis(displays, args.dpi)
+  elif args.mode == 'internal':
+    layout_internal_external(displays, 'internal')
     update_dpis(displays, args.dpi)
   elif args.mode == 'dpi-only':
     update_dpis(displays, args.dpi)

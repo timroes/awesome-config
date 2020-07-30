@@ -15,7 +15,7 @@ local lunaconf = {
 
 local switcher = {}
 
-local modes = { 'Extend', 'Clone', 'Game' }
+local modes = { 'Extend', 'Clone', 'Game', 'Internal', 'External' }
 
 local theme = lunaconf.theme.get()
 
