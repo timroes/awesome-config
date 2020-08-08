@@ -66,10 +66,11 @@ keys = gears.table.join(
 	awful.key({ "Mod1" }, "F4", function(c) c:kill() end),
 
 	-- swap clients into direction (only works in split mode (see tags.lua))
-	awful.key({ MOD, "Control" }, "Right", function(c) awful.client.swap.bydirection("right") end),
-	awful.key({ MOD, "Control" }, "Left", function(c) awful.client.swap.bydirection("left") end),
-	awful.key({ MOD, "Control" }, "Down", function(c) awful.client.swap.bydirection("down") end),
-	awful.key({ MOD, "Control" }, "Up", function(c) awful.client.swap.bydirection("up") end),
+	-- TODO: should be replaced by a better new split mode
+	-- awful.key({ MOD, "Control" }, "Right", function(c) awful.client.swap.bydirection("right") end),
+	-- awful.key({ MOD, "Control" }, "Left", function(c) awful.client.swap.bydirection("left") end),
+	-- awful.key({ MOD, "Control" }, "Down", function(c) awful.client.swap.bydirection("down") end),
+	-- awful.key({ MOD, "Control" }, "Up", function(c) awful.client.swap.bydirection("up") end),
 
 	-- toggle client floating state
 	awful.key({ MOD }, "Return", function(c)
@@ -116,6 +117,39 @@ awful.rules.rules = {
 		}
 	}
 }
+
+-- #################
+-- Fallback handling
+-- #################
+
+local function focus_fallback(oldfocus, screen)
+	if not client.focus then
+		if oldfocus.valid and oldfocus:isvisible() then
+			client.focus = oldfocus
+		else
+			local fallback = awful.client.focus.history.get(screen, 0)
+			if fallback then
+				client.focus = fallback
+			end
+		end
+	end
+end
+
+local function focus_fallback_delayed(c)
+	gears.timer.delayed_call(focus_fallback, c, c.screen)
+end
+
+-- Make sure whenever a client loses focus by some way, we focus another client as fallback
+client.connect_signal('unmanage', focus_fallback_delayed)
+client.connect_signal('untagged', focus_fallback_delayed)
+client.connect_signal('property::minimized', focus_fallback_delayed)
+client.connect_signal('property::hidden', focus_fallback_delayed)
+
+
+lunaconf.keys.globals(
+	awful.key({ lunaconf.config.MOD }, 'Page_Up', function() lunaconf.clients.focus_next(-1) end),
+	awful.key({ lunaconf.config.MOD }, 'Page_Down', function() lunaconf.clients.focus_next(1) end)
+)
 
 -- Raise client when focused
 client.connect_signal("focus", function(c)

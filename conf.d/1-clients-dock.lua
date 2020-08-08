@@ -42,11 +42,11 @@ local function toggle_client()
 	end
 
 	if c.first_tag == dock_tag then
-		c:move_to_tag(c.screen.primary_tag)
+		c:move_to_tag(lunaconf.tags.get_current_tag(c.screen))
 	else
 		local prev_docked_clients = dock_tag:clients()
 		for _,pc in pairs(prev_docked_clients) do
-			pc:move_to_tag(pc.screen.primary_tag)
+			pc:move_to_tag(lunaconf.tags.get_current_tag(pc.screen))
 		end
 		c:move_to_tag(dock_tag)
 	end

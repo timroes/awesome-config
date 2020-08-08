@@ -1,7 +1,5 @@
 local awful = require("awful")
 local wibox = require("wibox")
-local config = require('lunaconf.config')
-local tasklist = require('lunaconf.widgets.tasklist')
 local gears = require('gears')
 local lunaconf = require('lunaconf')
 

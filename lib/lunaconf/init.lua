@@ -15,6 +15,7 @@ return {
 	screens = require('lunaconf.screens'),
 	sidebar = require('lunaconf.sidebar'),
 	strings = require('lunaconf.strings'),
+	tags = require('lunaconf.tags'),
 	theme = require('lunaconf.theme'),
 	widgets = require('lunaconf.widgets'),
 	utils = require('lunaconf.utils'),

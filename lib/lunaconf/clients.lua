@@ -11,6 +11,10 @@ local clients = {}
 
 local attributes = {}
 
+function clients.focus_next(offset)
+	client.focus = awful.client.next(offset)
+end
+
 function clients.add_rules(rules)
 	awful.rules.rules = gears.table.join(awful.rules.rules, rules)
 end
