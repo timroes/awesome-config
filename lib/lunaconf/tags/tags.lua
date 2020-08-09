@@ -172,6 +172,26 @@ function module.next_tag()
 	module.select_tag(selected_tag_index + 1)
 end
 
+-- Moves the currently focused client to the next tag and switch to it.
+function module.move_to_next_tag()
+	local focused = client.focus
+	module.next_tag()
+	if focused then
+		focused:tags({ module.get_current_tag(focused.screen) })
+		client.focus = focused
+	end
+end
+
+-- Moves the currently focused client to the previous tag and switches to it.
+function module.move_to_prev_tag()
+	local focused = client.focus
+	module.prev_tag()
+	if focused then
+		focused:tags({ module.get_current_tag(focused.screen) })
+		client.focus = focused
+	end
+end
+
 function module.create_widget(for_screen)
 	return widget(for_screen, module, { tag_count = tag_count, selected_tag = selected_tag_index })
 end

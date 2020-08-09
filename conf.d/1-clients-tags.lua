@@ -7,8 +7,18 @@ lunaconf.keys.globals(
 	awful.key({ lunaconf.config.MOD, 'Control' }, 'n', lunaconf.tags.create_tag_with_current_client),
 	awful.key({ lunaconf.config.MOD, 'Shift' }, 'n', lunaconf.tags.create_tag_with_current_client),
 	awful.key({ lunaconf.config.MOD }, 'w', lunaconf.tags.close_current_tag),
+	awful.key({ lunaconf.config.MOD }, 'Home', lunaconf.tags.prev_tag),
+	awful.key({ lunaconf.config.MOD, 'Control' }, 'Home', lunaconf.tags.move_to_prev_tag),
+	awful.key({ lunaconf.config.MOD, 'Shift' }, 'Home', lunaconf.tags.move_to_prev_tag),
+	awful.key({ lunaconf.config.MOD }, 'End', lunaconf.tags.next_tag),
+	awful.key({ lunaconf.config.MOD, 'Control' }, 'End', lunaconf.tags.move_to_next_tag),
+	awful.key({ lunaconf.config.MOD, 'Shift' }, 'End', lunaconf.tags.move_to_next_tag),
 	awful.key({ lunaconf.config.MOD }, 'Up', lunaconf.tags.prev_tag),
-	awful.key({ lunaconf.config.MOD }, 'Down', lunaconf.tags.next_tag)
+	awful.key({ lunaconf.config.MOD, 'Control' }, 'Up', lunaconf.tags.move_to_prev_tag),
+	awful.key({ lunaconf.config.MOD, 'Shift' }, 'Up', lunaconf.tags.move_to_prev_tag),
+	awful.key({ lunaconf.config.MOD }, 'Down', lunaconf.tags.next_tag),
+	awful.key({ lunaconf.config.MOD, 'Control' }, 'Down', lunaconf.tags.move_to_next_tag),
+	awful.key({ lunaconf.config.MOD, 'Shift' }, 'Down', lunaconf.tags.move_to_next_tag)
 )
 
 client.connect_signal('request::activate', function(c, context)
