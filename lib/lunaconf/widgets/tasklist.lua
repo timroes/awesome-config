@@ -5,6 +5,8 @@ local lunaconf = {
 	dpi = require('lunaconf.dpi'),
 }
 
+local clienticon = require('lunaconf.widgets.clienticon')
+
 local tasklist = {}
 
 local tasklist_buttons = gears.table.join(
@@ -41,7 +43,7 @@ local function new(self, screen, tag_filter)
 				{
 					{
 						id = 'clienticon',
-						widget = awful.widget.clienticon,
+						widget = clienticon,
 					},
 					margins = lunaconf.dpi.x(5, screen),
 					widget  = wibox.container.margin
