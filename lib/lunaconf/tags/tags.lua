@@ -6,6 +6,7 @@ local lunaconf = {
 }
 local screen = screen
 local client = client
+local widget = require('lunaconf.tags.widget')
 
 local module = {}
 
@@ -28,6 +29,7 @@ end
 local function view_only_current_tags()
 	for s in screen do
 		s.common_tags[selected_tag_index]:view_only()
+		s:emit_signal('common_tag::selected', selected_tag_index)
 	end
 end
 
@@ -104,6 +106,8 @@ function module.create_tag()
 		local tag = create_tag(s)
 		table.insert(s.common_tags, tag)
 		tag:view_only()
+		s:emit_signal('common_tag::changed', tag_count)
+		s:emit_signal('common_tag::selected', selected_tag_index)
 	end
 end
 
@@ -126,15 +130,18 @@ function module.close_current_tag()
 	end
 
 	tag_count = tag_count - 1
+	local prev_selected_index = selected_tag_index
+	-- Mark the selected_tag_index correctly for the now focused tag
+	selected_tag_index = math.max(1, selected_tag_index - 1)
 	for s in screen do
-		local fallback_tag = s.common_tags[selected_tag_index == 1 and 2 or selected_tag_index - 1]
-		local tag = table.remove(s.common_tags, selected_tag_index)
+		local fallback_tag = s.common_tags[prev_selected_index == 1 and 2 or prev_selected_index - 1]
+		local tag = table.remove(s.common_tags, prev_selected_index)
 		-- Delete tag and move all clients from it to the fallback client
 		tag:delete(fallback_tag, true)
+		s:emit_signal('common_tag::changed', tag_count)
+		s:emit_signal('common_tag::selected', selected_tag_index)
 		-- View only the fallback client
 		fallback_tag:view_only()
-		-- Mark the selected_tag_index correctly for the now focused tag
-		selected_tag_index = math.max(1, selected_tag_index - 1)
 	end
 end
 
@@ -163,6 +170,10 @@ end
 
 function module.next_tag()
 	module.select_tag(selected_tag_index + 1)
+end
+
+function module.create_widget(for_screen)
+	return widget(for_screen, module, { tag_count = tag_count, selected_tag = selected_tag_index })
 end
 
 return module

@@ -78,7 +78,12 @@ end
 -- For all current and future screens create a bar
 awful.screen.connect_for_each_screen(function(s)
 	local layout = wibox.layout.align.horizontal()
-	layout:set_left(lunaconf.widgets.tasklist(s, function(tag) return not tag.invisible end))
+	local left_widgets = wibox.widget {
+		lunaconf.tags.create_widget(s),
+		lunaconf.widgets.tasklist(s, function(tag) return not tag.invisible end),
+		layout = wibox.layout.fixed.horizontal
+	}
+	layout:set_left(left_widgets)
 	layout:set_middle(margin(lunaconf.widgets.clienttitle(s), 12, 4, 0, 0))
 
 	local bar = awful.wibar {
