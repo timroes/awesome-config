@@ -1,6 +1,9 @@
 local notify = require('lunaconf.notify')
 local awful = require('awful')
 local gears = require('gears')
+local lunaconf = {
+	screens = require('lunaconf.screens')
+}
 local screen = screen
 local client = client
 
@@ -25,6 +28,33 @@ end
 local function view_only_current_tags()
 	for s in screen do
 		s.common_tags[selected_tag_index]:view_only()
+	end
+end
+
+-- Tries focusing a client on a given screen. Will return true if a client
+-- could be focused, false otherwise.
+local function focus_client_on_screen(scr)
+	if scr.clients[1] then
+		client.focus = scr.clients[1]
+		return true
+	else
+		return false
+	end
+end
+
+-- Tries to focus an client after a tag switch. Accepts a preferred screen on which first trying
+-- to focus a client, before falling back to other screens.
+local function focus_client(preferred_screen)
+	if preferred_screen and focus_client_on_screen(preferred_screen) then
+		return
+	end
+	if focus_client_on_screen(lunaconf.screens.primary()) then
+		return
+	end
+	for s in screen do
+		if focus_client_on_screen(s) then
+			return
+		end
 	end
 end
 
@@ -124,13 +154,7 @@ function module.select_tag(index)
 	local focused_screen = client.focus and client.focus.screen
 	selected_tag_index = gears.math.cycle(tag_count, index)
 	view_only_current_tags()
-	-- TODO: Improve focusing clients (e.g. just one screen, one client on any tag)
-	if focused_screen then
-		local new_focused_client = focused_screen.clients[1]
-		if new_focused_client then
-			client.focus = new_focused_client
-		end
-	end
+	focus_client(focused_screen)
 end
 
 function module.prev_tag()
