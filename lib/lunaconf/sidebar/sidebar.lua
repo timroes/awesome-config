@@ -76,6 +76,12 @@ local function start_stats_calculation(self)
 		self._cpupower_timer:start()
 	end
 
+	-- Get GPU stats if they were installed
+	if self._gpu_timer then
+		self._gpu_callback()
+		self._gpu_timer:start()
+	end
+
 	return function()
 		-- We're blanking out the percentage value on hiding, since we need some time to calculate
 		-- it the next time we open the panel and we don't want the old value to look like it's still
@@ -85,6 +91,9 @@ local function start_stats_calculation(self)
 		awesome.kill(top_pid, awesome.unix_signal.SIGINT)
 		if self._cpupower_timer then
 			self._cpupower_timer:stop()
+		end
+		if self._gpu_timer then
+			self._gpu_timer:stop()
 		end
 	end
 end
@@ -369,6 +378,37 @@ local function new(_, args)
 		type = 'dock',
 		visible = false
 	}
+
+	-- Only show GPU stats for nvidia GPUs
+	lunaconf.utils.only_if_command_exists('nvidia-smi', function()
+		self._gpu_stats = stats_panel {
+			screen = screen.primary,
+			color = theme.stats_cpu,
+			title = 'GPU',
+		}
+		self._gpu_callback = function()
+			awful.spawn.easy_async('nvidia-smi -q', function(stdout)
+				local utilization = tonumber(stdout:match('Gpu%s*:%s*([0-9]+) %%'))
+				local power_draw = stdout:match('Power Draw%s*:%s*([0-9.]+)')
+				local fan = stdout:match('Fan Speed%s*:%s*([0-9]+)')
+				self._gpu_stats:set_title('GPU (Fan: ' .. fan .. '% / Power: ' .. power_draw .. 'W)')
+				self._gpu_stats:set_value(utilization .. '%')
+				self._gpu_stats:set_percentage(utilization)
+			end)
+		end
+		self._gpu_timer = gears.timer {
+			timeout = 2,
+			callback = self._gpu_callback
+		}
+		self._popup.widget:get_children_by_id('stats_panel')[1]:add(wibox.widget {
+			widget = wibox.container.margin,
+			left = dx(10),
+			right = dx(10),
+			top = dy(10),
+			bottom = dy(10),
+			self._gpu_stats
+		})
+	end)
 
 	-- Only add the battery widget if upower is installed
 	lunaconf.utils.only_if_command_exists('upower', function(upower_installed)

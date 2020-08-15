@@ -5,7 +5,8 @@ local theme = {}
 local colors = {
 	text = {
 		dark = '#343741',
-		gray = '#69707D'
+		gray = '#69707D',
+		light_gray = '#98A2B3'
 	},
 	bg = {
 		green = '#54B399',
@@ -89,7 +90,7 @@ theme.tag_color_selected_bg = colors.bg.light_blue
 
 -- Sidebar
 theme.sidebar_bg = panel_bg
-theme.sidebar_shaded_text = colors.text.gray
+theme.sidebar_shaded_text = colors.text.light_gray
 theme.sidebar_trigger_color = colors.text.gray
 theme.sidebar_panel_bg = '#40434f'
 theme.sidebar_dnd_color = colors.bg.pink
