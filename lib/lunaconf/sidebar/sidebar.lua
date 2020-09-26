@@ -392,7 +392,18 @@ local function new(_, args)
 				local power_draw = stdout:match('Power Draw%s*:%s*([0-9.]+)')
 				local fan = stdout:match('Fan Speed%s*:%s*([0-9]+)')
 				local temp = stdout:match('Current Temp%s*:%s*([0-9]+)')
-				self._gpu_stats:set_title('GPU (' .. fan .. '% / ' .. temp .. '°C / ' .. power_draw .. 'W)')
+				local gpu_title = 'GPU ('
+				if fan then
+					gpu_title = gpu_title .. fan .. '% / '
+				end
+				if temp then
+					gpu_title = gpu_title .. temp .. '°C / '
+				end
+				if power_draw then
+					gpu_title = gpu_title .. power_draw .. 'W'
+				end
+				gpu_title = gpu_title .. ')'
+				self._gpu_stats:set_title(gpu_title)
 				self._gpu_stats:set_value(utilization .. '%')
 				self._gpu_stats:set_percentage(utilization)
 			end)
