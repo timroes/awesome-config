@@ -37,3 +37,13 @@ lunaconf.keys.globals(
 	awful.key({ }, 'XF86AudioMicMute', toggle_mic_mute),
 	awful.key({ lunaconf.config.MOD }, 'XF86AudioMute', toggle_mic_mute)
 )
+
+
+-- Register media hotkeys if playerctl exists
+lunaconf.utils.only_if_command_exists('playerctl', function ()
+	lunaconf.keys.globals(
+		awful.key({ }, 'XF86AudioPlay', function() lunaconf.utils.spawn('playerctl play-pause') end),
+		awful.key({ }, 'XF86AudioNext', function() lunaconf.utils.spawn('playerctl next') end),
+		awful.key({ }, 'XF86AudioPrev', function() lunaconf.utils.spawn('playerctl previous') end)
+	)
+end)
