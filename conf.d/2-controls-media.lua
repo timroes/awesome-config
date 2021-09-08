@@ -44,6 +44,16 @@ lunaconf.utils.only_if_command_exists('playerctl', function ()
 	lunaconf.keys.globals(
 		awful.key({ }, 'XF86AudioPlay', function() lunaconf.utils.spawn('playerctl play-pause') end),
 		awful.key({ }, 'XF86AudioNext', function() lunaconf.utils.spawn('playerctl next') end),
-		awful.key({ }, 'XF86AudioPrev', function() lunaconf.utils.spawn('playerctl previous') end)
+		awful.key({ }, 'XF86AudioPrev', function() lunaconf.utils.spawn('playerctl previous') end),
+		awful.key({ lunaconf.config.MOD }, 'XF86AudioPlay', function()
+			awful.spawn.easy_async('playerctl metadata --format \'{{title}} ({{artist}})\'', function (stdout)
+				lunaconf.notify.show_or_update('audio.show_metadata', {
+					title = 'Currently playing',
+					text = lunaconf.strings.trim(tostring(stdout)),
+					icon = 'audio-speakers',
+					timeout = 3
+				})
+			end)
+		end)
 	)
 end)
