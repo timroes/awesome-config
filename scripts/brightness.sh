@@ -11,7 +11,7 @@
 
 device=$1
 # OLED screens deliver a wrong max_brightness value, so we need to manual set this to the actual max value.
-max='2000'
+max="$(cat $device/max_brightness)"
 
 if [ -z "$device" ]; then
 	exit 1
