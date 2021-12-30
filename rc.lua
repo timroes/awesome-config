@@ -66,3 +66,8 @@ for i,conf in pairs(confs) do
 	end
 end
 -- }}}
+
+-- {{{ Load code compiled from TypeScript
+package.path = configpath .. "/build/?.lua;" .. configpath .. "/build/?/index.lua;" .. package.path
+require('build/index');
+-- }}}

@@ -1,0 +1,16 @@
+{
+  "name": "awesome",
+  "main": "rc.lua",
+  "repository": "git@github.com:timroes/awesome-config.git",
+  "author": "Tim Roes <mail@timroes.de>",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "typescript": "^4.5.4",
+    "typescript-to-lua": "^1.3.0"
+  },
+  "scripts": {
+    "build": "tstl",
+    "start": "tstl --watch"
+  }
+}

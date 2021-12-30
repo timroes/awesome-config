@@ -1,3 +1,5 @@
-autostart/*
-!autostart/README
 config.yml
+node_modules/
+
+# Ignore compiled output
+build/

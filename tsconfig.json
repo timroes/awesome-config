@@ -1,0 +1,22 @@
+{
+  "include": ["src/**/*", "types/**/*"],
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": ["esnext"],
+    "moduleResolution": "node",
+    "types": [],
+    "typeRoots": [
+      "types/"
+    ],
+    "strict": true,
+    "noImplicitThis": true,
+    "outDir": "build/"
+  },
+  "tstl": {
+    "luaTarget": "universal",
+    "buildMode": "default",
+    "noResolvePaths": ["lunaconf", "awful", "gears"],
+    "noImplicitSelf": true,
+    "noHeader": true
+  }
+}

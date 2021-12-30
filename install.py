@@ -12,6 +12,7 @@ PKG_DEPS = {
   'xdg-utils': 'starts files according to their extension',
   'xorg-setxkbmap': 'changes the keyboard layout',
   'xorg-xset': 'sets properties in xserver (e.g. power saving)',
+  'yarn': 'required to build typescript files',
 }
 
 # All optional dependencies. These won't be installed automatically, but information
@@ -50,7 +51,7 @@ def install_pkg_deps():
 
   print('')
 
-  subprocess.call(['sudo', 'pacman', '-S'] + list(PKG_DEPS.keys()))
+  subprocess.call(['sudo', 'pacman', '-S', '--needed'] + list(PKG_DEPS.keys()))
 
 def install_lua_deps():
   for dep, desc in LUA_DEPS.items():
@@ -60,6 +61,12 @@ def install_lua_deps():
 
   for dep, desc in LUA_DEPS.items():
     subprocess.call(['luarocks', '--local', 'install', dep])
+
+def install_yarn_deps():
+   subprocess.call(['yarn', 'install'])
+
+def build_typescript():
+  subprocess.call(['yarn', 'build'])
 
 def print_opt_pkg_info():
   print('{}Optional packages{}\n'.format(BLUE, RESET))
@@ -85,6 +92,14 @@ if __name__ == '__main__':
   print('{}Installing lua dependencies:{}\n'.format(BLUE, RESET))
   install_lua_deps()
   print('{}Finished installing lua dependencies.{}\n'.format(GREEN, RESET))
+
+  print('{}Installing npm dependencies:{}\n'.format(BLUE, RESET))
+  install_yarn_deps()
+  print('{}Finished installing npm dependencies.{}\n'.format(GREEN, RESET))
+
+  print('{}Compiling TypeScript to Lua:{}\n'.format(BLUE, RESET))
+  build_typescript()
+  print('{}Finished compiling TypeScript.{}\n'.format(GREEN, RESET))
 
   print_opt_pkg_info()
   print('')
