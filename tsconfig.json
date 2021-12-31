@@ -10,12 +10,13 @@
     ],
     "strict": true,
     "noImplicitThis": true,
+    "allowSyntheticDefaultImports": true,
     "outDir": "build/"
   },
   "tstl": {
     "luaTarget": "universal",
     "buildMode": "default",
-    "noResolvePaths": ["lunaconf", "awful", "gears"],
+    "noResolvePaths": ["lunaconf", "awful", "gears", "inspect"],
     "noImplicitSelf": true,
     "noHeader": true
   }

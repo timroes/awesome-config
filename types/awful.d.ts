@@ -6,6 +6,11 @@ declare module 'awful' {
     // @incompleteTyping
     spawn(cmd: string): void;
   }
-
   export const spawn: Spawn;
+
+  /** @noSelf */
+  interface KeyModule {
+    (modifiers: string[], key: string, onPress: () => void, onRelease?: () => void): Key[];
+  }
+  export const key: KeyModule;
 }
