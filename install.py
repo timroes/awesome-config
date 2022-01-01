@@ -7,6 +7,7 @@ PKG_DEPS = {
   'alsa-utils': 'provides utils for volume controls',
   'dex': 'launches all autostart desktop files',
   'libyaml': 'required for lua yaml lib to read config',
+  'light-locker': 'required to lock screen properly',
   'luarocks': 'installs lua dependencies',
   'xautolock': 'lock screen automatically after timeout',
   'xdg-utils': 'starts files according to their extension',
@@ -20,7 +21,6 @@ PKG_DEPS = {
 OPT_PKG_DEPS = {
   'cpupower': 'required to show CPU frequency information in sidebar',
   'imagemagick': 'required to make screenshots',
-  'light-locker': 'required to lock screen properly',
   'numlockx': 'install to enable numlock on start',
   'picom': 'required if you want compositing effects (e.g. shadow)',
   'playerctl': 'required if you want to control music via media hotkeys',
