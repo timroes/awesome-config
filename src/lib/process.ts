@@ -4,7 +4,7 @@ export function spawn(cmd: string): void {
   awful.spawn.with_shell(`${cmd} >> /tmp/awesome.spawn.log 2>&1`);
 }
 
-export function spawn_once(cmd: string, pidof: string = cmd.split(' ')[0]): void {
+export function spawnOnce(cmd: string, pidof: string = cmd.split(' ')[0]): void {
   awful.spawn.easy_async(`pidof ${pidof}`, (pid) => {
     if (!pid || pid.length === 0) {
       spawn(cmd);
