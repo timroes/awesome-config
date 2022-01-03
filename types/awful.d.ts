@@ -2,7 +2,7 @@ declare module 'awful' {
   /** @noSelf */
   interface Spawn {
     with_shell(cmd: string): void;
-    easy_async(cmd: string, callback: (stdout: string, stderr: string, exitreason: string, exitcode: number) => void): void;
+    easy_async(cmd: string, callback: (stdout: string, stderr: string, exitreason: 'exit' | 'signal', exitcode: number) => void): void;
     // @incompleteTyping
     spawn(cmd: string): void;
   }

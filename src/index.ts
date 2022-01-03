@@ -1,6 +1,7 @@
 // Import the actual configuration files in the desired order.
 
 import './conf/screenlock';
+import './conf/brightness';
 
 // Global controls
 import './conf/misc-keys';

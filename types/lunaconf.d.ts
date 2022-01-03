@@ -4,12 +4,22 @@ declare module 'lunaconf' {
     spawn(cmd: string): void;
   }
 
-  export const utils: Utils;
-
   /** @noSelf */
   interface Config {
     get<T = unknown>(key: string, defaultValue?: T): T;
   }
+  
+  interface BarDialogInstance {
+    set_value(value: number): void;
+    show(): void;
+  }
 
+  /** @noSelf */
+  interface Dialogs {
+    bar(icon: string, timeout: number): BarDialogInstance;
+  }
+  
+  export const utils: Utils;
   export const config: Config;
+  export const dialogs: Dialogs;
 }

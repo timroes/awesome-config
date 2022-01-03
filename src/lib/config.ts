@@ -2,6 +2,7 @@ import * as lunaconf from 'lunaconf';
 
 interface Config {
   'screensaver.timeout': number;
+  'brightness_device': string;
 }
 
 export function config<K extends keyof Config>(key: K): Config[K] | undefined;
