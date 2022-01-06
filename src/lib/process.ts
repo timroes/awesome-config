@@ -39,6 +39,6 @@ export async function isCommandAvailable(cmd: string): Promise<void> {
   if (exitCodeOrSignal === 0) {
     return Promise.resolve();
   } else {
-    Promise.reject();
+    return Promise.reject();
   }
 }
