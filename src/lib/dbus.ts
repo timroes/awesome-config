@@ -1,30 +1,42 @@
 import * as lgi from 'lgi';
 
+interface SignalParams<Params = undefined> {
+  sender: string;
+  objectPath: string;
+  interfaceName: string;
+  signalName: string;
+  params: Params;
+}
+
 const { GLib, Gio } = lgi;
 
 class DBusConnection {
   constructor(private bus: any) {}
 
-  public onSignal(
+  public onSignal<T = undefined>(
     sender: string | null,
     interfaceName: string | null,
-    member: string | null,
+    signalName: string | null,
     objectPath: string | null,
-    callback: (signal: unknown) => void,
+    callback: (signal: SignalParams<T>) => void,
   ): number {
-    return this.bus.signal_subscribe(sender, interfaceName, member, objectPath, null, Gio.DBusSignalFlags.NONE, callback);
+    return this.bus.signal_subscribe(sender, interfaceName, signalName, objectPath, null, Gio.DBusSignalFlags.NONE,
+      (connection: unknown, sender: string, objectPath: string, interfaceName: string, signalName: string, args?: any) => {
+        callback({ sender, objectPath, interfaceName, signalName, params: args.value });
+      }
+    );
   }
 
-  public call<T = unknown>(
+  public call<T = void>(
     destination: string,
     objectPath: string,
     interfaceName: string,
     member: string,
     params?: Array<[variantType: string, variantValue: unknown]>
-  ): Promise<T | undefined> {
+  ): Promise<T> {
     const args = params?.map(([type, value]) => GLib.Variant(type, value));
 
-    this.bus.call_sync(
+    const resp = this.bus.call_sync(
       destination,
       objectPath,
       interfaceName,
@@ -34,9 +46,25 @@ class DBusConnection {
       Gio.DBusCallFlags.NONE,
       -1, // Timeout
     );
-    // TODO: does not yet handle dbus calls with response
-    return Promise.resolve(undefined);
+
+    return Promise.resolve(resp.value);
   }
+
+  // TODO: Untested implementation
+  // public async emitSignal(
+  //   destination: string | null,
+  //   objectPath: string,
+  //   interfaceName: string,
+  //   signalName: string
+  // ): Promise<void> {
+  //   this.bus.emit_signal(
+  //     destination,
+  //     objectPath,
+  //     interfaceName,
+  //     signalName,
+  //     null // parameters
+  //   );
+  // }
 }
 
 let system: DBusConnection;

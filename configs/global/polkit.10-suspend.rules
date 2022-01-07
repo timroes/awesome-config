@@ -1,0 +1,10 @@
+// sudo cp $HOME/.config/awesome/configs/global/polkit.10-suspend.rules /etc/polkit-1/rules.d/10-suspend.rules
+polkit.addRule(function(action, subject) {
+  if ((action.id == "org.freedesktop.login1.suspend" ||
+      action.id == "org.freedesktop.login1.suspend-multiple-sessions" ||
+      action.id == "org.freedesktop.login1.hibernate" ||
+      action.id == "org.freedesktop.login1.hibernate-multiple-sessions") &&
+      subject.isInGroup("powerctl")) {
+    return polkit.Result.YES;
+  }
+});

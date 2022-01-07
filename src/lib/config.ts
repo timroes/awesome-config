@@ -2,6 +2,7 @@ import * as lunaconf from 'lunaconf';
 
 interface Config {
   'screensaver.timeout': number;
+  'screensaver.suspend_delay': number;
   'brightness_device': string;
 }
 

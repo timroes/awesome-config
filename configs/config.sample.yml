@@ -23,6 +23,8 @@ dpi:
 screensaver:
   # Configure how many minutes before the screen will be locked (Default: 10)
   timeout: 10
+  # A delay after locking the screen before putting the machine to suspend-then-hibernate
+  suspend_delay: 10
 
 calendar:
   # Specify a path to a .desktop file to execute when clicking the clock in the bar

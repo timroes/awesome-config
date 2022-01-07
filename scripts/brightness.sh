@@ -1,13 +1,7 @@
 #! /bin/bash	
 
-# For this script to work you need write rights to the /sys/class/backlight/*/brightness devices.	
-# This could e.g. be accomplished by an udev rule with the following content:	
-
-# /etc/udev/rules.d/backlight.rules
-# SUBSYSTEM=="backlight", ACTION=="add", RUN+="/bin/chgrp video /sys/class/backlight/%k/brightness"	
-# SUBSYSTEM=="backlight", ACTION=="add", RUN+="/bin/chmod g+w /sys/class/backlight/%k/brightness"	
-
-# You then need to be in the video group.
+# For this script to work make sure ../configs/global/udev.backlight.rules is copied to the appropriate place
+# and the user is in the video group.
 
 device=$1
 max="$(cat $device/max_brightness)"
