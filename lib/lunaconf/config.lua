@@ -22,6 +22,6 @@ function config.get(key, default)
 	return level or default
 end
 
-config.MOD = config.get('modkey', 'Mod4')
+config.MOD = 'Mod4'
 
 return config

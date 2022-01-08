@@ -13,7 +13,6 @@ local apps_by_id = {}
 function xdg.refresh(callback)
 	local data_dirs = glib.get_system_data_dirs()
 	table.insert(data_dirs, glib.get_user_data_dir() .. '/')
-	log.info("data_dirs: %s", inspect(data_dirs))
 
 	apps = {}
 	apps_by_id = {}

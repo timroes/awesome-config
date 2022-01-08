@@ -1,8 +1,3 @@
-# Specify the modifier key which should be used as primary modifier (e.g. for moving
-# windows, etc.)
-# Default: Mod4
-modkey: Mod4
-
 # Style different theme settings
 theme:
   # A path to a wallpaper to use.

@@ -7,7 +7,11 @@ local awful = require('awful')
 local log = {}
 
 function log.log(level, message, ...)
-	awful.spawn.spawn('logger -t awesome "' .. string.format(message, ...) .. '"')
+	awful.spawn.spawn('logger -p user.' .. level .. ' -t awesome "' .. string.format(message, ...) .. '"')
+end
+
+function log.debug(message, ...)
+	log.log('debug', message, ...)
 end
 
 function log.info(message, ...)
