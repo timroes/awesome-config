@@ -1,4 +1,5 @@
 import * as gears from 'gears';
+import * as lunaconf from 'lunaconf';
 import { config } from '../lib/config';
 import { SCRIPT_PATH, SUPER } from '../lib/constants';
 import { dbus } from '../lib/dbus';
@@ -15,6 +16,21 @@ addKey([SUPER], 'l', () => spawn(LOCK_COMMAND));
 // Start xautolock which will lock the screen after the configured `screensaver.timeout`
 // It locks the screen the same way than using the shortcut to lock it immediately.
 spawnOnce(`xautolock -time ${screensaverTimeout} -locker ${LOCK_COMMAND}`);
+
+// Start the script that will monitor the DBus for screensaver inhibit/uninhibit messages and turn them into signals
+spawnOnce(`${SCRIPT_PATH}/dbus-screensaver-monitor.sh`, '-x dbus-screensaver-monitor.sh');
+
+let inhibitorsCount = 0;
+// Listen on the signals emitted by the dbus-screensaver-monitor.sh script and keep track of how many
+// inhibitors exist. Prevent auto screen sleep as long as there is at least one inhibitor
+dbus.session().onSignal(null, 'de.timroes.awesome.ScreenSaver', null, null, (signal) => {
+  if (signal.signalName === 'Inhibit') {
+    inhibitorsCount++;
+  } else {
+    inhibitorsCount--;
+  }
+  lunaconf.sidebar.get()?.set_screensleep(inhibitorsCount > 0);
+});
 
 // The following code handles going to sleep after locking the machine with some delay.
 let suspendTimer: gears.TimerInstance | undefined;

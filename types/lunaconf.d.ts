@@ -20,7 +20,17 @@ declare module 'lunaconf' {
   interface Dialogs {
     bar(icon: string, timeout: number): BarDialogInstance;
   }
+
+  interface SidebarInstance {
+    set_screensleep(keepalive: boolean): void;
+  }
+
+  /** @noSelf */
+  interface Sidebar {
+    get(): SidebarInstance | undefined;
+  }
   
+  export const sidebar: Sidebar;
   export const utils: Utils;
   export const config: Config;
   export const dialogs: Dialogs;

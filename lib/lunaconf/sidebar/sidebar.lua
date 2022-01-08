@@ -23,6 +23,8 @@ local dy = function (v) return lunaconf.dpi.y(v, screen.primary) end
 
 local sidebar = {}
 
+local instance = nil
+
 local dnd_enabled = false
 local keepscreenawake = false
 -- Resume screensaver on startup, so the icon will always be in sync over awesome restarts
@@ -194,6 +196,10 @@ end
 
 function sidebar.is_dnd_enabled()
 	return dnd_enabled
+end
+
+function sidebar.get()
+	return instance
 end
 
 local function new(_, args)
@@ -496,6 +502,8 @@ local function new(_, args)
 	if args.screen_keepalive then
 		set_screensleep_rules(self, args.screen_keepalive)
 	end
+
+	instance = self
 
 	return self
 end
