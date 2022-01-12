@@ -25,8 +25,6 @@ local sidebar = {}
 
 local instance = nil
 
-local dnd_enabled = false
-local keepscreenawake = false
 -- Resume screensaver on startup, so the icon will always be in sync over awesome restarts
 awful.spawn.spawn(lunaconf.utils.scriptpath() .. '/screensaver.sh resume')
 
@@ -146,67 +144,41 @@ local function toggle(self)
 	end
 end
 
--- Do prevent screen sleep while a client that matches any of the given rules on startup
--- is still managed.
-local function set_screensleep_rules(self, rules)
-	self._keepalive_clients = {}
-	self._count_keepalive_clients = 0
-	client.connect_signal('manage', function (c)
-		if awful.rules.matches_list(c, rules) then
-			self._keepalive_clients[c.window] = true
-			self._count_keepalive_clients = self._count_keepalive_clients + 1
-			self:set_screensleep(true)
-		end
-	end)
-
-	client.connect_signal('unmanage', function (c)
-		if self._keepalive_clients[c.window] then
-			self._keepalive_clients[c.window] = nil
-			self._count_keepalive_clients = self._count_keepalive_clients - 1
-			if self._count_keepalive_clients == 0 then
-				self:set_screensleep(false)
-			end
-		end
-	end)
-end
-
 function sidebar:set_screensleep(keepalive)
 	-- If we're already in the right state, don't do anything
-	if keepscreenawake == keepalive then
+	if self._keepscreenawake == keepalive then
 		return
 	end
-	keepscreenawake = keepalive
-	self._screensleep:set_state(keepscreenawake)
+	self._keepscreenawake = keepalive
+	self._screensleep:set_state(self._keepscreenawake)
 	self._trigger_squares:emit_signal('widget::redraw_needed')
-	awful.spawn.spawn(lunaconf.utils.scriptpath() .. '/screensaver.sh ' .. (keepscreenawake and 'pause' or 'resume'))
+	awful.spawn.spawn(lunaconf.utils.scriptpath() .. '/screensaver.sh ' .. (self._keepscreenawake and 'pause' or 'resume'))
 end
 
 function sidebar:toggle_screensleep()
-	self:set_screensleep(not keepscreenawake)
+	self:set_screensleep(not self._keepscreenawake)
 end
 
 function sidebar:toggle_dnd()
-	dnd_enabled = not dnd_enabled
-	self._dnd_switch:set_state(dnd_enabled)
+	self._dnd_enabled = not self._dnd_enabled
+	self._dnd_switch:set_state(self._dnd_enabled)
 	self._trigger_squares:emit_signal('widget::redraw_needed')
-	if dnd_enabled then
+	if self._dnd_enabled then
 		naughty.destroy_all_notifications()
 	end
 end
 
-function sidebar.is_dnd_enabled()
-	return dnd_enabled
+function sidebar:is_dnd_enabled()
+	return self._dnd_enabled
 end
 
-function sidebar.get()
-	return instance
-end
-
-local function new(_, args)
+local function init(_)
 	local self = {}
 	for k,v in pairs(_) do
 		self[k] = v
 	end
+
+	self._keepscreenawake = false
 	
 	self._trigger_squares = wibox.widget {
 		widget = wibox.widget.base.make_widget,
@@ -217,7 +189,7 @@ local function new(_, args)
 			local regular_color = theme.sidebar_trigger_color
 
 			-- Top left square which indicates the dnd status
-			cr:set_source_rgb(gears.color.parse_color(dnd_enabled and theme.sidebar_dnd_color or regular_color))
+			cr:set_source_rgb(gears.color.parse_color(self._dnd_enabled and theme.sidebar_dnd_color or regular_color))
 			gears.shape.transform(gears.shape.rounded_rect)
 				:translate(0.15 * width, 0.15 * height)
 				(cr, 0.3 * width, 0.3 * height, dx(2))
@@ -237,7 +209,7 @@ local function new(_, args)
 			cr:fill()
 
 			-- Bottom right square
-			cr:set_source_rgb(gears.color.parse_color(keepscreenawake and theme.sidebar_screensleep_color or regular_color))
+			cr:set_source_rgb(gears.color.parse_color(self._keepscreenawake and theme.sidebar_screensleep_color or regular_color))
 			gears.shape.transform(gears.shape.rounded_rect)
 				:translate(0.55 * width, 0.55 * height)
 				(cr, 0.3 * width, 0.3 * height, dx(2))
@@ -269,7 +241,7 @@ local function new(_, args)
 		screen = screen.primary,
 		title = 'Keep Screen Awake',
 		active_color = theme.sidebar_screensleep_color,
-		initial_state = keepscreenawake,
+		initial_state = self._keepscreenawake,
 		on_toggle = function() self:toggle_screensleep() end
 	}
 
@@ -499,13 +471,13 @@ local function new(_, args)
 		end)
 	)
 
-	if args.screen_keepalive then
-		set_screensleep_rules(self, args.screen_keepalive)
-	end
-
-	instance = self
-
 	return self
 end
 
-return setmetatable(sidebar, { __call = new })
+function sidebar.get()
+	return instance
+end
+
+instance = init(sidebar)
+
+return sidebar

@@ -27,7 +27,7 @@ declare module 'lunaconf' {
 
   /** @noSelf */
   interface Sidebar {
-    get(): SidebarInstance | undefined;
+    get(): SidebarInstance;
   }
   
   export const sidebar: Sidebar;

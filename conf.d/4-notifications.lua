@@ -17,7 +17,7 @@ end
 -- Register a callback to preprocess all notifications
 naughty.config.notify_callback = function(args)
 	-- Cancel notifications if dnd widget is enabled
-	if lunaconf.sidebar.is_dnd_enabled() then
+	if lunaconf.sidebar.get():is_dnd_enabled() then
 		return null
 	end
 
@@ -54,6 +54,8 @@ naughty.config.notify_callback = function(args)
 	return args
 end
 
+local sidebar = lunaconf.sidebar.get()
+
 -- Always show notifications on primary screen
 local function update_notification_screen()
 	local screen = lunaconf.screens.primary()
@@ -73,5 +75,11 @@ update_notification_screen()
 
 -- Allow dismissing all notifications via Modifier + d
 lunaconf.keys.globals(
-	awful.key({ lunaconf.config.MOD }, "d", function() naughty.destroy_all_notifications() end)
+	awful.key({ lunaconf.config.MOD }, "d", function() naughty.destroy_all_notifications() end),
+	awful.key({ lunaconf.config.MOD, 'Control' }, 'd', function ()
+		sidebar:toggle_dnd()
+	end),
+	awful.key({ lunaconf.config.MOD , 'Shift' }, 'd', function ()
+		sidebar:toggle_dnd()
+	end)
 )

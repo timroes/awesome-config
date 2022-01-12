@@ -29,7 +29,7 @@ dbus.session().onSignal(null, 'de.timroes.awesome.ScreenSaver', null, null, (sig
   } else {
     inhibitorsCount--;
   }
-  lunaconf.sidebar.get()?.set_screensleep(inhibitorsCount > 0);
+  lunaconf.sidebar.get().set_screensleep(inhibitorsCount > 0);
 });
 
 // The following code handles going to sleep after locking the machine with some delay.
