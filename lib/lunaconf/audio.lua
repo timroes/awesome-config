@@ -47,7 +47,7 @@ function audio.toggle_mute(callback)
 		end
 		-- If a callback has been specified inform whether sound is no on or off
 		if callback then
-			callback(is_unmuted, volume)
+			callback(is_muted, volume)
 		end
 	end)
 end
