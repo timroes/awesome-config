@@ -7,6 +7,8 @@ local bar_height = 32
 
 local sidebar = lunaconf.sidebar.get()
 
+local latest_clock = nil
+
 local function margin(widget, left, right, top, bottom, screen)
 	if not screen then
 		screen = lunaconf.screens.primary()
@@ -29,6 +31,8 @@ local function create_primaryscreen_widgets()
 	
 	-- Add textclock
 	local clock = wibox.widget.textclock('%H:%M')
+	-- Store referece for later
+	latest_clock = clock
 	local cal_action = lunaconf.config.get('calendar.action', nil)
 	if cal_action then
 		clock:buttons(
@@ -85,3 +89,12 @@ end)
 screen.connect_signal('primary_changed', update_primary_bar)
 -- Initialize the widgets on the current primary
 update_primary_bar()
+
+awesome.connect_signal('ts::timezone_changed', function(tz)
+	-- Timezone change was detected in TypeScript, thus refreshing the clock now
+	if latest_clock then
+		latest_clock:force_update()
+		local is_home_timezone = tz == "Europe/Berlin"
+		latest_clock.format = is_home_timezone and "%H:%M" or "%H:%M  🌎"
+	end
+end)

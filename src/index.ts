@@ -3,6 +3,8 @@
 import './conf/screensaver';
 import './conf/brightness';
 
+import './conf/timezones';
+
 // Global controls
 import './conf/misc-keys';
 
