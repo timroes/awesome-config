@@ -51,7 +51,8 @@ lunaconf.utils.only_if_command_exists('playerctl', function ()
 					title = 'Currently playing',
 					text = lunaconf.strings.trim(tostring(stdout)),
 					icon = 'audio-speakers',
-					timeout = 3
+					timeout = 3,
+					ignore_dnd = true
 				})
 			end)
 		end)
