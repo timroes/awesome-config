@@ -14,5 +14,6 @@ import './conf/numpad';
 
 // Application specific handling
 import './conf/apps/ulauncher';
+import './conf/apps/rofimoji';
 
 import './conf/autostart';
