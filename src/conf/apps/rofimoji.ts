@@ -1,7 +1,8 @@
+import { CONFIGS_PATH, SCRIPT_PATH } from "../../lib/constants";
 import { addKey } from "../../lib/keys";
 import { log } from "../../lib/log";
 import { isCommandAvailable, spawn } from "../../lib/process";
 
 isCommandAvailable('rofimoji').then(() => {
-  addKey(['Mod1'], 'space', () => spawn('rofimoji'));
+  addKey(['Mod1'], 'space', () => spawn(`rofimoji --selector-args="-theme ${CONFIGS_PATH}/rofimoji.theme.rasi"`));
 });
