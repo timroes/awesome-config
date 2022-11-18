@@ -4,5 +4,5 @@ import { log } from "../../lib/log";
 import { isCommandAvailable, spawn } from "../../lib/process";
 
 isCommandAvailable('rofimoji').then(() => {
-  addKey(['Mod1'], 'space', () => spawn(`rofimoji --selector-args="-theme ${CONFIGS_PATH}/rofimoji.theme.rasi"`));
+  addKey(['Mod1'], 'space', () => spawn(`rofimoji -s neutral --selector-args="-theme ${CONFIGS_PATH}/rofimoji.theme.rasi"`));
 });
