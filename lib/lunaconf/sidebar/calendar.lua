@@ -1,8 +1,12 @@
 local wibox = require('wibox')
 local gears = require('gears')
+local glib = require("lgi").GLib
+local DateTime = glib.DateTime
+local TimeZone = glib.TimeZone
 local lunaconf = {
 	config = require('lunaconf.config'),
 	dpi = require('lunaconf.dpi'),
+	log = require('lunaconf.log'),
 	theme = require('lunaconf.theme')
 }
 
@@ -14,6 +18,14 @@ local day_widgets = {}
 
 local current_month
 local current_year
+
+local function today()
+	local now = DateTime.new_now(TimeZone.new_local())
+	local month = now:get_month()
+	local year = now:get_year()
+	local day = now:get_day_of_month()
+	return year, month, day
+end
 
 local function recolor_daybox(self, daybox)
 	if daybox._highlight then
@@ -29,7 +41,7 @@ local function recolor_daybox(self, daybox)
 end
 
 local function render_month(self)
-	local now = os.date('*t')
+	local year, month, day = today()
 	local first_day_in_month = os.time { year = current_year, month = current_month, day = 1 }
 	local last_day_in_month = tonumber(os.date("%d", os.time { year = current_year,	month = current_month + 1, day = 1 } - 86400))
 	local first_weekday_in_month = math.floor((os.date("%w", first_day_in_month) - 1) % 7 + 1)
@@ -52,7 +64,7 @@ local function render_month(self)
 			widget._highlight = highlights[os.date('%Y-%m-%d', widget._date)]
 			widget.visible = true
 			widget:get_children_by_id('text')[1].text = tostring(i - first_weekday_in_month + 1)
-			if now.year == current_year and now.month == current_month and (i - first_weekday_in_month + 1) == now.day then
+			if year == current_year and month == current_month and (i - first_weekday_in_month + 1) == day then
 				widget.shape_border_width = lunaconf.dpi.x(2, self._screen)
 			else
 				widget.shape_border_width = 0
@@ -71,8 +83,8 @@ local function weekday_name(name)
 end
 
 local function calculate_datediff(self, daybox)
-	local now = os.date('*t')
-	local beginning_of_today = os.time { year = now.year, month = now.month, day = now.day }
+	local year, month, day = today()
+	local beginning_of_today = os.time { year = year, month = month, day = day }
 	local diff = math.floor(os.difftime(beginning_of_today, daybox._date) // (24 * 60 * 60))
 	local diffstr
 	if diff == 0 then
@@ -133,14 +145,16 @@ local function daybox(self, nr)
 	return daybox
 end
 
-function calendar:set_to_now()
-	local now = os.date('*t')
-	if current_month ~= now.month or current_year ~= now.year then
-		current_month = now.month
-		current_year = now.year
+function calendar:set_to_now(force_refresh)
+	local year, month, day = today()
+	if current_month ~= month or current_year ~= year then
+		current_month = month
+		current_year = year
 		if self._highlighted_day then
 			self._highlighted_day:emit_signal('mouse::leave')
 		end
+		render_month(self)
+	elseif force_refresh then
 		render_month(self)
 	end
 end

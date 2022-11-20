@@ -132,7 +132,7 @@ local function show(self)
 	placement_fn(self._popup)
 	self._stop_stats_calculation = start_stats_calculation(self)
 	self._keygrabber:start()
-	self._calendar:set_to_now()
+	self._calendar:set_to_now(true)
 	self._popup.visible = true
 end
 
