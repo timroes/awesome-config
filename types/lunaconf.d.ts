@@ -29,9 +29,24 @@ declare module 'lunaconf' {
   interface Sidebar {
     get(): SidebarInstance;
   }
+
+  interface Notification {
+    text: string;
+    title?: string;
+    icon?: string;
+    timeout?: number;
+    ignore_dnd?: boolean;
+  }
+
+  /** @noSelf */
+  interface Notify {
+    show(notification: Notification): void;
+    show_or_update(key: string, notification: Notification): void;
+  }
   
   export const sidebar: Sidebar;
   export const utils: Utils;
   export const config: Config;
   export const dialogs: Dialogs;
+  export const notify: Notify;
 }

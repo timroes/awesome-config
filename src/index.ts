@@ -2,6 +2,7 @@
 
 import './conf/screensaver';
 import './conf/brightness';
+import './conf/audio';
 
 import './conf/timezones';
 
