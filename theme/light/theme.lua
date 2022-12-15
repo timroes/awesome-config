@@ -73,7 +73,7 @@ theme.titlebar_fg_focus = "#555555"
 theme.ontop_indicator = colors.bg.pink
 
 -- Screenbar (the bar on top of each screen)
-theme.screenbar_bg = panel_bg
+theme.screenbar_bg = panel_bg .. 'CC'
 theme.screenbar_fg = '#E0E0E0'
 
 -- Systray
