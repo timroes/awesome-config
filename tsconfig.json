@@ -5,9 +5,6 @@
     "lib": ["esnext"],
     "moduleResolution": "node",
     "types": ["@typescript-to-lua/language-extensions"],
-    "typeRoots": [
-      "types/"
-    ],
     "strict": true,
     "noImplicitThis": true,
     "allowSyntheticDefaultImports": true,

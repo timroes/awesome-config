@@ -8,6 +8,8 @@ local screen = screen
 local client = client
 local widget = require('lunaconf.tags.widget')
 
+local layout = require('build.layout.layout')
+
 local module = {}
 
 local selected_tag_index = 1
@@ -20,8 +22,8 @@ local tag_count = 1
 local function create_tag(s)
 	return awful.tag.add('🏷', {
 		screen = s,
-		layout = awful.layout.suit.max,
-		common_tag = true		
+		layout = layout.myLayout,
+		common_tag = true
 	})
 end
 

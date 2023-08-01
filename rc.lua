@@ -7,6 +7,7 @@ local gears = require('gears')
 -- Add our lib folder to the require lookup path
 local configpath = gears.filesystem.get_configuration_dir()
 package.path = configpath .. "/lib/?.lua;" .. configpath .. "/lib/?/init.lua;" .. package.path
+package.path = configpath .. "/build/?.lua;" .. configpath .. "/build/?/index.lua;" .. package.path
 
 local naughty = require('naughty')
 

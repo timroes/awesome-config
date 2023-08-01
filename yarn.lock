@@ -68,17 +68,17 @@ tapable@^2.2.0:
   resolved "https://registry.yarnpkg.com/tapable/-/tapable-2.2.1.tgz#1967a73ef4060a82f12ab96af86d52fdb76eeca0"
   integrity sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==
 
-typescript-to-lua@^1.3.0:
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/typescript-to-lua/-/typescript-to-lua-1.11.1.tgz#b58d132756a2def83d6c1e070fdb3786e86703c5"
-  integrity sha512-XxGOf0zBRrMocGr4BbVaJdnvnk4yTrUs0BCdamfb/Qg94hKZg8ydRUy17ZtHZfYmnwFupR88R5DZXIpHYP0S5g==
+typescript-to-lua@^1.16.3:
+  version "1.16.3"
+  resolved "https://registry.yarnpkg.com/typescript-to-lua/-/typescript-to-lua-1.16.3.tgz#2546fb5b0f657e039dc8b77472c65dbd922f6f0f"
+  integrity sha512-vWJIfupLO6u22tMYmlczdcb5TtFUv8Mwf79ZKUyxqX4td5xWv3L2wu5WCx0YrOZ4//JwDQohrkfX1y4LbZTugQ==
   dependencies:
     "@typescript-to-lua/language-extensions" "1.0.0"
     enhanced-resolve "^5.8.2"
     resolve "^1.15.1"
     source-map "^0.7.3"
 
-typescript@^4.5.4:
-  version "4.9.4"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.4.tgz#a2a3d2756c079abda241d75f149df9d561091e78"
-  integrity sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==
+typescript@^5.1.6:
+  version "5.1.6"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.1.6.tgz#02f8ac202b6dad2c0dd5e0913745b47a37998274"
+  integrity sha512-zaWCozRZ6DLEWAWFrVDz1H6FVXzUSfTy5FUMWsQlU8Ym5JP9eO4xkTIROFCQvhQf61z6O/G6ugw3SgAnvvm+HA==
