@@ -1,5 +1,6 @@
 // Import the actual configuration files in the desired order.
 
+import './conf/compositor';
 import './conf/screensaver';
 import './conf/brightness';
 import './conf/audio';
@@ -14,7 +15,6 @@ import './conf/pointing-devices';
 import './conf/numpad';
 
 // Application specific handling
-import './conf/apps/picom';
 import './conf/apps/ulauncher';
 import './conf/apps/rofimoji';
 

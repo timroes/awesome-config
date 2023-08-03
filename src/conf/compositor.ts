@@ -1,8 +1,8 @@
 import * as awful from "awful";
 
-import { config } from "../../lib/config";
-import { CONFIGS_PATH } from "../../lib/constants";
-import { execute, isCommandAvailable, spawnOnce } from "../../lib/process";
+import { config } from "../lib/config";
+import { CONFIGS_PATH } from "../lib/constants";
+import { execute, isCommandAvailable, spawnOnce } from "../lib/process";
 
 async function runPicom() {
   await spawnOnce(`picom --config ${CONFIGS_PATH}/picom.conf -b`);
