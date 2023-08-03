@@ -4,6 +4,7 @@ interface Config {
   'screensaver.timeout': number;
   'screensaver.suspend_delay': number;
   'brightness_device': string;
+  'disable_compositor': boolean;
 }
 
 export function config<K extends keyof Config>(key: K): Config[K] | undefined;

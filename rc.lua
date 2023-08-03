@@ -48,7 +48,7 @@ root.keys({ })
 -- {{{ Load custom scripts from conf.d directory
 local lfs = require('lfs')
 local confs = {}
-local confd = configpath .. '/conf.d/'
+local confd = configpath .. 'conf.d/'
 for s in lfs.dir(confd) do
 	local f = lfs.attributes(confd .. s)
 	if s:sub(-4) == ".lua" and f.mode == "file" then

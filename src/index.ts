@@ -14,6 +14,7 @@ import './conf/pointing-devices';
 import './conf/numpad';
 
 // Application specific handling
+import './conf/apps/picom';
 import './conf/apps/ulauncher';
 import './conf/apps/rofimoji';
 
