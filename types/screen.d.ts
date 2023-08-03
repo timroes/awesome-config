@@ -1,9 +1,11 @@
 interface Screen {
-  
+  geometry: Geometry;
+  workarea: Geometry;
+  index: number;
 }
 
-type ScreenProperties = "geometry";
-type ScreenSignals = "list" | `property::${ScreenProperties}`;
+type ScreenProperties = "geometry" | "workarea" | "index";
+type ScreenSignals = "list" | "primary_changed" | "added" | "removed" | "swapped" | `property::${ScreenProperties}`;
 
 /** @noSelf */
 interface ScreenGlobal {
