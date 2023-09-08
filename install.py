@@ -60,7 +60,7 @@ def install_lua_deps():
   print('')
 
   for dep, desc in LUA_DEPS.items():
-    subprocess.call(['luarocks', '--local', 'install', dep])
+    subprocess.call(['luarocks', '--local', '--lua-version', '5.3', 'install', dep])
 
 def install_yarn_deps():
    subprocess.call(['yarn', 'install'])

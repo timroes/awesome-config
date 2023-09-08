@@ -1,5 +1,9 @@
 -- Require the luarocks loader for luarocks dependencies
-require('luarocks.loader')
+pcall(require, 'luarocks.loader')
+
+local HOME = os.getenv("HOME")
+package.path = "/usr/share/lua/5.3/?.lua;/usr/share/lua/5.3/?/init.lua;/usr/lib/lua/5.3/?.lua;/usr/lib/lua/5.3/?/init.lua;./?.lua;./?/init.lua;" .. HOME .. "/.luarocks/share/lua/5.3/?.lua;" .. HOME .. "/.luarocks/share/lua/5.3/?/init.lua;" .. package.path
+package.cpath = "/usr/lib/lua/5.3/?.so;/usr/lib/lua/5.3/loadall.so;./?.so;" .. HOME .. "/.luarocks/lib/lua/5.3/?.so;" .. package.cpath
 
 -- Standard awesome library
 local gears = require('gears')
@@ -7,6 +11,7 @@ local gears = require('gears')
 -- Add our lib folder to the require lookup path
 local configpath = gears.filesystem.get_configuration_dir()
 package.path = configpath .. "/lib/?.lua;" .. configpath .. "/lib/?/init.lua;" .. package.path
+-- Add TypeScript build folder to path
 package.path = configpath .. "/build/?.lua;" .. configpath .. "/build/?/index.lua;" .. package.path
 
 local naughty = require('naughty')
@@ -69,6 +74,5 @@ end
 -- }}}
 
 -- {{{ Load code compiled from TypeScript
-package.path = configpath .. "/build/?.lua;" .. configpath .. "/build/?/index.lua;" .. package.path
 require('build/index');
 -- }}}
