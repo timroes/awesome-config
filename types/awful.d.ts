@@ -13,4 +13,11 @@ declare module 'awful' {
     (modifiers: string[], key: string, onPress: () => void, onRelease?: () => void): Key[];
   }
   export const key: KeyModule;
+
+  /** @noSelf */
+  interface Client {
+    object: any;
+  }
+
+  export const client: Client;
 }
