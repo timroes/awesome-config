@@ -6,7 +6,11 @@ import { isCommandAvailable, spawn } from "../lib/process";
 addKey([SUPER], 'e', () => spawn('xdg-open $HOME'));
 addKey([SUPER, 'Control'], 'Delete', () => awesome.restart());
 
+isCommandAvailable('flameshot').then(() => {
+  addKey([], 'Print', () => spawn('flameshot gui -p /tmp'));
+  addKey([SUPER], 'Print', () => spawn(`flameshot full -p /tmp`));
+});
+
 isCommandAvailable('import').then(() => {
   addKey(['Mod1'], 'Print', () => spawn(`${SCRIPT_PATH}/screenshot win`));
-  addKey([SUPER], 'Print', () => spawn(`${SCRIPT_PATH}/screenshot scr`))
 });

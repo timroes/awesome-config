@@ -20,7 +20,8 @@ PKG_DEPS = {
 # will be printed out at the end of this script.
 OPT_PKG_DEPS = {
   'cpupower': 'required to show CPU frequency information in sidebar',
-  'imagemagick': 'required to make screenshots',
+  'imagemagick': 'required to make basic screenshots',
+  'flameshot': 'required for better screenshots',
   'numlockx': 'install to enable numlock on start',
   'picom': 'required if you want compositing effects (e.g. shadow)',
   'playerctl': 'required if you want to control music via media hotkeys',
@@ -77,7 +78,7 @@ def print_opt_pkg_info():
 
   for dep, desc in OPT_PKG_DEPS.items():
     installed = not subprocess.call(['pacman', '-Qq', dep], stdout=FNULL, stderr=FNULL)
-    print('  {}{}{}{} - {}'.format(BOLD, dep, RESET, ' [already installed]' if installed else '', desc))
+    print('  {}{}{}{} - {}'.format(BOLD, dep, RESET, f' {GREEN}[already installed]{RESET}' if installed else '', desc))
 
 if __name__ == '__main__':
   if not shutil.which('pacman'):
