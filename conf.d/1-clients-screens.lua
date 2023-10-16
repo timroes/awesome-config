@@ -41,5 +41,7 @@ end
 
 lunaconf.keys.globals(
 	awful.key({ lunaconf.config.MOD }, 'Right', function() move_in_direction('right') end),
+	awful.key({ lunaconf.config.MOD }, 'Up', function() move_in_direction('up') end),
+	awful.key({ lunaconf.config.MOD }, 'Down', function() move_in_direction('down') end),
 	awful.key({ lunaconf.config.MOD }, 'Left', function() move_in_direction('left') end)
 )
