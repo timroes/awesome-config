@@ -41,7 +41,6 @@ local function get_icon_lookup_path()
 		local paths = glib.get_system_data_dirs()
 		table.insert(paths, 1, glib.get_user_data_dir())
 
-
 		-- Note: We add first the hicolor themes, since we will reverse the order
 		-- of all directories later on when selecting all subdirectories. Since we want
 		-- to have the actual theme files precedence to the hicolor icons, we add
@@ -73,6 +72,9 @@ local function get_icon_lookup_path()
 			end
 		end
 	end
+
+	-- Use /usr/share/pixmaps as last fallback
+	table.insert(icon_lookup_path, "/usr/share/pixmaps/")
 	return icon_lookup_path
 end
 
