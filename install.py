@@ -20,8 +20,7 @@ PKG_DEPS = {
 # will be printed out at the end of this script.
 OPT_PKG_DEPS = {
   'cpupower': 'required to show CPU frequency information in sidebar',
-  'imagemagick': 'required to make basic screenshots',
-  'flameshot': 'required for better screenshots',
+  'flameshot': 'required to take screenshots',
   'numlockx': 'install to enable numlock on start',
   'picom': 'required if you want compositing effects (e.g. shadow)',
   'playerctl': 'required if you want to control music via media hotkeys',

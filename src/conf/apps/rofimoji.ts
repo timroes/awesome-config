@@ -1,4 +1,4 @@
-import { CONFIGS_PATH, SCRIPT_PATH } from "../../lib/constants";
+import { CONFIGS_PATH } from "../../lib/constants";
 import { addKey } from "../../lib/keys";
 import { isCommandAvailable, spawn } from "../../lib/process";
 
