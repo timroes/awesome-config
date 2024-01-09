@@ -100,8 +100,8 @@ end
 
 -- Placement function for the sidebar
 local function placement_fn(wibox)
-	local p = awful.placement.maximize_vertically + awful.placement.right
-	p(wibox, { honor_workarea = true })	
+	local p = awful.placement.align
+	p(wibox, { honor_workarea = true, position = "top_right", margins = { top = dy(10), right = dx(10) }})	
 end
 
 local function hide(self, stop_keygrabber)
@@ -262,10 +262,10 @@ local function init(_)
 		widget = {
 			widget = wibox.container.margin,
 			forced_width = dx(400),
-			left = dx(20),
-			right = dx(20),
-			top = dy(20),
-			bottom = dy(20),
+			left = dx(10),
+			right = dx(10),
+			top = dy(15),
+			bottom = dy(15),
 			{
 				widget = wibox.layout.fixed.vertical,
 				spacing = dy(10),
@@ -353,8 +353,8 @@ local function init(_)
 		screen = screen.primary,
 		placement = placement_fn,
 		ontop = true,
-		type = 'dock',
-		visible = false
+		visible = false,
+		shape = gears.shape.rounded_rect,
 	}
 
 	-- Only show GPU stats for nvidia GPUs
