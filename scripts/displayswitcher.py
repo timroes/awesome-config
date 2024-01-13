@@ -197,10 +197,10 @@ def get_internal_external(displays):
   external = []
   internal = []
   for display in displays['connected']:
-    if display['connector']:
-      external.append(display)
-    else:
+    if display['id'] == "eDP-1":
       internal.append(display)
+    else:
+      external.append(display)
 
   return {
     'internal': internal,
