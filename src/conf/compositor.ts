@@ -1,5 +1,3 @@
-import * as awful from "awful";
-
 import { config } from "../lib/config";
 import { CONFIGS_PATH } from "../lib/constants";
 import { execute, isCommandAvailable, spawnOnce } from "../lib/process";
@@ -14,15 +12,16 @@ async function restartPicom() {
 }
 
 awesome.register_xproperty("_PICOM_NO_SHADOW", "boolean");
-awful.client.object.set_disable_shadow = (client: Client, value: boolean) => {
-  client.set_xproperty("_PICOM_NO_SHADOW", value);
-};
+awesome.register_xproperty("_PICOM_NO_ROUNDED", "boolean");
 
 if (!config("disable_compositor", false)) {
   client.connect_signal("manage", (c) => {
-    c.disable_shadow = !c.floating;
+    c.set_xproperty("_PICOM_NO_SHADOW", !c.floating);
+    c.set_xproperty("_PICOM_NO_ROUNDED", !c.floating);
+
     c.connect_signal("property::floating", (c) => {
-      c.disable_shadow = !c.floating;
+      c.set_xproperty("_PICOM_NO_SHADOW", !c.floating);
+      c.set_xproperty("_PICOM_NO_ROUNDED", !c.floating);
     });
   });
 
