@@ -94,7 +94,7 @@ awesome.connect_signal('ts::timezone_changed', function(tz)
 	-- Timezone change was detected in TypeScript, thus refreshing the clock now
 	if latest_clock then
 		latest_clock:force_update()
-		local is_home_timezone = tz == "Europe/Berlin"
-		latest_clock.format = is_home_timezone and "%H:%M" or "%H:%M  🌎"
+		local is_home_timezone = tz == "CET" or tz == "CEST"
+		latest_clock.format = is_home_timezone and "%H:%M" or "%H:%M  <span color='gray'>(" .. tz .. ")</span>"
 	end
 end)
