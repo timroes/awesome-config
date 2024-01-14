@@ -75,7 +75,16 @@ keys = gears.table.join(
 	-- toggle client floating state
 	awful.key({ MOD }, "Return", function(c)
 		if not c.unresizeable then
-			awful.client.floating.toggle(c)
+			c.floating = not c.floating
+			if c.floating and c.width == c.screen.workarea.width and c.height == c.screen.workarea.height and c.x == c.screen.workarea.x and c.y == c.screen.workarea.y then
+				c:geometry({
+					x = c.screen.workarea.x + 30,
+					y = c.screen.workarea.y + 30,
+					width = c.screen.workarea.width - 60,
+					height = c.screen.workarea.height - 60
+				})
+				awful.placement.centered(c, { honor_workarea = true })
+			end
 		end
 	end),
 	-- toggle client always on top
