@@ -46,12 +46,6 @@ declare module 'lunaconf' {
   }
 
   /** @noSelf */
-  interface Dpi {
-    y(value: number, screen: Screen): number;
-    x(value: number, screen: Screen): number;
-  }
-
-  /** @noSelf */
   interface Clients {
     smart_move(client: Client): void;
   }
@@ -67,7 +61,6 @@ declare module 'lunaconf' {
     clienttitle(screen: Screen): WidgetBase;
   }
 
-  export const dpi: Dpi;
   export const sidebar: Sidebar;
   export const utils: Utils;
   export const config: Config;
@@ -76,4 +69,9 @@ declare module 'lunaconf' {
   export const clients: Clients;
   export const tags: Tags;
   export const widgets: Widgets;
+}
+
+declare module 'lunaconf.config' {
+  import { Config } from 'lunaconf';
+  export const get: Config['get'];
 }

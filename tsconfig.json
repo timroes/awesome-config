@@ -15,7 +15,7 @@
   "tstl": {
     "luaTarget": "universal",
     "buildMode": "default",
-    "noResolvePaths": ["lunaconf", "awful", "gears", "inspect", "lgi", "wibox"],
+    "noResolvePaths": ["lunaconf", "lunaconf.config", "awful", "beautiful", "gears", "inspect", "lgi", "wibox"],
     "noImplicitSelf": true,
     "noHeader": true,
   }

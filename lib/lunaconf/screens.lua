@@ -3,45 +3,8 @@ local screen = screen
 
 local screens = {}
 
-local function get_first_output(screen)
-	local next, t = pairs(screen.outputs)
-	return screen.outputs[next(t)]
-end
-
-function screens.primary_index()
-	return screen.primary.index
-end
-
 function screens.primary()
 	return screen.primary
-end
-
-function screens.xdpi(screen)
-	if not screen.outputs then
-		return nil
-	end
-	local output = get_first_output(screen)
-	if output then
-		return (screen.geometry.width * 25.4) / output.mm_width
-	end
-end
-
-function screens.ydpi(screen)
-	if not screen.outputs then
-		return nil
-	end
-	local output = get_first_output(screen)
-	if output then
-		return (screen.geometry.height * 25.4) / output.mm_height
-	end
-end
-
-function screens.output_name(screen)
-	if not screen.outputs then
-		return nil
-	end
-	local next, t = pairs(screen.outputs)
-	return next(t)
 end
 
 -- #########################

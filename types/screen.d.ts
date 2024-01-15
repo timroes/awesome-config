@@ -2,9 +2,10 @@ interface Screen {
   geometry: Geometry;
   workarea: Geometry;
   index: number;
+  outputs: Record<string, { mm_height: number; mm_width: number }>;
 }
 
-type ScreenProperties = "geometry" | "workarea" | "index";
+type ScreenProperties = "geometry" | "workarea" | "index" | "outputs";
 type ScreenSignals = "list" | "primary_changed" | "added" | "removed" | "swapped" | `property::${ScreenProperties}`;
 
 /** @noSelf */

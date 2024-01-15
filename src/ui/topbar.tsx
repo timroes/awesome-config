@@ -5,6 +5,7 @@ import * as screens from "../lib/screen";
 import { config } from '../lib/config';
 import { execute, spawn } from '../lib/process';
 import { dbus } from '../lib/dbus';
+import { dpiY } from '../lib/dpi';
 
 const BAR_HEIGHT = 32;
 const sidebar = lunaconf.sidebar.get();
@@ -50,7 +51,7 @@ awful.screen.connect_for_each_screen((s) => {
   const bar = awful.wibar({
     position: 'top',
     screen: s,
-    height: lunaconf.dpi.y(BAR_HEIGHT, s),
+    height: dpiY(BAR_HEIGHT, s),
     bg: "#1a1b26",
     widget: barWidget,
   });
