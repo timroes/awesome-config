@@ -25,7 +25,7 @@ local highlight_color = colors.bg.blue
 local highlight_text_bg = colors.bg.light_blue
 local highlight_text_color = colors.text.dark
 
-local panel_bg = '#343741'
+local panel_bg = '#1a1b26'
 
 theme.font          = "Source Sans Pro 11"
 theme.large_font   = "Source Sans Pro 14"
@@ -73,7 +73,7 @@ theme.titlebar_fg_focus = "#555555"
 theme.ontop_indicator = colors.bg.pink
 
 -- Screenbar (the bar on top of each screen)
-theme.screenbar_bg = panel_bg .. 'CC'
+theme.screenbar_bg = '#1a1b26'
 theme.screenbar_fg = '#E0E0E0'
 
 -- Systray
@@ -92,7 +92,7 @@ theme.tag_color_selected_bg = colors.bg.light_blue
 theme.sidebar_bg = panel_bg
 theme.sidebar_shaded_text = colors.text.light_gray
 theme.sidebar_trigger_color = colors.text.gray
-theme.sidebar_panel_bg = '#40434f'
+theme.sidebar_panel_bg = '#24283b'
 theme.sidebar_dnd_color = colors.bg.pink
 theme.sidebar_screensleep_color = colors.bg.yellow
 

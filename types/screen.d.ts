@@ -9,6 +9,7 @@ type ScreenSignals = "list" | "primary_changed" | "added" | "removed" | "swapped
 
 /** @noSelf */
 interface ScreenGlobal {
+  primary: Screen;
   connect_signal(signal: ScreenSignals, callback: (screen: Screen) => void): void;
 }
 

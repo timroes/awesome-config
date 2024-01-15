@@ -11,6 +11,8 @@ local gears = require('gears')
 -- Add our lib folder to the require lookup path
 local configpath = gears.filesystem.get_configuration_dir()
 package.path = configpath .. "/lib/?.lua;" .. configpath .. "/lib/?/init.lua;" .. package.path
+-- Add package path for lua config files in src folder
+package.path = configpath .. "/src/?.lua;" .. package.path
 -- Add TypeScript build folder to path
 package.path = configpath .. "/build/?.lua;" .. configpath .. "/build/?/index.lua;" .. package.path
 
@@ -46,6 +48,9 @@ inspect = require('inspect')
 
 local log = require('lunaconf.log')
 local awful = require('awful')
+
+-- Load the jsx utilities before other Lua configs, so any config file could import TS compiled files that use JSX
+require('build/jsx');
 
 -- Clear all shortcuts before including any config files
 root.keys({ })

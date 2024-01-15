@@ -5,8 +5,6 @@ import './conf/screensaver';
 import './conf/brightness';
 import './conf/audio';
 
-import './conf/timezones';
-
 // Global controls
 import './conf/misc-keys';
 
@@ -16,5 +14,7 @@ import './conf/numpad';
 
 // Application specific handling
 import './conf/apps/rofimoji';
+
+import './ui/topbar';
 
 import './conf/autostart';

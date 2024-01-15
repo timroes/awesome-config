@@ -7,14 +7,16 @@
     "types": ["@typescript-to-lua/language-extensions"],
     "strict": true,
     "noImplicitThis": true,
+    "jsx": "react",
+    "jsxFactory": "setupWidget",
     "allowSyntheticDefaultImports": true,
     "outDir": "build/",
   },
   "tstl": {
     "luaTarget": "universal",
     "buildMode": "default",
-    "noResolvePaths": ["lunaconf", "awful", "gears", "inspect", "lgi"],
+    "noResolvePaths": ["lunaconf", "awful", "gears", "inspect", "lgi", "wibox"],
     "noImplicitSelf": true,
-    "noHeader": true
+    "noHeader": true,
   }
 }

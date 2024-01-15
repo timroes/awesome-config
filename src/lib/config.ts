@@ -5,6 +5,7 @@ interface Config {
   'screensaver.suspend_delay': number;
   'brightness_device': string;
   'disable_compositor': boolean;
+  'calendar.action': string;
 }
 
 export function config<K extends keyof Config>(key: K): Config[K] | undefined;

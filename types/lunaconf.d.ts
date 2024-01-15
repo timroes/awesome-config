@@ -23,6 +23,7 @@ declare module 'lunaconf' {
 
   interface SidebarInstance {
     set_screensleep(keepalive: boolean): void;
+    trigger: WidgetBase;
   }
 
   /** @noSelf */
@@ -43,10 +44,36 @@ declare module 'lunaconf' {
     show(notification: Notification): void;
     show_or_update(key: string, notification: Notification): void;
   }
-  
+
+  /** @noSelf */
+  interface Dpi {
+    y(value: number, screen: Screen): number;
+    x(value: number, screen: Screen): number;
+  }
+
+  /** @noSelf */
+  interface Clients {
+    smart_move(client: Client): void;
+  }
+
+  /** @noSelf */
+  interface Tags {
+    create_widget(screen: Screen): WidgetBase;
+  }
+
+  /** @noSelf */
+  interface Widgets {
+    tasklist(screen: Screen): WidgetBase;
+    clienttitle(screen: Screen): WidgetBase;
+  }
+
+  export const dpi: Dpi;
   export const sidebar: Sidebar;
   export const utils: Utils;
   export const config: Config;
   export const dialogs: Dialogs;
   export const notify: Notify;
+  export const clients: Clients;
+  export const tags: Tags;
+  export const widgets: Widgets;
 }

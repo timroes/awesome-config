@@ -26,7 +26,7 @@ local tasklist_buttons = gears.table.join(
 	end)
 )
 
-local function new(self, screen, tag_filter)
+local function new(self, screen)
 	local widget = awful.widget.tasklist {
 		screen = screen,
 		filter = awful.widget.tasklist.filter.currenttags,
