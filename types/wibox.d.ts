@@ -1,17 +1,28 @@
+interface WidgetDefinition {
+  __isWidgetDefinition: true;
+  layout?: WidgetBase;
+  widget?: WidgetBase;
+
+  // Widget declaration
+  [key: string]: unknown;
+}
+
 interface WidgetBase {
-  (): WidgetBase;
-  get_children_by_id(id: string): WidgetBase[];
+  (): WidgetDefinition;
   // Those properties don't really exist on the Lua class,
   // but are only used for TypeScript type differentiation.
   __type: "widget";
-  __widget: string;
 }
 
 interface LayoutBase {
-  (): LayoutBase;
+  (): WidgetDefinition;
   // Those properties don't really exist on the Lua class,
   // but are only used for TypeScript type differentiation.
   __type: "layout";
+}
+
+interface Widget {
+  get_children_by_id(id: string): Widget[];
 }
 
 interface TextBoxProps {
@@ -34,14 +45,14 @@ interface ContainerProps {
 
 type LayoutProps<T> = T extends { __layout: "container" } ? ContainerProps : {};
 
-interface TextClock extends WidgetBase{
+interface TextClock extends Widget {
   format?: string;
   force_update(): void;
 }
 
 declare module 'wibox' {
   /** @noSelf */
-  interface Widget {
+  interface WidgetModule {
     calendar: WidgetBase;
     checkbox: WidgetBase;
     graph: WidgetBase;
@@ -54,12 +65,18 @@ declare module 'wibox' {
     textbox: WidgetBase & { __widget: "textbox" };
     textclock: WidgetBase;
     
-    (declarativeWidget: unknown): WidgetBase;
+    (declarativeWidget: WidgetDefinition): Widget;
   }
 
   /** @noSelf */
   interface Container {
     background: LayoutBase & { __layout: "container" };
+  }
+
+  interface AlignLayout extends Widget {
+    first: Widget;
+    second: Widget;
+    third: Widget;
   }
 
   /** @noSelf */
@@ -74,7 +91,7 @@ declare module 'wibox' {
     }
   }
 
-  export const widget: Widget;
+  export const widget: WidgetModule;
   export const container: Container;
   export const layout: Layouts;
 }

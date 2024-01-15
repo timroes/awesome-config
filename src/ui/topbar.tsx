@@ -11,16 +11,14 @@ const BAR_HEIGHT = 32;
 const sidebar = lunaconf.sidebar.get();
 
 const bars = new WeakMap<Screen, awful.Wibar>();
-let lastClock: TextClock | null = null;
 
 const createPrimaryScreenWidgets = () => {
   const calendarAction = config('calendar.action');
   const clockButtons = calendarAction ? awful.button([], 1, () => spawn(`dex '${calendarAction}'`)) : null;
-  lastClock = <wibox.widget.textclock id="clock" format="%H:%M" buttons={clockButtons} />;
-  return (
+  return wibox.widget(
     <wibox.layout.fixed.horizontal spacing={5}>
       <wibox.widget.systray />
-      {lastClock}
+      <wibox.widget.textclock id="clock" format="%H:%M" buttons={clockButtons} />
       {sidebar.trigger}
     </wibox.layout.fixed.horizontal>
   );
@@ -53,21 +51,22 @@ awful.screen.connect_for_each_screen((s) => {
     screen: s,
     height: dpiY(BAR_HEIGHT, s),
     bg: "#1a1b26",
-    widget: barWidget,
+    widget: wibox.widget(barWidget),
   });
 
   bars.set(s, bar);
 });
 
 const updateTimezone = async () => {
-  if (!lastClock) {
+  const clock = (bars.get(screen.primary)?.widget as wibox.AlignLayout).third.get_children_by_id("clock")[0] as TextClock | undefined;
+  if (!clock) {
     return;
   }
   const { stdout } = await execute("date +%Z");
   const tz = (stdout ?? "").trim();
   const isHomeTimezone = tz == "CET" || tz == "CEST"
-  lastClock.format = isHomeTimezone ? "%H:%M" : `%H:%M  <span color='gray'>(${tz})</span>`;
-  lastClock.force_update();
+  clock.format = isHomeTimezone ? "%H:%M" : `%H:%M  <span color='gray'>(${tz})</span>`;
+  clock.force_update();
 };
 
 dbus.system().onSignal<[string, { Timezone?: string }]>(null, 'org.freedesktop.DBus.Properties', 'PropertiesChanged', '/org/freedesktop/timedate1', async (event) => {

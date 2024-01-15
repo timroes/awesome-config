@@ -1,17 +1,14 @@
-import * as wibox from 'wibox';
-
-function setupWidget<T extends WidgetBase>(widget: T, props: WidgetProps<T>, ...children: any[]) {
-  if (children.length > 0) {
-    (children as any).layout = widget;
-  } else {
-    (children as any).widget = widget;
-  }
+function setupWidget<T extends WidgetBase>(widget: T, props: WidgetProps<T>, ...children: WidgetDefinition[]): WidgetDefinition {
+  const content = children as unknown as WidgetDefinition;
+  // This isn't needed by awesome, just so we can have better TS typing
+  content.__isWidgetDefinition = true;
+  content[children.length > 0 ? "layout" : "widget"] = widget;
   if (!!props) {
     for (const [key, value] of Object.entries(props)) {
-      (children as any)[key] = value;
+      content[key] = value;
     }
   }
-  return wibox.widget(children);
+  return content;
 }
 
 globalThis.setupWidget = setupWidget;

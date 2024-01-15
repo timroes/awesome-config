@@ -32,7 +32,7 @@ declare module 'awful' {
     x?: number;
     y?: number;
     bg?: string;
-    widget?: WidgetBase;
+    widget?: Widget;
   }
 
   type WibarArgs = Wibar;
