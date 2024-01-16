@@ -24,7 +24,7 @@ declare module 'awful' {
     connect_for_each_screen(callback: (screen: Screen) => void): void;
   }
 
-  interface Wibar {
+  interface Wibar<T extends Widget> {
     position?: 'top' | 'bottom' | 'left' | 'right';
     screen: Screen;
     height?: number;
@@ -32,12 +32,12 @@ declare module 'awful' {
     x?: number;
     y?: number;
     bg?: string;
-    widget?: Widget;
+    widget?: T;
   }
 
-  type WibarArgs = Wibar;
+  type WibarArgs<T extends Widget> = Wibar<T>;
 
-  export const wibar: (args: WibarArgs) => Wibar;
+  export const wibar: <T extends Widget>(args: WibarArgs<T>) => Wibar<T>;
   export const screen: ScreenModule;
   export const client: ClientModule;
   export function button(modifiers: string[], button: 1 | 2 | 3, onPress: (() => void) | null, onRelease?: (() => void) | null): unknown[];

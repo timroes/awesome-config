@@ -10,7 +10,7 @@ import { dpiY } from '../lib/dpi';
 const BAR_HEIGHT = 32;
 const sidebar = lunaconf.sidebar.get();
 
-const bars = new WeakMap<Screen, awful.Wibar>();
+const bars = new WeakMap<Screen, awful.Wibar<wibox.AlignLayout>>();
 
 const createPrimaryScreenWidgets = () => {
   const calendarAction = config('calendar.action');
@@ -51,14 +51,14 @@ awful.screen.connect_for_each_screen((s) => {
     screen: s,
     height: dpiY(BAR_HEIGHT, s),
     bg: "#1a1b26",
-    widget: wibox.widget(barWidget),
+    widget: wibox.widget(barWidget) as wibox.AlignLayout,
   });
 
   bars.set(s, bar);
 });
 
 const updateTimezone = async () => {
-  const clock = (bars.get(screen.primary)?.widget as wibox.AlignLayout).third.get_children_by_id("clock")[0] as TextClock | undefined;
+  const clock = bars.get(screen.primary)?.widget?.third.get_children_by_id("clock")[0] as TextClock | undefined;
   if (!clock) {
     return;
   }
