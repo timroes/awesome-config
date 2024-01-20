@@ -6,6 +6,7 @@ const colors = {
   },
   cyan: {
     darkest: '#083344',
+    light: '#79AAD9',
   },
   gray: {
     darkest: '#030712',
@@ -14,6 +15,9 @@ const colors = {
   },
   pink: {
     light: '#f0abfc',
+  },
+  green: {
+    medium: '#54B399',
   },
 
   // Legacy color definitions
@@ -55,6 +59,14 @@ const base = {
     dark: colors.gray.darkest,
     light: colors.gray.lightest,
   },
+
+  highlight: {
+    disabled: colors.gray.medium,
+    regular: colors.cyan.light,
+    success: colors.green.medium,
+  },
+
+  transparent: '#00000000',
 } as const;
 
 const clientlist = {

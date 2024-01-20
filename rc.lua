@@ -11,8 +11,6 @@ local gears = require('gears')
 -- Add our lib folder to the require lookup path
 local configpath = gears.filesystem.get_configuration_dir()
 package.path = configpath .. "/lib/?.lua;" .. configpath .. "/lib/?/init.lua;" .. package.path
--- Add package path for lua config files in src folder
-package.path = configpath .. "/src/?.lua;" .. package.path
 -- Add TypeScript build folder to path
 package.path = configpath .. "/build/?.lua;" .. configpath .. "/build/?/index.lua;" .. package.path
 

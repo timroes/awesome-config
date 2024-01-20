@@ -27,7 +27,7 @@ class DBusConnection {
     );
   }
 
-  public call<T = void>(
+  public call<T = any>(
     destination: string,
     objectPath: string,
     interfaceName: string,
@@ -36,6 +36,7 @@ class DBusConnection {
   ): Promise<T> {
     const args = params?.map(([type, value]) => GLib.Variant(type, value));
 
+    // TODO: We should idealy use async calling here
     const resp = this.bus.call_sync(
       destination,
       objectPath,
@@ -47,7 +48,7 @@ class DBusConnection {
       -1, // Timeout
     );
 
-    return Promise.resolve(resp.value);
+    return Promise.resolve(resp);
   }
 
   // TODO: Untested implementation

@@ -9,6 +9,8 @@ local calendar = require('lunaconf.sidebar.calendar')
 local battery = require('lunaconf.sidebar.battery')
 local stats_panel = require('lunaconf.sidebar.stats_panel')
 
+local bluetooth_control = require('ui.controlcenter.bluetooth').bluetoothControl
+
 local lunaconf = {
 	config = require('lunaconf.config'),
 	dpi = require('lunaconf.dpi'),
@@ -106,6 +108,7 @@ end
 
 local function hide(self, stop_keygrabber)
 	self._popup.visible = false
+	awesome.emit_signal('controlcenter::close')
 	if self._stop_stats_calculation then
 		self._stop_stats_calculation()
 		self._stop_stats_calculation = nil
@@ -133,6 +136,7 @@ local function show(self)
 	self._stop_stats_calculation = start_stats_calculation(self)
 	self._keygrabber:start()
 	self._calendar:set_to_now(true)
+	awesome.emit_signal('controlcenter::open')
 	self._popup.visible = true
 end
 
@@ -346,7 +350,8 @@ local function init(_)
 							}
 						}
 					}
-				}
+				},
+				bluetooth_control(screen.primary),
 			}
 		},
 		bg = theme.sidebar_bg,

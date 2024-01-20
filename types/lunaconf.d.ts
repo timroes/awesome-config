@@ -62,6 +62,12 @@ declare module 'lunaconf' {
     clienticon: WidgetBase;
   }
 
+  /** @noSelf */
+  interface Icons {
+    lookup_icon(name: string): string;
+  }
+
+  export const icons: Icons;
   export const sidebar: Sidebar;
   export const utils: Utils;
   export const config: Config;

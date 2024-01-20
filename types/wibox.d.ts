@@ -89,6 +89,11 @@ declare module 'wibox' {
     third: Widget;
   }
 
+  interface FixedLayout extends Widget {
+    reset(): void;
+    add(...widget: Widget[]): void;
+  }
+
   /** @noSelf */
   interface Layouts {
     ratio: {
