@@ -6,3 +6,5 @@ declare interface Key {
   // can only create it from methods (like awful.key), that are declaring it.
   [UniqueKeySymbol]: void;
 }
+
+type Modifier = 'Mod1' | 'Shift' | 'Control' | 'Mod4';

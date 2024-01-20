@@ -9,6 +9,8 @@ interface Client {
   requests_no_titlebar: boolean;
   skip_taskbar: boolean;
   screen: Screen;
+  minimized: boolean;
+  urgent: boolean;
   set_xproperty(name: string, value: boolean | string | number): void;
   connect_signal(signal: ClientSignals, callback: (client: Client) => void): void;
   raise(): void;
@@ -22,6 +24,7 @@ type ClientSignals = 'manage' | 'unmanage' | `property::${ClientProperties}` | "
 /** @noSelf */
 interface ClientGlobal {
   connect_signal(signal: ClientSignals, callback: (client: Client) => void): void;
+  focus?: Client;
 }
 
 declare const client: ClientGlobal;

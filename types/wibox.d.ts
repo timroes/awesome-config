@@ -35,6 +35,8 @@ interface TextBoxProps {
   font?: string;
 }
 
+interface TextBox extends Widget, TextBoxProps {}
+
 type WidgetProps<T> = T extends { __widget: "textbox" } ? TextBoxProps : {};
 
 interface ContainerProps {
@@ -68,9 +70,17 @@ declare module 'wibox' {
     (declarativeWidget: WidgetDefinition): Widget;
   }
 
+  interface BackgroundContainer extends Widget {
+    bg: string;
+    fg: string;
+  }
+
   /** @noSelf */
   interface Container {
     background: LayoutBase & { __layout: "container" };
+    constraint: LayoutBase;
+    margin: LayoutBase;
+    place: LayoutBase;
   }
 
   interface AlignLayout extends Widget {
@@ -81,6 +91,10 @@ declare module 'wibox' {
 
   /** @noSelf */
   interface Layouts {
+    ratio: {
+      horizontal: LayoutBase;
+      vertical: LayoutBase;
+    },
     align: {
       horizontal: LayoutBase;
       vertical: LayoutBase;
@@ -88,7 +102,11 @@ declare module 'wibox' {
     fixed: {
       horizontal: LayoutBase;
       vertical: LayoutBase;
-    }
+    },
+    flex: {
+      horizontal: LayoutBase;
+      vertical: LayoutBase;
+    },
   }
 
   export const widget: WidgetModule;

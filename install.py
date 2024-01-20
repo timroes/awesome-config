@@ -6,6 +6,7 @@ import os, shutil, subprocess, sys
 PKG_DEPS = {
   'alsa-utils': 'provides utils for volume controls',
   'dex': 'launches all autostart desktop files',
+  'inter-font': 'Font used for interface',
   'libyaml': 'required for lua yaml lib to read config',
   'light-locker': 'required to lock screen properly',
   'luarocks': 'installs lua dependencies',

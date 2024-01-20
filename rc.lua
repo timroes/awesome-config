@@ -52,6 +52,11 @@ local awful = require('awful')
 -- Load the jsx utilities before other Lua configs, so any config file could import TS compiled files that use JSX
 require('build/jsx');
 
+-- Load theme from TS files
+local beautiful = require('beautiful')
+local theme = require('theme.default')
+beautiful.init(theme.beautiful)
+
 -- Clear all shortcuts before including any config files
 root.keys({ })
 

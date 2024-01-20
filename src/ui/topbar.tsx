@@ -5,7 +5,9 @@ import * as screens from "../lib/screen";
 import { config } from '../lib/config';
 import { execute, spawn } from '../lib/process';
 import { dbus } from '../lib/dbus';
-import { dpiY } from '../lib/dpi';
+import { dpiX, dpiY } from '../lib/dpi';
+import { createClientlist } from './clientlist';
+import { theme } from '../theme/default';
 
 const BAR_HEIGHT = 32;
 const sidebar = lunaconf.sidebar.get();
@@ -16,8 +18,10 @@ const createPrimaryScreenWidgets = () => {
   const calendarAction = config('calendar.action');
   const clockButtons = calendarAction ? awful.button([], 1, () => spawn(`dex '${calendarAction}'`)) : null;
   return wibox.widget(
-    <wibox.layout.fixed.horizontal spacing={5}>
-      <wibox.widget.systray />
+    <wibox.layout.fixed.horizontal spacing={dpiX(5, screen.primary)}>
+      <wibox.container.margin margins={dpiY(7, screen.primary)}>
+        <wibox.widget.systray />
+      </wibox.container.margin>
       <wibox.widget.textclock id="clock" format="%H:%M" buttons={clockButtons} />
       {sidebar.trigger}
     </wibox.layout.fixed.horizontal>
@@ -38,11 +42,8 @@ const updatePrimaryBar = () => {
 awful.screen.connect_for_each_screen((s) => {
   const barWidget = (
     <wibox.layout.align.horizontal>
-      <wibox.layout.fixed.horizontal>
-        {lunaconf.tags.create_widget(s)}
-        {lunaconf.widgets.tasklist(s)}
-      </wibox.layout.fixed.horizontal>
-      {lunaconf.widgets.clienttitle(s)}
+      {lunaconf.tags.create_widget(s)}
+      {createClientlist(s)}
     </wibox.layout.align.horizontal>
   );
 
@@ -50,7 +51,7 @@ awful.screen.connect_for_each_screen((s) => {
     position: 'top',
     screen: s,
     height: dpiY(BAR_HEIGHT, s),
-    bg: "#1a1b26",
+    bg: theme.bg.base,
     widget: wibox.widget(barWidget) as wibox.AlignLayout,
   });
 

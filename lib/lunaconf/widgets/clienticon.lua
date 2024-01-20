@@ -4,6 +4,7 @@
 
 local base = require('wibox.widget.base')
 local gears = require('gears')
+local cairo = require('lgi').cairo
 
 local notify = require('lunaconf.notify')
 local lunaconf = {
@@ -61,6 +62,16 @@ function clienticon:draw(_, cr, width, height)
 
 	cr:set_source_surface(s, 0, 0)
 	cr:paint()
+
+	if c.minimized then
+		-- Draw minimized client icons in grayscale
+		local pattern = cairo.Pattern.create_for_surface(s)
+		cr:rectangle(0, 0, swidth, sheight)
+		cr:set_source_rgb(0, 0, 0);
+		cr:set_operator(cairo.Operator.HSL_SATURATION)
+		cr:mask(pattern)
+	else
+	end
 end
 
 function clienticon:fit(_, width, height)
@@ -131,14 +142,17 @@ local function new(c)
 		return ret
 end
 
-client.connect_signal("property::icon", function(c)
-		for obj in pairs(instances) do
-				if obj._private.client.valid and obj._private.client == c then
-						obj:emit_signal("widget::layout_changed")
-						obj:emit_signal("widget::redraw_needed")
-				end
-		end
-end)
+local function redraw_matching(c)
+	for obj in pairs(instances) do
+			if obj._private.client.valid and obj._private.client == c then
+					obj:emit_signal("widget::layout_changed")
+					obj:emit_signal("widget::redraw_needed")
+			end
+	end
+end
+
+client.connect_signal("property::icon", redraw_matching)
+client.connect_signal("property::minimized", redraw_matching)
 
 return setmetatable(clienticon, {
 		__call = function(_, ...)

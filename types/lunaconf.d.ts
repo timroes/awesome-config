@@ -59,6 +59,7 @@ declare module 'lunaconf' {
   interface Widgets {
     tasklist(screen: Screen): WidgetBase;
     clienttitle(screen: Screen): WidgetBase;
+    clienticon: WidgetBase;
   }
 
   export const sidebar: Sidebar;

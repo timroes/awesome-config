@@ -37,8 +37,29 @@ declare module 'awful' {
 
   type WibarArgs<T extends Widget> = Wibar<T>;
 
+  type TasklistFilterFn = (client: Client, screen: Screen) => boolean;
+
+  interface TasklistArgs {
+    screen: Screen;
+    filter: TasklistFilterFn;
+    buttons?: Button[];
+    layout: WidgetDefinition;
+    widget_template: WidgetDefinition & { create_callback?: (self: Widget, client: Client, index: number, clients: Client[]) => void };
+  }
+
+  /** @noSelf */
+  interface WidgetModule {
+    tasklist: {
+      (args: TasklistArgs): Widget;
+      filter: {
+        currenttags: TasklistFilterFn;
+      }
+    }
+  }
+
+  export const widget: WidgetModule;
   export const wibar: <T extends Widget>(args: WibarArgs<T>) => Wibar<T>;
   export const screen: ScreenModule;
   export const client: ClientModule;
-  export function button(modifiers: string[], button: 1 | 2 | 3, onPress: (() => void) | null, onRelease?: (() => void) | null): unknown[];
+  export function button<T extends any[] = []>(modifiers: Modifier[], button: 1 | 2 | 3, onPress: ((...args: T) => void) | null, onRelease?: (() => void) | null): Button[];
 }
