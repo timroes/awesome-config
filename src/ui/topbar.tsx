@@ -1,7 +1,6 @@
 import * as wibox from 'wibox';
 import * as awful from 'awful';
 import * as lunaconf from 'lunaconf';
-import * as screens from "../lib/screen";
 import { config } from '../lib/config';
 import { execute, spawn } from '../lib/process';
 import { dbus } from '../lib/dbus';
@@ -29,7 +28,7 @@ const createPrimaryScreenWidgets = () => {
 };
 
 const updatePrimaryBar = () => {
-  for (const s of screens.screens_as_array()) {
+  for (const s of screen) {
     if (s === screen.primary) {
       (bars.get(s)?.widget as any).set_right(createPrimaryScreenWidgets());
     } else {

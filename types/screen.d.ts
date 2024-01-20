@@ -9,7 +9,7 @@ type ScreenProperties = "geometry" | "workarea" | "index" | "outputs";
 type ScreenSignals = "list" | "primary_changed" | "added" | "removed" | "swapped" | `property::${ScreenProperties}`;
 
 /** @noSelf */
-interface ScreenGlobal {
+interface ScreenGlobal extends LuaIterable<Screen> {
   primary: Screen;
   connect_signal(signal: ScreenSignals, callback: (screen: Screen) => void): void;
 }

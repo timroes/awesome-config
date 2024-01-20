@@ -1,6 +1,5 @@
 import * as beautiful from 'beautiful';
 import { config } from "./config";
-import { screens_as_array } from "./screen";
 import { dpis, outputName } from "./screens";
 
 const DEFAULT_DPI = 96;
@@ -32,7 +31,7 @@ function calculateScreensDpi(screen: Screen): void {
 }
 
 function calculateAllDpi(): void {
-  for (const s of screens_as_array()) {
+  for (const s of screen) {
     calculateScreensDpi(s);
   }
 }
