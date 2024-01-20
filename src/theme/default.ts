@@ -10,7 +10,6 @@ const colors = {
   gray: {
     darkest: '#030712',
     medium: '#6b7280',
-    light: '#d1d5db',
     lightest: '#f9fafb',
   },
   pink: {
@@ -51,6 +50,11 @@ const base = {
     base: colors.blue.darkest,
     panel: colors.blue.dark,
   },
+
+  text: {
+    dark: colors.gray.darkest,
+    light: colors.gray.lightest,
+  },
 } as const;
 
 const clientlist = {
@@ -61,10 +65,10 @@ const clientlist = {
     urgent: colors.pink.light,
   },
   fg: {
-    normal: colors.gray.lightest,
-    focused: colors.gray.lightest,
+    normal: base.text.light,
+    focused: base.text.light,
     minimized: colors.gray.medium,
-    urgent: colors.gray.darkest,
+    urgent: base.text.dark,
   }
 };
 
