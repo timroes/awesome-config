@@ -14,6 +14,7 @@ import './conf/numpad';
 
 // Application specific handling
 import './conf/apps/rofimoji';
+import './conf/apps/zoom';
 
 import './ui/topbar';
 

@@ -1,4 +1,32 @@
+interface MotifWmHints {
+  decorations?: {
+    all?: boolean;
+    border?: boolean;
+    maximize?: boolean;
+    menu?: boolean;
+    minimize?: boolean;
+    resizeh?: boolean;
+    title?: boolean;
+  };
+  functions?: {
+    all?: boolean;
+    close?: boolean;
+    maximize?: boolean;
+    minimize?: boolean;
+    move?: boolean;
+    resize?: boolean;
+  };
+  input_mode?: string;
+  status?: {
+    tearoff_window?: boolean;
+  }
+}
+
 interface Client {
+  /**
+   * The X window id of the client.
+   */
+  readonly window: number;
   name: string;
   class: string;
   floating: boolean;
@@ -11,6 +39,12 @@ interface Client {
   screen: Screen;
   minimized: boolean;
   urgent: boolean;
+  modal: boolean;
+  transient_for: number | null;
+  group_window: number | null;
+  leader_window: number | null;
+  readonly motif_wm_hints: MotifWmHints | null;
+  readonly is_fixed: () => boolean;
   set_xproperty(name: string, value: boolean | string | number): void;
   connect_signal(signal: ClientSignals, callback: (client: Client) => void): void;
   raise(): void;
