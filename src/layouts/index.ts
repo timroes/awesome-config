@@ -1,0 +1,1 @@
+export { maximized } from './maximized';

@@ -1,5 +1,5 @@
-export const myLayout: Layout = {
-  name: "My layout",
+export const maximized: Layout = {
+  name: "Maximized",
   arrange(params) {
     for (const client of params.clients) {
       params.geometries.set(client, {

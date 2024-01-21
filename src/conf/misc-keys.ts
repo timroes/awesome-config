@@ -1,6 +1,6 @@
-import { notify } from "lunaconf";
-import { SUPER, SCRIPT_PATH } from "../lib/constants";
+import { SUPER } from "../lib/constants";
 import { addKey } from "../lib/keys";
+import { MouseButtonIndex } from "../lib/mouse";
 import { isCommandAvailable, spawn } from "../lib/process";
 
 // Open file exporer in home directory
@@ -14,7 +14,7 @@ isCommandAvailable('flameshot').then(() => {
 
   addKey(['Mod1'], 'Print', () => {
     mousegrabber.run((m) => {
-      if (m.buttons[0]) {
+      if (m.buttons[MouseButtonIndex.PRIMARY]) {
         const c = mouse.current_client;
         if (c) {
           c.raise();
@@ -22,7 +22,7 @@ isCommandAvailable('flameshot').then(() => {
         }
         return false;
       }
-      return !m.buttons[2];
+      return !m.buttons[MouseButtonIndex.SECONDARY];
     }, "crosshair");
     
   });
