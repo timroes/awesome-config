@@ -11,7 +11,7 @@ interface SignalParams<Params = undefined> {
 const { GLib, Gio } = lgi;
 
 class DBusConnection {
-  constructor(private bus: any) {}
+  constructor(private bus: lgi.DBusConnection) {}
 
   public onSignal<T = undefined>(
     sender: string | null,
@@ -27,16 +27,15 @@ class DBusConnection {
     );
   }
 
-  public call<T = any>(
+  public callSync<T = any>(
     destination: string,
     objectPath: string,
     interfaceName: string,
     member: string,
     params?: Array<[variantType: string, variantValue: unknown]>
-  ): Promise<T> {
+  ): T {
     const args = params?.map(([type, value]) => GLib.Variant(type, value));
 
-    // TODO: We should idealy use async calling here
     const resp = this.bus.call_sync(
       destination,
       objectPath,
@@ -48,7 +47,31 @@ class DBusConnection {
       -1, // Timeout
     );
 
-    return Promise.resolve(resp);
+    return resp;
+  }
+
+  public call<T = any>(destination: string, objectPath: string, interfaceName: string, member: string, params?: Array<[variantType: string, variantValue: unknown]>): Promise<T> {
+    const args = params?.map(([type, value]) => GLib.Variant(type, value));
+
+    return new Promise((resolve, reject) => {
+      lgi.Gio.Async.call(() => {
+        const [result, error] = this.bus.async_call(
+          destination,
+          objectPath,
+          interfaceName,
+          member,
+          args ? GLib.Variant.new_tuple(args, args.length) : null,
+          null,
+          Gio.DBusCallFlags.NONE,
+          -1
+        );
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      })();
+    });
   }
 
   // TODO: Untested implementation
