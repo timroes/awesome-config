@@ -78,7 +78,7 @@ local function update_battery(self)
 				self._battery_warning_shown = false
 				set_color(self, colors.charging)
 			else
-				if status.TimeToEmpty <= critical_time_left_minutes * 60 then
+				if status.TimeToEmpty ~= 0 and status.TimeToEmpty <= critical_time_left_minutes * 60 then
 					if not self._battery_warning_shown then
 						lunaconf.notify.show {
 							title = 'Battery Warning',
