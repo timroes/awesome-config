@@ -22,6 +22,18 @@ interface MotifWmHints {
   }
 }
 
+interface SizeHints {
+  user_position?: {
+    x?: number;
+    y?: number;
+  };
+  user_size?: {
+    width?: number;
+    height?: number;
+  };
+  win_gravity?: string;
+}
+
 interface Client {
   /**
    * The X window id of the client.
@@ -43,17 +55,20 @@ interface Client {
   transient_for: number | null;
   group_window: number | null;
   leader_window: number | null;
+  ontop: boolean;
+  size_hints?: SizeHints;
   readonly motif_wm_hints: MotifWmHints | null;
   readonly is_fixed: () => boolean;
   set_xproperty(name: string, value: boolean | string | number): void;
   connect_signal(signal: ClientSignals, callback: (client: Client) => void): void;
+  tags(tags?: Tag[]): Tag[];
   raise(): void;
   kill(): void;
   geometry(): unknown;
 }
 
 type ClientProperties = 'floating' | 'screen' | 'requests_no_titlebar' | 'is_docked';
-type ClientSignals = 'manage' | 'unmanage' | `property::${ClientProperties}` | "request::titlebars";
+type ClientSignals = 'manage' | 'unmanage' | 'focus' | `property::${ClientProperties}` | "request::titlebars";
 
 /** @noSelf */
 interface ClientGlobal {
