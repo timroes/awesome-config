@@ -15,20 +15,25 @@ declare module 'gears' {
     start_new(timeoutInSeconds: number, callback: () => boolean | void): TimerInstance;
   }
 
-  type Context = { 
-    /**
-     * This doesn't really exist in the Lua object, just here to distinguish types in TS.
-     */
-    __type: "cairo_context"
+  type CairoContext = {
+    rectangle(x: number, y: number, width: number, height: number): void;
+    set_source_rgb(r: number, g: number, b: number): void;
+    fill(): void;
   };
-  type ShapeFn = (cr: Context, width: number, height: number) => void;
+  type ShapeFn = (cr: CairoContext, width: number, height: number) => void;
 
   /** @noSelf */
   interface ShapeModule {
-    rounded_rect: (cr: Context, width: number, height: number, radius: number) => void;
-    circle: (cr: Context, width: number, height: number, radius: number) => void;
+    rounded_rect: (cr: CairoContext, width: number, height: number, radius: number) => void;
+    circle: (cr: CairoContext, width: number, height: number, radius: number) => void;
   }
 
+  /** @noSelf */
+  interface Color {
+    parse_color(color: string): LuaMultiReturn<[number, number, number, number]>;
+  }
+
+  export const color: Color;
   export const filesystem: Filesystem;
   export const timer: Timer;
   export const shape: ShapeModule;

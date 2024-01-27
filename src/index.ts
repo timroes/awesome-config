@@ -1,5 +1,7 @@
 // Import the actual configuration files in the desired order.
 
+import './conf/tags';
+
 import './conf/compositor';
 import './conf/screensaver';
 import './conf/brightness';

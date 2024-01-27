@@ -11,7 +11,7 @@ import { theme } from '../theme/default';
 const BAR_HEIGHT = 32;
 const sidebar = lunaconf.sidebar.get();
 
-const bars = new WeakMap<Screen, awful.Wibar<wibox.AlignLayout>>();
+const bars = new WeakMap<Screen, awful.Wibar<AlignLayout>>();
 
 const createPrimaryScreenWidgets = () => {
   const calendarAction = config('calendar.action');
@@ -41,7 +41,9 @@ const updatePrimaryBar = () => {
 awful.screen.connect_for_each_screen((s) => {
   const barWidget = (
     <wibox.layout.align.horizontal>
-      {lunaconf.tags.create_widget(s)}
+      <wibox.container.margin right={dpiX(4, s)}>
+        {lunaconf.tags.create_widget(s)}
+      </wibox.container.margin>
       {createClientlist(s)}
     </wibox.layout.align.horizontal>
   );
@@ -51,7 +53,7 @@ awful.screen.connect_for_each_screen((s) => {
     screen: s,
     height: dpiY(BAR_HEIGHT, s),
     bg: theme.bg.base,
-    widget: wibox.widget(barWidget) as wibox.AlignLayout,
+    widget: wibox.widget(barWidget) as AlignLayout,
   });
 
   bars.set(s, bar);

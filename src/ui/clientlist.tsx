@@ -4,6 +4,7 @@ import * as gears from 'gears';
 import * as lunaconf from 'lunaconf';
 import { dpiX, dpiY } from '../lib/dpi';
 import { theme } from '../theme/default';
+import { MouseButton } from '../lib/mouse';
 
 const getColor = (c: Client, type: "fg" | "bg") => {
   if (c.urgent) {
@@ -20,7 +21,7 @@ const getColor = (c: Client, type: "fg" | "bg") => {
 
 export const createClientlist = (screen: Screen) => {
   const buttons = [
-    ...awful.button<[Client]>([], 1, (c) => {
+    ...awful.button<[Client]>([], MouseButton.PRIMARY, (c) => {
       if (c === client.focus) {
         c.minimized = true;
       } else {
@@ -29,16 +30,21 @@ export const createClientlist = (screen: Screen) => {
         c.raise();
       }
     }),
-    ...awful.button<[Client]>([], 2, (c) => c.kill()),
-    ...awful.button<[Client]>([], 3, (c) => {
-      client.focus = c;
-      c.minimized = !c.minimized;
+    ...awful.button<[Client]>([], MouseButton.MIDDLE, (c) => c.kill()),
+    ...awful.button<[Client]>([], MouseButton.SECONDARY, (c) => {
+      const tagsWithAction = c.tags().filter((t) => t.layout.clientlistAction);
+      if (tagsWithAction.length > 0) {
+        // If the current tags have clientlistActions, execute them instead of toggling minimization status
+        tagsWithAction.forEach(t => t.layout.clientlistAction!(c));
+      } else {
+        c.minimized = !c.minimized;
+      }
     }),
   ];
 
   const onUpdate = (self: Widget, c: Client) => {
     (self.get_children_by_id('clientname')[0] as TextBox).text = c.name;
-    const bg = self.get_children_by_id("background")[0] as wibox.BackgroundContainer;
+    const bg = self.get_children_by_id("background")[0] as BackgroundContainer;
     bg.bg = getColor(c, "bg");
     bg.fg = getColor(c, "fg");
   };

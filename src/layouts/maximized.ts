@@ -1,12 +1,12 @@
-export const maximized: Layout = {
+export const maximized: LayoutDescription = {
   name: "Maximized",
-  arrange(params) {
-    for (const client of params.clients) {
-      params.geometries.set(client, {
-        x: params.workarea.x,
-        y: params.workarea.y,
-        height: params.workarea.height,
-        width: params.workarea.width
+  arrange({ clients, workarea, geometries }) {
+    for (const client of clients) {
+      geometries.set(client, {
+        x: workarea.x,
+        y: workarea.y,
+        height: workarea.height,
+        width: workarea.width
       });
     }
   },

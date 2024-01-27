@@ -12,7 +12,7 @@ export const bluetoothControl = (screen: Screen) => {
     </wibox.container.background>
   );
 
-  const deviceList = widget.get_children_by_id("devices")[0] as wibox.FixedLayout;
+  const deviceList = widget.get_children_by_id("devices")[0] as FixedLayout;
   const devices: Record<string, { connected: boolean; name: string; icon: string, pendingAction: boolean; }> = {};
   
   const onUpdate = () => {

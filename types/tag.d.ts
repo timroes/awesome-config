@@ -1,4 +1,4 @@
-type TagProperties = 'layout';
+type TagProperties = 'layout' | 'master_width_factor' | 'selected';
 type TagSignals = `property::${TagProperties}`;
 
 interface Tag {
@@ -14,5 +14,6 @@ interface Tag {
   gap: number;
   master_width_factor: number;
 
+  connect_signal(signal: TagSignals, callback: (...args: any[]) => void): void;
   emit_signal(signal: TagSignals): void;
 }

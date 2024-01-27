@@ -52,6 +52,22 @@ interface TextClock extends Widget {
   force_update(): void;
 }
 
+interface AlignLayout extends Widget {
+  first: Widget;
+  second: Widget;
+  third: Widget;
+}
+
+interface FixedLayout extends Widget {
+  reset(): void;
+  add(...widget: Widget[]): void;
+}
+
+interface BackgroundContainer extends Widget {
+  bg: string;
+  fg: string;
+}
+
 declare module 'wibox' {
   /** @noSelf */
   interface WidgetModule {
@@ -66,13 +82,13 @@ declare module 'wibox' {
     systray: WidgetBase;
     textbox: WidgetBase & { __widget: "textbox" };
     textclock: WidgetBase;
+
+    /** @noSelf */
+    base: {
+      make_widget: LayoutBase;
+    }
     
     (declarativeWidget: WidgetDefinition): Widget;
-  }
-
-  interface BackgroundContainer extends Widget {
-    bg: string;
-    fg: string;
   }
 
   /** @noSelf */
@@ -81,17 +97,6 @@ declare module 'wibox' {
     constraint: LayoutBase;
     margin: LayoutBase;
     place: LayoutBase;
-  }
-
-  interface AlignLayout extends Widget {
-    first: Widget;
-    second: Widget;
-    third: Widget;
-  }
-
-  interface FixedLayout extends Widget {
-    reset(): void;
-    add(...widget: Widget[]): void;
   }
 
   /** @noSelf */
@@ -114,7 +119,35 @@ declare module 'wibox' {
     },
   }
 
-  export const widget: WidgetModule;
-  export const container: Container;
-  export const layout: Layouts;
+  interface WiboxArgs {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    widget?: Widget;
+    screen: Screen;
+    visible: boolean;
+    ontop?: boolean;
+    type?: WindowType;
+    cursor?: Cursor;
+    bg?: string;
+  }
+
+  interface Wibox extends WiboxArgs {
+    connect_signal(signal: string, callback: (...args: any[]) => void): void;
+    buttons(buttons: Button[]): Button[];
+    set_xproperty(name: string, value: boolean | string | number): void;
+  }
+
+  /** @noSelf */
+  interface WiboxModule {
+    (args: WiboxArgs): Wibox;
+
+    widget: WidgetModule;
+    container: Container;
+    layout: Layouts;
+  }
+
+  const wibox: WiboxModule;
+  export = wibox;
 }

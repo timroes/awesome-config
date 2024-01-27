@@ -34,6 +34,21 @@ interface SizeHints {
   win_gravity?: string;
 }
 
+type WindowType = 
+  | "desktop"
+  | "dock"
+  | "splash"
+  | "dialog"
+  | "menu"
+  | "toolbar"
+  | "utility"
+  | "dropdown_menu"
+  | "popup_menu"
+  | "notification"
+  | "combo"
+  | "dnd"
+  | "normal";
+
 interface Client {
   /**
    * The X window id of the client.
