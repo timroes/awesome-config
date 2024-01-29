@@ -3,9 +3,7 @@ const colors = {
   blue: {
     darkest: '#0f172a',
     dark: '#24283b',
-  },
-  cyan: {
-    darkest: '#083344',
+    medium: '#3730a3',
     light: '#79AAD9',
   },
   gray: {
@@ -62,7 +60,7 @@ const base = {
 
   highlight: {
     disabled: colors.gray.medium,
-    regular: colors.cyan.light,
+    regular: colors.blue.light,
     success: colors.green.medium,
   },
 
@@ -72,7 +70,7 @@ const base = {
 const clientlist = {
   bg: {
     normal: base.bg.panel,
-    focused: colors.cyan.darkest,
+    focused: colors.blue.medium,
     minimized: base.bg.panel,
     urgent: colors.pink.light,
   },
