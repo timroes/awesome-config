@@ -27,6 +27,18 @@ interface SizeHints {
     x?: number;
     y?: number;
   };
+  program_position?: {
+    x?: number;
+    y?: number;
+  };
+  max_height?: number;
+  max_width?: number;
+  min_height?: number;
+  min_width?: number;
+  program_size?: {
+    width?: number;
+    height?: number;
+  };
   user_size?: {
     width?: number;
     height?: number;
@@ -89,6 +101,7 @@ type ClientSignals = 'manage' | 'unmanage' | 'focus' | `property::${ClientProper
 interface ClientGlobal {
   connect_signal(signal: ClientSignals, callback: (client: Client) => void): void;
   focus?: Client;
+  get(screenIndex?: number, stacked?: boolean): Client[];
 }
 
 declare const client: ClientGlobal;

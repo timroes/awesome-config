@@ -1,6 +1,7 @@
 import { dpiX } from "../lib/dpi";
 import * as wibox from "wibox";
 import * as awful from "awful";
+// import * as lunaconf from 'lunaconf';
 import { maximized } from "./maximized";
 import { MouseButton, MouseButtonIndex } from "../lib/mouse";
 import { theme } from "../theme/default";
@@ -45,10 +46,14 @@ export const split: LayoutFactory = (tag) => {
   divider.set_xproperty(Xproperties.DISABLE_SHADOW, true);
   divider.buttons([
     ...awful.button([], MouseButton.PRIMARY, () => {
+      const clients = tag.screen.get_tiled_clients(true);
+      const leftMinimumSize = clients.find(clients => sides.get(clients) === "left")?.size_hints?.min_width ?? 0;
+      const rightMinimumSize = clients.find(clients => sides.get(clients) === "right")?.size_hints?.min_width ?? 0;
+      const minimumFactor = leftMinimumSize / tag.screen.workarea.width;
+      const maximumFactor = 1 - rightMinimumSize / tag.screen.workarea.width;
       mousegrabber.run((mouse) => {
-        // TODO: Handle minimum window sizes somehow
-        const newWidth = mouse.x / tag.screen.workarea.width;
-        tag.master_width_factor = newWidth;
+        const newWidth = (mouse.x - tag.screen.workarea.x) / tag.screen.workarea.width;
+        tag.master_width_factor = Math.max(Math.min(newWidth, maximumFactor), minimumFactor);
         return mouse.buttons[MouseButtonIndex.PRIMARY];
       }, "sb_h_double_arrow");
     }),
@@ -68,6 +73,15 @@ export const split: LayoutFactory = (tag) => {
   return {
     name: "Split",
     is_dynamic: true,
+    wake_up() {
+       const clients = tag.screen.get_tiled_clients(true);
+       if (clients[0]) {
+        sides.set(clients[0], "left");
+       }
+       if (clients[1]) {
+        sides.set(clients[1], "right");
+       }
+    },
     clientlistAction: (c: Client) => {
       sides.set(c, opposite(lastActiveSide));
       c.raise();
@@ -80,6 +94,7 @@ export const split: LayoutFactory = (tag) => {
       for (const client of tag.clients()) {
         sides.set(client, opposite(sides.get(client) ?? "left"));
       }
+      tag.master_width_factor = 1 - tag.master_width_factor;
       tag.emit_signal("property::layout");
     },
     moveClient(client, direction) {
