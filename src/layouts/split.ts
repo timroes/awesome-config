@@ -4,6 +4,7 @@ import * as awful from "awful";
 import { maximized } from "./maximized";
 import { MouseButton, MouseButtonIndex } from "../lib/mouse";
 import { theme } from "../theme/default";
+import { Xproperties } from "../lib/constants";
 
 type Side = "left" | "right";
 
@@ -40,8 +41,8 @@ export const split: LayoutFactory = (tag) => {
   divider.connect_signal("mouse::leave", () => {
     divider.bg = theme.bg.base;
   });
-  divider.set_xproperty("_PICOM_NO_SHADOW", true);
-  divider.set_xproperty("_PICOM_NO_ROUNDED", true);
+  divider.set_xproperty(Xproperties.DISABLE_ROUNDED, true);
+  divider.set_xproperty(Xproperties.DISABLE_SHADOW, true);
   divider.buttons([
     ...awful.button([], MouseButton.PRIMARY, () => {
       mousegrabber.run((mouse) => {

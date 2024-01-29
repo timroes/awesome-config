@@ -1,5 +1,5 @@
 import { config } from "../lib/config";
-import { CONFIGS_PATH } from "../lib/constants";
+import { CONFIGS_PATH, Xproperties } from "../lib/constants";
 import { execute, isCommandAvailable, spawnOnce } from "../lib/process";
 
 async function runPicom() {
@@ -11,18 +11,19 @@ async function restartPicom() {
   await runPicom();
 }
 
-awesome.register_xproperty("_PICOM_NO_SHADOW", "boolean");
-awesome.register_xproperty("_PICOM_NO_ROUNDED", "boolean");
+const FLOATING_XPROP = "_AWESOMEWM_FLOATING";
+
+awesome.register_xproperty(FLOATING_XPROP, "boolean");
+awesome.register_xproperty(Xproperties.DISABLE_ROUNDED, "boolean");
+awesome.register_xproperty(Xproperties.DISABLE_SHADOW, "boolean");
 
 if (!config("disable_compositor", false)) {
   client.connect_signal("manage", (c) => {
-    c.set_xproperty("_PICOM_NO_SHADOW", !c.floating);
-    c.set_xproperty("_PICOM_NO_ROUNDED", !c.floating);
+    c.set_xproperty(FLOATING_XPROP, c.floating);
+  });
 
-    c.connect_signal("property::floating", (c) => {
-      c.set_xproperty("_PICOM_NO_SHADOW", !c.floating);
-      c.set_xproperty("_PICOM_NO_ROUNDED", !c.floating);
-    });
+  client.connect_signal("property::floating", (c) => {
+    c.set_xproperty(FLOATING_XPROP, c.floating);
   });
 
   isCommandAvailable("picom").then(() => {
