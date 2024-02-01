@@ -77,6 +77,9 @@ interface Client {
   skip_taskbar: boolean;
   screen: Screen;
   minimized: boolean;
+  maximized: boolean;
+  maximized_horizontal: boolean;
+  maximized_vertical: boolean;
   urgent: boolean;
   modal: boolean;
   transient_for: number | null;
@@ -91,15 +94,15 @@ interface Client {
   tags(tags?: Tag[]): Tag[];
   raise(): void;
   kill(): void;
-  geometry(): unknown;
+  geometry(geometry?: Partial<Geometry>): Geometry;
 }
 
-type ClientProperties = 'floating' | 'screen' | 'requests_no_titlebar' | 'is_docked';
-type ClientSignals = 'manage' | 'unmanage' | 'focus' | `property::${ClientProperties}` | "request::titlebars";
+type ClientProperties = 'floating' | 'screen' | 'requests_no_titlebar' | 'is_docked' | 'maximized' | 'maximized_horizontal' | 'maximized_vertical';
+type ClientSignals = 'manage' | 'unmanage' | 'focus' | `property::${ClientProperties}` | "request::titlebars" | "request::geometry";
 
 /** @noSelf */
 interface ClientGlobal {
-  connect_signal(signal: ClientSignals, callback: (client: Client) => void): void;
+  connect_signal(signal: ClientSignals, callback: (client: Client, ...args: unknown[]) => void): void;
   focus?: Client;
   get(screenIndex?: number, stacked?: boolean): Client[];
 }

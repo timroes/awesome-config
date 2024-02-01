@@ -43,7 +43,7 @@ export const createClientlist = (screen: Screen) => {
   ];
 
   const onUpdate = (self: Widget, c: Client) => {
-    (self.get_children_by_id('clientname')[0] as TextBox).text = c.name;
+    (self.get_children_by_id('clientname')[0] as TextBox).text = c.name || c.class || " ";
     const bg = self.get_children_by_id("background")[0] as BackgroundContainer;
     bg.bg = getColor(c, "bg");
     bg.fg = getColor(c, "fg");

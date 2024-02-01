@@ -100,7 +100,10 @@ awful.rules.rules = {
 			buttons = buttons,
 			keys = keys,
 			floating = false,
-			focus = true
+			focus = true,
+			maximized = false,
+			maximized_horizontal = false,
+			maximized_vertical = false,
 		}
 	},{
 		rule = { },
