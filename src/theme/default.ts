@@ -79,7 +79,10 @@ const clientlist = {
     focused: base.text.light,
     minimized: colors.gray.medium,
     urgent: base.text.dark,
-  }
+  },
+  indicators: {
+    ontop: colors.pink.light,
+  },
 };
 
 export const theme = { ...base, clientlist } as const;

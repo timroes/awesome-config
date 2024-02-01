@@ -44,6 +44,7 @@ export const createClientlist = (screen: Screen) => {
 
   const onUpdate = (self: Widget, c: Client) => {
     (self.get_children_by_id('clientname')[0] as TextBox).text = c.name || c.class || " ";
+    (self.get_children_by_id("ontopIndicator")[0] as TextBox).visible = c.ontop;
     const bg = self.get_children_by_id("background")[0] as BackgroundContainer;
     bg.bg = getColor(c, "bg");
     bg.fg = getColor(c, "fg");
@@ -74,10 +75,15 @@ export const createClientlist = (screen: Screen) => {
           fg={theme.clientlist.fg.normal}
         >
           <wibox.container.margin left={dpiX(3, screen)} right={dpiX(3, screen)} top={dpiY(1, screen)} bottom={dpiY(1, screen)}>
-            <wibox.layout.fixed.horizontal spacing={dpiX(5, screen)}>
+            <wibox.layout.align.horizontal>
               <lunaconf.widgets.clienticon id="clienticon" />
-              <wibox.widget.textbox id="clientname" />
-            </wibox.layout.fixed.horizontal>
+              <wibox.container.margin left={dpiX(5, screen)} right={dpiX(5, screen)}>
+                <wibox.widget.textbox id="clientname" />
+              </wibox.container.margin>
+              <wibox.container.background shape={gears.shape.circle} bg={theme.clientlist.indicators.ontop}>
+                <wibox.widget.textbox id="ontopIndicator" markup={`<span color="${theme.text.dark}" weight="500">⇧</span>`} visible={false} />
+              </wibox.container.background>
+            </wibox.layout.align.horizontal>
           </wibox.container.margin>
         </wibox.container.background>
       </wibox.container.margin>

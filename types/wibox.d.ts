@@ -33,6 +33,7 @@ interface TextBoxProps {
   valign?: "top" | "center" | "bottom";
   align?: "left" | "center" | "right";
   font?: string;
+  visible?: boolean;
 }
 
 interface TextBox extends Widget, TextBoxProps {}
