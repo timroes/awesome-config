@@ -25,6 +25,7 @@ OPT_PKG_DEPS = {
   'numlockx': 'install to enable numlock on start',
   'picom': 'required if you want compositing effects (e.g. shadow)',
   'playerctl': 'required if you want to control music via media hotkeys',
+  'rojimoji': 'optional to get an emoji picker',
   'upower': 'required for battery widget',
   'xf86-input-libinput': 'required for better touchpad behavior',
   'xorg-xinput': 'required to configure mouse and trackpads',
