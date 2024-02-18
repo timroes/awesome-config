@@ -1,4 +1,5 @@
 import * as awful from 'awful';
+import { LogLevel, log } from './log';
 
 interface ExecuteOutput {
   stdout?: string;
@@ -24,6 +25,7 @@ export function execute(cmd: string): Promise<ExecuteOutput> {
  * Spawns of a program in a shell and write all its output to a /tmp/awesome.spawn.log.
  */
 export function spawn(cmd: string): void {
+  log(`$ ${cmd}`, LogLevel.DEBUG);
   awful.spawn.with_shell(`${cmd} >> /tmp/awesome.spawn.log 2>&1`);
 }
 
