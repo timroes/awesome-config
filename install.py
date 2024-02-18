@@ -4,7 +4,6 @@ import os, shutil, subprocess, sys
 
 # All pacman packages that are required for this ocnfiguration to run
 PKG_DEPS = {
-  'alsa-utils': 'provides utils for volume controls',
   'dex': 'launches all autostart desktop files',
   'inter-font': 'Font used for interface',
   'libyaml': 'required for lua yaml lib to read config',
