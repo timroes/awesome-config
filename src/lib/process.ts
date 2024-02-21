@@ -8,8 +8,11 @@ interface ExecuteOutput {
   exitCodeOrSignal: number;
 }
 
-export function execute(cmd: string): Promise<ExecuteOutput> {
+export function execute(cmd: string, logging: boolean = true): Promise<ExecuteOutput> {
   return new Promise((resolve) => {
+    if (logging) {
+      log(`$ ${cmd}`, LogLevel.DEBUG);
+    }
     awful.spawn.easy_async(cmd, (stdout, stderr, exitReason, exitCode) => {
       resolve({
         stdout,
@@ -30,14 +33,14 @@ export function spawn(cmd: string): void {
 }
 
 export async function spawnOnce(cmd: string, pidof: string = cmd.split(' ')[0]): Promise<void> {
-  const { stdout: pid } = await execute(`pidof ${pidof}`);
+  const { stdout: pid } = await execute(`pidof ${pidof}`, false);
   if (!pid || pid.length === 0) {
     spawn(cmd);
   }
 }
 
 export async function isCommandAvailable(cmd: string): Promise<void> {
-  const { exitCodeOrSignal } = await execute(`/bin/bash -c 'command -v ${cmd}'`);
+  const { exitCodeOrSignal } = await execute(`/bin/bash -c 'command -v ${cmd}'`, false);
   if (exitCodeOrSignal === 0) {
     return Promise.resolve();
   } else {

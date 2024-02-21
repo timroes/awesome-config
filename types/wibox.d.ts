@@ -69,6 +69,26 @@ interface BackgroundContainer extends Widget {
   fg: string;
 }
 
+interface WiboxArgs {
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  widget?: Widget;
+  screen: Screen;
+  visible: boolean;
+  ontop?: boolean;
+  type?: WindowType;
+  cursor?: Cursor;
+  bg?: string;
+}
+
+interface Wibox extends WiboxArgs {
+  connect_signal(signal: string, callback: (...args: any[]) => void): void;
+  buttons(buttons: Button[]): Button[];
+  set_xproperty(name: string, value: boolean | string | number): void;
+}
+
 declare module 'wibox' {
   /** @noSelf */
   interface WidgetModule {
@@ -118,26 +138,6 @@ declare module 'wibox' {
       horizontal: LayoutBase;
       vertical: LayoutBase;
     },
-  }
-
-  interface WiboxArgs {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-    widget?: Widget;
-    screen: Screen;
-    visible: boolean;
-    ontop?: boolean;
-    type?: WindowType;
-    cursor?: Cursor;
-    bg?: string;
-  }
-
-  interface Wibox extends WiboxArgs {
-    connect_signal(signal: string, callback: (...args: any[]) => void): void;
-    buttons(buttons: Button[]): Button[];
-    set_xproperty(name: string, value: boolean | string | number): void;
   }
 
   /** @noSelf */

@@ -31,6 +31,7 @@ declare module 'gears' {
   /** @noSelf */
   interface Color {
     parse_color(color: string): LuaMultiReturn<[number, number, number, number]>;
+    recolor_image(image: string, color: string): string;
   }
 
   export const color: Color;

@@ -6,7 +6,7 @@ const DEFAULT_DPI = 96;
 
 const scaleCache = new WeakMap<Screen, { x: number; y: number }>();
 
-function calculateScreensDpi(screen: Screen): void {
+function calculateScreenDpi(screen: Screen): void {
   const configDpi = config("dpi", {});
   const output = outputName(screen);
 
@@ -30,28 +30,28 @@ function calculateScreensDpi(screen: Screen): void {
   beautiful.xresources.set_dpi(Math.min(dpi.x, dpi.y), screen);
 }
 
-function calculateAllDpi(): void {
+export function calculateAllDpi() {
   for (const s of screen) {
-    calculateScreensDpi(s);
+    calculateScreenDpi(s);
   }
 }
 
 export function dpiX(value: number, screen: Screen): number {
   if (!scaleCache.has(screen)) {
-    calculateScreensDpi(screen);
+    calculateScreenDpi(screen);
   }
   return Math.ceil(value * scaleCache.get(screen)!.x);
 }
 
 export function dpiY(value: number, screen: Screen): number {
   if (!scaleCache.has(screen)) {
-    calculateScreensDpi(screen);
+    calculateScreenDpi(screen);
   }
   return Math.ceil(value * scaleCache.get(screen)!.y);
 }
 
 screen.connect_signal("list", calculateAllDpi);
-screen.connect_signal("property::geometry", calculateScreensDpi);
-screen.connect_signal("property::outputs", calculateScreensDpi);
+screen.connect_signal("property::geometry", calculateScreenDpi);
+screen.connect_signal("property::outputs", calculateScreenDpi);
 
 calculateAllDpi();

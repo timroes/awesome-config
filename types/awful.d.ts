@@ -57,6 +57,85 @@ declare module 'awful' {
     }
   }
 
+  type Position = 'top' | 'bottom' | 'left' | 'right' | 'centered' | 'top_left' | 'top_right' | 'bottom_left' | 'bottom_right';
+
+  interface PlacementArgs {
+    pretend?: boolean;
+    honor_workarea?: boolean;
+    honor_padding?: boolean;
+    margins?: number | { top?: number, right?: number, bottom?: number, left?: number };
+  }
+
+  type PlacementFn = unknown;
+
+  /** @noSelf */
+  interface PlacementModule {
+    align(drawable: Client | Wibox, args: PlacementArgs & { position: Position }): void;
+    centered: PlacementFn;
+  }
+
+  interface KeygrabberInstance {
+    stop(): void;
+  }
+
+  interface KeygrabberArgs {
+    /**
+     * @default "press"
+     */
+    stop_event?: "press" | "release";
+    stop_key?: string | Key;
+    /**
+     * The maximum inactivity delay.
+     * @default -1
+     */
+    timeout?: number;
+    start_callback?: () => void;
+    stop_callback?: () => void;
+    keypressed_callback?: (this: KeygrabberInstance, modifiers: Modifier[], key: string, event: "press" | "release") => void;
+    keyreleased_callback?: (this: KeygrabberInstance, modifiers: Modifier[], key: string, event: "press" | "release") => void;
+    allowed_keys?: string[];
+    /**
+     * Create root (global) keybindings.
+     * @default false
+     */
+    export_keybindings?: boolean;
+    /**
+     * Do not call the callbacks on modifier keys (like Control or Mod4) events.
+     * @default false
+     */
+    mask_modkeys?: boolean;
+    root_keybindings?: Array<[modifiers: Modifier[], key: string, cb: () => void]>;
+  }
+
+  /** @noSelf */
+  interface KeygrabberModule {
+    (args: KeygrabberArgs): KeygrabberInstance;
+  }
+
+  interface PopupArgs {
+    screen: Screen;
+    widget: Widget;
+    visible?: boolean;
+    type?: WindowType;
+    width?: number;
+    height?: number;
+    x?: number;
+    y?: number;
+    bg?: string;
+    ontop?: boolean;
+    placement?: PlacementFn;
+  }
+
+  interface Popup extends NonNullable<PopupArgs> {}
+
+  /** @noSelf */
+  interface PopupModule {
+    (args: PopupArgs): Popup;
+  }
+
+  export const popup: PopupModule;
+  export const keygrabber: KeygrabberModule;
+  export const placement: PlacementModule;
   export const widget: WidgetModule;
   export const wibar: <T extends Widget>(args: WibarArgs<T>) => Wibar<T>;
   export const screen: ScreenModule;

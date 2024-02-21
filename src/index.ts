@@ -20,5 +20,6 @@ import './conf/apps/rofimoji';
 import './conf/apps/zoom';
 
 import './ui/topbar';
+import './ui/displayswitcher';
 
 import './conf/autostart';

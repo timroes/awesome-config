@@ -43,7 +43,7 @@ export const createClientlist = (screen: Screen) => {
   ];
 
   const onUpdate = (self: Widget, c: Client) => {
-    (self.get_children_by_id('clientname')[0] as TextBox).text = c.name || c.class || " ";
+    (self.get_children_by_id("clientname")[0] as TextBox).text = c.name || c.class || " ";
     (self.get_children_by_id("ontopIndicator")[0] as TextBox).visible = c.ontop;
     const bg = self.get_children_by_id("background")[0] as BackgroundContainer;
     bg.bg = getColor(c, "bg");
@@ -51,7 +51,7 @@ export const createClientlist = (screen: Screen) => {
   };
   
   const onCreate = (self: Widget, c: Client) => {
-    (self.get_children_by_id('clienticon')[0] as any).client = c;
+    (self.get_children_by_id("clienticon")[0] as any).client = c;
     onUpdate(self, c);
   };
 
