@@ -11,9 +11,6 @@ dpi:
   # Overwrite the automatically detected DPI for an output.
   # Specify here key value pairs where the key is the output name
   # as shown by xrandr and the value a dpi to set.
-  # You can use the special key "default" which will overwrite the DPI
-  # of all outputs, unless they have a specific overwrite.
-  default:
 
 screensaver:
   # Configure how many minutes before the screen will be locked (Default: 10)

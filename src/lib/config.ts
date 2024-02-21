@@ -6,7 +6,7 @@ interface Config {
   'brightness_device': string;
   'disable_compositor': boolean;
   'calendar.action': string;
-  'dpi': { default?: number; [key: string]: number | undefined };
+  'dpi': { [key: string]: number | undefined };
 }
 
 export function config<K extends keyof Config>(key: K): Config[K] | undefined;

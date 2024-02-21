@@ -65,7 +65,7 @@ local function render_month(self)
 			widget.visible = true
 			widget:get_children_by_id('text')[1].text = tostring(i - first_weekday_in_month + 1)
 			if year == current_year and month == current_month and (i - first_weekday_in_month + 1) == day then
-				widget.shape_border_width = lunaconf.dpi.x(2, self._screen)
+				widget.shape_border_width = lunaconf.dpi.x(1, self._screen)
 			else
 				widget.shape_border_width = 0
 			end

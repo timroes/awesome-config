@@ -3,12 +3,19 @@ import * as awful from 'awful';
 import * as gears from 'gears';
 import { dbus } from '../../lib/dbus';
 import { theme } from '../../theme/default';
-import { dpiX, dpiY } from '../../lib/dpi';
+import { dpi } from '../../lib/dpi';
+import { ICON_PATH } from '../../lib/constants';
+
+const ICON_MAP: Record<string, string> = {
+  "audio-headset": "audio-headset.png",
+};
+
+const DEFAULT_ICON = "bluetooth.png";
 
 export const bluetoothControl = (screen: Screen) => { 
   const widget = wibox.widget(
     <wibox.container.background bg={theme.bg.panel} shape={gears.shape.rounded_rect}>
-      <wibox.layout.fixed.vertical id="devices" spacing={dpiY(2, screen)} spacing_widget={<wibox.widget.separator span_ratio={0.95} color={theme.bg.base} />} />
+      <wibox.layout.fixed.vertical id="devices" spacing={dpi(2, screen)} spacing_widget={<wibox.widget.separator span_ratio={0.95} color={theme.bg.base} />} />
     </wibox.container.background>
   );
 
@@ -26,21 +33,12 @@ export const bluetoothControl = (screen: Screen) => {
             onUpdate();
           });
         });
-        const indicatorColor = info.connected ? theme.highlight.success : theme.transparent;
-        const borderColor = info.pendingAction ? theme.highlight.regular : info.connected ? theme.highlight.success : theme.highlight.disabled;
+        const icon = ICON_MAP[info.icon] || DEFAULT_ICON;
+        const color = info.pendingAction ? theme.highlight.regular : info.connected ? theme.highlight.success : theme.highlight.disabled;
         deviceList.add(wibox.widget(
-            <wibox.container.margin margins={dpiX(12, screen)} buttons={buttons}>
-              <wibox.layout.fixed.horizontal spacing={dpiX(6, screen)}>
-                <wibox.container.background
-                  bg={indicatorColor}
-                  shape={gears.shape.circle}
-                  shape_border_width={dpiX(1, screen)}
-                  shape_border_color={borderColor}
-                  forced_width={dpiX(8, screen)}
-                  forced_height={dpiX(8, screen)}
-                 >
-                  <wibox.widget.textbox text="" />
-                </wibox.container.background>
+            <wibox.container.margin margins={dpi(12, screen)} buttons={buttons}>
+              <wibox.layout.fixed.horizontal spacing={dpi(6, screen)}>
+                <wibox.widget.imagebox image={gears.color.recolor_image(`${ICON_PATH}/${icon}`, color)} forced_height={dpi(14, screen)} />
                 <wibox.widget.textbox text={info.name} />
               </wibox.layout.fixed.horizontal>
             </wibox.container.margin>

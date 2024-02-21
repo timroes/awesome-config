@@ -1,4 +1,4 @@
-import { dpiX } from "../lib/dpi";
+import { dpi } from "../lib/dpi";
 import * as wibox from "wibox";
 import * as awful from "awful";
 // import * as lunaconf from 'lunaconf';
@@ -17,7 +17,7 @@ export const split: LayoutFactory = (tag) => {
   let lastActiveSide: Side = "left";
   const sides = new WeakMap<Client, Side>();
 
-  const gapWidth = dpiX(2, tag.screen);
+  const gapWidth = dpi(2, tag.screen);
 
   client.connect_signal("focus", (client) => {
     if (client.tags().includes(tag)) {

@@ -32,6 +32,7 @@ interface ScreenGlobal extends LuaIterable<Screen> {
   count(): number;
   primary: Screen;
   connect_signal(signal: ScreenSignals, callback: (screen: Screen) => void): void;
+  emit_signal(signal: ScreenSignals, screen: Screen): void;
 }
 
 declare const screen: ScreenGlobal;

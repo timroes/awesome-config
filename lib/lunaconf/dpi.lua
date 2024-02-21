@@ -4,11 +4,11 @@ local dpiUtils = require('lib.dpi');
 local dpi = {}
 
 function dpi.x(value, screen)
-	return dpiUtils.dpiX(value, screen)
+	return dpiUtils.dpi(value, screen)
 end
 
 function dpi.y(value, screen)
-	return dpiUtils.dpiY(value, screen)
+	return dpiUtils.dpi(value, screen)
 end
 
 return dpi

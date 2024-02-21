@@ -2,7 +2,7 @@ import * as awful from 'awful';
 import * as wibox from 'wibox';
 import * as gears from 'gears';
 import * as lunaconf from 'lunaconf';
-import { dpiX, dpiY } from '../lib/dpi';
+import { dpi } from '../lib/dpi';
 import { theme } from '../theme/default';
 import { MouseButton } from '../lib/mouse';
 
@@ -60,11 +60,11 @@ export const createClientlist = (screen: Screen) => {
     buttons,
     filter: awful.widget.tasklist.filter.currenttags,
     layout:
-      <wibox.layout.flex.horizontal spacing={dpiX(3, screen)} max_widget_size={dpiX(300, screen)} />,
+      <wibox.layout.flex.horizontal spacing={dpi(3, screen)} max_widget_size={dpi(300, screen)} />,
     widget_template: (
       <wibox.container.margin
-        top={dpiY(4, screen)}
-        bottom={dpiY(4, screen)}
+        top={dpi(4, screen)}
+        bottom={dpi(4, screen)}
         create_callback={onCreate}
         update_callback={onUpdate}
       >
@@ -74,10 +74,10 @@ export const createClientlist = (screen: Screen) => {
           bg={theme.clientlist.bg.normal}
           fg={theme.clientlist.fg.normal}
         >
-          <wibox.container.margin left={dpiX(3, screen)} right={dpiX(3, screen)} top={dpiY(1, screen)} bottom={dpiY(1, screen)}>
+          <wibox.container.margin left={dpi(3, screen)} right={dpi(3, screen)} top={dpi(1, screen)} bottom={dpi(1, screen)}>
             <wibox.layout.align.horizontal>
               <lunaconf.widgets.clienticon id="clienticon" />
-              <wibox.container.margin left={dpiX(5, screen)} right={dpiX(5, screen)}>
+              <wibox.container.margin left={dpi(5, screen)} right={dpi(5, screen)}>
                 <wibox.widget.textbox id="clientname" />
               </wibox.container.margin>
               <wibox.container.background shape={gears.shape.circle} bg={theme.clientlist.indicators.ontop}>

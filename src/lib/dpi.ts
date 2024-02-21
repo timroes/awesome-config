@@ -1,57 +1,48 @@
-import * as beautiful from 'beautiful';
+import * as beautiful from "beautiful";
 import { config } from "./config";
-import { dpis, outputName } from "./screens";
+import { spawn } from "./process";
+import { LogLevel, log } from "./log";
 
-const DEFAULT_DPI = 96;
+export const DEFAULT_DPI = 96;
 
-const scaleCache = new WeakMap<Screen, { x: number; y: number }>();
+const scaleCache = new WeakMap<Screen, number>();
 
-function calculateScreenDpi(screen: Screen): void {
-  const configDpi = config("dpi", {});
-  const output = outputName(screen);
+const DPI_OVERWRITES = config("dpi") ?? {};
 
-  let dpi: { x: number; y: number } = { x: DEFAULT_DPI, y: DEFAULT_DPI };
+function updateDpis() {
+  log("Updating DPIs for all screens", LogLevel.DEBUG);
+  const allDpis: number[] = [];
+  for (const s of screen) {
+    const [output, outputSize] = Object.entries(s.outputs)[0] ?? [];
+    let dpi = DEFAULT_DPI;
 
-  if (output && configDpi?.[output]) {
-    // Use screen specific dpi from config.yml
-    dpi = { x: Number(configDpi[output]!), y: Number(configDpi[output]!) };
-  } else if (configDpi?.default) {
-    // Use dpi.default setting from config.yml
-    dpi = { x: Number(configDpi.default), y: Number(configDpi.default) };
-  } else {
-    // Calculate dpi from screen dimensions/resolutions
-    const screenDpi = dpis(screen);
-    if (screenDpi) {
-      dpi = screenDpi;
+    if (output && DPI_OVERWRITES[output]) {
+      // Use screen specific dpi from config.yml
+      dpi = Number(DPI_OVERWRITES[output]);
+    } else if (!!outputSize){
+      // Calculate dpi from screen dimensions/resolutions
+      dpi = (s.geometry.width * 25.4) / outputSize.mm_width;
+    }
+
+    scaleCache.set(s, dpi / DEFAULT_DPI);
+    beautiful.xresources.set_dpi(dpi, s);
+    allDpis.push(dpi);
+
+    if (output?.length > 0) {
+      spawn(`command -v xrandr > /dev/null && xrandr --dpi ${dpi}/${output}`);
     }
   }
 
-  scaleCache.set(screen, { x: dpi.x / DEFAULT_DPI, y: dpi.y / DEFAULT_DPI });
-  beautiful.xresources.set_dpi(Math.min(dpi.x, dpi.y), screen);
+  spawn(`command -v xrdb > /dev/null && (echo "Xft.dpi: ${Math.min(...allDpis)}" | xrdb -merge -)`);
 }
 
-export function calculateAllDpi() {
-  for (const s of screen) {
-    calculateScreenDpi(s);
-  }
+export function dpi(value: number, screen: Screen): number {
+  const factor = scaleCache.get(screen) ?? 1;
+  return Math.ceil(value * factor);
 }
 
-export function dpiX(value: number, screen: Screen): number {
-  if (!scaleCache.has(screen)) {
-    calculateScreenDpi(screen);
-  }
-  return Math.ceil(value * scaleCache.get(screen)!.x);
-}
+screen.connect_signal("list", updateDpis);
+screen.connect_signal("property::geometry", updateDpis);
+screen.connect_signal("property::outputs", updateDpis);
 
-export function dpiY(value: number, screen: Screen): number {
-  if (!scaleCache.has(screen)) {
-    calculateScreenDpi(screen);
-  }
-  return Math.ceil(value * scaleCache.get(screen)!.y);
-}
-
-screen.connect_signal("list", calculateAllDpi);
-screen.connect_signal("property::geometry", calculateScreenDpi);
-screen.connect_signal("property::outputs", calculateScreenDpi);
-
-calculateAllDpi();
+updateDpis();
