@@ -9,7 +9,6 @@ import { createClientlist } from './clientlist';
 import { theme } from '../theme/default';
 
 const BAR_HEIGHT = 32;
-const sidebar = lunaconf.sidebar.get();
 
 const bars = new WeakMap<Screen, awful.Wibar<AlignLayout>>();
 
@@ -22,7 +21,7 @@ const createPrimaryScreenWidgets = () => {
         <wibox.widget.systray />
       </wibox.container.margin>
       <wibox.widget.textclock id="clock" format="%H:%M" buttons={clockButtons} />
-      {sidebar.trigger}
+      {lunaconf.sidebar.rerender().trigger}
     </wibox.layout.fixed.horizontal>
   );
 };
@@ -38,13 +37,18 @@ const updatePrimaryBar = () => {
   updateTimezone();
 };
 
-awful.screen.connect_for_each_screen((s) => {
+const createScreenBar = (s: Screen) => {
+  // Remove previous bar from screen before recreating new bar
+  const previousBar = bars.get(s);
+  previousBar?.remove();
+
   const barWidget = (
     <wibox.layout.align.horizontal>
       <wibox.container.margin right={dpi(4, s)}>
         {lunaconf.tags.create_widget(s)}
       </wibox.container.margin>
       {createClientlist(s)}
+      {s === screen.primary ? createPrimaryScreenWidgets() : null}
     </wibox.layout.align.horizontal>
   );
 
@@ -57,7 +61,9 @@ awful.screen.connect_for_each_screen((s) => {
   });
 
   bars.set(s, bar);
-});
+};
+
+awful.screen.connect_for_each_screen(createScreenBar);
 
 const updateTimezone = async () => {
   const clock = bars.get(screen.primary)?.widget?.third.get_children_by_id("clock")[0] as TextClock | undefined;
@@ -80,5 +86,5 @@ dbus.system().onSignal<[string, { Timezone?: string }]>(null, 'org.freedesktop.D
 
 // Whenever the primary change move the widgets to the new primary bar
 screen.connect_signal('primary_changed', updatePrimaryBar);
-// Initialize the widgets on the current primary
-updatePrimaryBar();
+// Whenever the dpis of a screen change recreate that screen's bar
+screen.connect_signal('property::dpi', createScreenBar)

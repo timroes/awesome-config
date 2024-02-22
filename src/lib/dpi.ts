@@ -27,6 +27,7 @@ function updateDpis() {
     scaleCache.set(s, dpi / DEFAULT_DPI);
     beautiful.xresources.set_dpi(dpi, s);
     allDpis.push(dpi);
+    screen.emit_signal("property::dpi", s);
 
     if (output?.length > 0) {
       spawn(`command -v xrandr > /dev/null && xrandr --dpi ${dpi}/${output}`);

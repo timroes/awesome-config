@@ -457,26 +457,12 @@ local function init(_)
 		end
 	}
 
-	-- Hide the popup if a client gains focus while it's open
-	client.connect_signal('focus', function()
-		if self._popup.visible then
-			hide(self, true)
-		end
-	end)
-
-	-- Whenever the primary screen change move the popup to that screen (this only works while it's open)
-	screen.connect_signal('primary_changed', function ()
-		self._popup.screen = screen.primary
-	end)
-
-	-- Register global hotkey to open sidebar
-	lunaconf.keys.globals(
-		awful.key({ lunaconf.config.MOD }, '\\', function()
-			toggle(self)
-		end)
-	)
-
 	return self
+end
+
+function sidebar.rerender()
+	instance = init(sidebar)
+	return instance
 end
 
 function sidebar.get()
@@ -484,5 +470,24 @@ function sidebar.get()
 end
 
 instance = init(sidebar)
+
+-- Hide the popup if a client gains focus while it's open
+client.connect_signal('focus', function()
+	if instance._popup.visible then
+		hide(instance, true)
+	end
+end)
+
+-- Whenever the primary screen change move the popup to that screen (this only works while it's open)
+screen.connect_signal('primary_changed', function ()
+	instance._popup.screen = screen.primary
+end)
+
+-- Register global hotkey to open sidebar
+lunaconf.keys.globals(
+	awful.key({ lunaconf.config.MOD }, '\\', function()
+		toggle(instance)
+	end)
+)
 
 return sidebar

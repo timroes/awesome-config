@@ -33,9 +33,10 @@ declare module 'awful' {
     y?: number;
     bg?: string;
     widget?: T;
+    remove(): void;
   }
 
-  type WibarArgs<T extends Widget> = Wibar<T>;
+  type WibarArgs<T extends Widget> = Omit<Wibar<T>, "remove">;
 
   type TasklistFilterFn = (client: Client, screen: Screen) => boolean;
 

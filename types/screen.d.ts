@@ -25,7 +25,7 @@ interface Screen {
 }
 
 type ScreenProperties = "geometry" | "workarea" | "index" | "outputs";
-type ScreenSignals = "list" | "primary_changed" | "added" | "removed" | "swapped" | `property::${ScreenProperties}`;
+type ScreenSignals = "list" | "primary_changed" | "added" | "removed" | "swapped" | `property::${ScreenProperties}` | "property::dpi";
 
 /** @noSelf */
 interface ScreenGlobal extends LuaIterable<Screen> {

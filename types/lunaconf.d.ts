@@ -29,6 +29,7 @@ declare module 'lunaconf' {
   /** @noSelf */
   interface Sidebar {
     get(): SidebarInstance;
+    rerender(): SidebarInstance;
   }
 
   interface Notification {
