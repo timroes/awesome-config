@@ -7,7 +7,6 @@ return {
 	dpi = require('lunaconf.dpi'),
 	icons = require('lunaconf.icons'),
 	keys = require('lunaconf.keys'),
-	layouts = require('lunaconf.layouts'),
 	log = require('lunaconf.log'),
 	notify = require('lunaconf.notify'),
 	screens = require('lunaconf.screens'),
