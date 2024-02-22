@@ -2,8 +2,9 @@ import * as lunaconf from "lunaconf";
 import { addKey } from '../lib/keys';
 import { SUPER } from '../lib/constants';
 import { execute, isCommandAvailable, spawn } from '../lib/process';
+import { BarModal } from "../ui/bar-modal";
 
-const dialog = lunaconf.dialogs.bar('audio-volume-high', 1);
+const modal = new BarModal('volume.png');
 
 async function getDefaultSink() {
   const { stdout } = await execute("pactl get-default-sink");
@@ -18,10 +19,9 @@ async function showAudioState(defaultSink?: string) {
   ]);
   const muted = mutedRaw?.includes('yes') ?? true;
   const volume = volumeRaw ? Number(string.match(volumeRaw, " (%d+)%% ") ?? 0) : 0;
-  dialog.set_value(volume);
-  dialog.set_disabled(muted);
-  dialog.set_icon(muted ? 'audio-volume-muted' : 'audio-volume-high');
-  dialog.show();
+  modal.setIcon(muted ? "volume-off.png" : "volume.png");
+  modal.setValue(volume);
+  modal.show();
 }
 
 async function changeVolume(step: number) {

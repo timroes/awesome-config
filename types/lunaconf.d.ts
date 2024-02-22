@@ -16,11 +16,6 @@ declare module 'lunaconf' {
     show(): void;
   }
 
-  /** @noSelf */
-  interface Dialogs {
-    bar(icon: string, timeout: number): BarDialogInstance;
-  }
-
   interface SidebarInstance {
     set_screensleep(keepalive: boolean): void;
     trigger: WidgetBase;
@@ -72,7 +67,6 @@ declare module 'lunaconf' {
   export const sidebar: Sidebar;
   export const utils: Utils;
   export const config: Config;
-  export const dialogs: Dialogs;
   export const notify: Notify;
   export const clients: Clients;
   export const tags: Tags;

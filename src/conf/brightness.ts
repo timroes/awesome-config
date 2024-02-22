@@ -1,18 +1,18 @@
-import * as lunaconf from 'lunaconf';
 import { config } from "../lib/config";
 import { execute } from "../lib/process";
 import { SCRIPT_PATH } from "../lib/constants";
 import { addKey } from "../lib/keys";
+import { BarModal } from '../ui/bar-modal';
 
 const backlightDevice = config('brightness_device');
 
 if (backlightDevice) {
-  const dialog = lunaconf.dialogs.bar('preferences-system-brightness-lock', 1);
+  const modal = new BarModal('brightness.png');
 
   const controlBrightness = async (value: string) => {
     const { stdout } = await execute(`${SCRIPT_PATH}/brightness.sh ${backlightDevice} ${value}`);
-    dialog.set_value(Number(stdout));
-    dialog.show();
+    modal.setValue(Number(stdout));
+    modal.show();
   }
 
   addKey([], 'XF86MonBrightnessUp', () => controlBrightness('up'));

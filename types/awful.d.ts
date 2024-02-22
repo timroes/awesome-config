@@ -125,6 +125,7 @@ declare module 'awful' {
     bg?: string;
     ontop?: boolean;
     placement?: PlacementFn;
+    opacity?: number;
   }
 
   interface Popup extends NonNullable<PopupArgs> {}

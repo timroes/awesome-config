@@ -38,6 +38,18 @@ interface TextBoxProps {
 
 interface TextBox extends Widget, TextBoxProps {}
 
+interface ProgressBarProps {
+  value?: number;
+}
+
+interface ProgressBar extends Widget, ProgressBarProps {}
+
+interface ImageboxProps {
+  image?: string;
+}
+
+interface Imagebox extends Widget, ImageboxProps {}
+
 type WidgetProps<T> = T extends { __widget: "textbox" } ? TextBoxProps : {};
 
 interface ContainerProps {
