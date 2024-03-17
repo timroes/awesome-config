@@ -69,9 +69,11 @@ declare module 'awful' {
 
   type PlacementFn = unknown;
 
+  type Drawable = Client | Wibox | Popup;
+
   /** @noSelf */
   interface PlacementModule {
-    align(drawable: Client | Wibox, args: PlacementArgs & { position: Position }): void;
+    align(drawable: Drawable, args: PlacementArgs & { position: Position }): void;
     centered: PlacementFn;
   }
 
@@ -108,9 +110,13 @@ declare module 'awful' {
     root_keybindings?: Array<[modifiers: Modifier[], key: string, cb: () => void]>;
   }
 
+  type KeygrabberFn = (modifiers: Modifier[], key: string, event: "press" | "release") => boolean | void;
+
   /** @noSelf */
   interface KeygrabberModule {
     (args: KeygrabberArgs): KeygrabberInstance;
+    run(grabber: KeygrabberFn): KeygrabberFn;
+    stop(grabber: KeygrabberFn): void;
   }
 
   interface PopupArgs {

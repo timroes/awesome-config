@@ -22,6 +22,8 @@ interface LayoutBase {
 }
 
 interface Widget {
+  emit_signal(signal: string, ...args: any[]): void;
+  connect_signal(signal: string, callback: (...args: any[]) => void): void;
   get_children_by_id(id: string): Widget[];
 }
 
@@ -46,6 +48,7 @@ interface ProgressBar extends Widget, ProgressBarProps {}
 
 interface ImageboxProps {
   image?: string;
+  visible?: boolean;
 }
 
 interface Imagebox extends Widget, ImageboxProps {}
@@ -71,12 +74,17 @@ interface AlignLayout extends Widget {
   third: Widget;
 }
 
+interface GridLayout extends Widget {
+  add_widget_at(widget: Widget, row: number, column: number, rowSpan: number, colSpan: number): void;
+}
+
 interface FixedLayout extends Widget {
   reset(): void;
   add(...widget: Widget[]): void;
 }
 
 interface BackgroundContainer extends Widget {
+  widget: Widget;
   bg: string;
   fg: string;
 }
@@ -150,6 +158,8 @@ declare module 'wibox' {
       horizontal: LayoutBase;
       vertical: LayoutBase;
     },
+    grid: LayoutBase;
+    stack: LayoutBase;
   }
 
   /** @noSelf */

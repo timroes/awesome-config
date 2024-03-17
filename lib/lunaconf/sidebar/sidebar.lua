@@ -9,7 +9,7 @@ local calendar = require('lunaconf.sidebar.calendar')
 local battery = require('lunaconf.sidebar.battery')
 local stats_panel = require('lunaconf.sidebar.stats_panel')
 
-local bluetooth_control = require('ui.controlcenter.bluetooth').bluetoothControl
+-- local bluetooth_control = require('ui.controlcenter.bluetooth').bluetoothControl
 
 local lunaconf = {
 	config = require('lunaconf.config'),
@@ -351,7 +351,7 @@ local function init(_)
 						}
 					}
 				},
-				bluetooth_control(screen.primary),
+				-- bluetooth_control(screen.primary),
 			}
 		},
 		bg = theme.sidebar_bg,
@@ -484,10 +484,10 @@ screen.connect_signal('primary_changed', function ()
 end)
 
 -- Register global hotkey to open sidebar
-lunaconf.keys.globals(
-	awful.key({ lunaconf.config.MOD }, '\\', function()
-		toggle(instance)
-	end)
-)
+-- lunaconf.keys.globals(
+-- 	awful.key({ lunaconf.config.MOD }, '\\', function()
+-- 		toggle(instance)
+-- 	end)
+-- )
 
 return sidebar

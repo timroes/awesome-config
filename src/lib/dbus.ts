@@ -1,4 +1,5 @@
 import * as lgi from 'lgi';
+import { log } from './log';
 
 interface SignalParams<Params = undefined> {
   sender: string;
@@ -72,6 +73,14 @@ class DBusConnection {
         }
       })();
     });
+  }
+
+  public async getProperty<T = any>(destination: string, objectPath: string, interfaceName: string, property: string): Promise<T> {
+    const result = await this.call<{ value: Array<{ type: string, value: T }> }>(destination, objectPath, "org.freedesktop.DBus.Properties", "Get", [
+      ["s", interfaceName],
+      ["s", property],
+    ]);
+    return result.value[0].value;
   }
 
   // TODO: Untested implementation

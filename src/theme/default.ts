@@ -12,10 +12,14 @@ const colors = {
     lightest: '#f9fafb',
   },
   pink: {
+    medium: '#EE789D',
     light: '#f0abfc',
   },
   green: {
     medium: '#54B399',
+  },
+  yellow: {
+    light: '#D6BF57',
   },
 
   // Legacy color definitions
@@ -56,6 +60,7 @@ const base = {
   text: {
     dark: colors.gray.darkest,
     light: colors.gray.lightest,
+    subdued: colors.gray.medium,
   },
 
   highlight: {
@@ -85,7 +90,29 @@ const clientlist = {
   },
 };
 
-export const theme = { ...base, clientlist } as const;
+const controlcenter = {
+  settings: {
+    icon: {
+      disabled: colors.gray.lightest,
+      active: colors.blue.dark
+    },
+    disabled: colors.blue.dark,
+    dnd: colors.pink.medium,
+    keepAwake: colors.yellow.light,
+  },
+  calendar: {
+    today: colors.pink.medium,
+    weekdays: colors.blue.light,
+    month: colors.blue.light,
+  },
+  trigger: {
+    inactive: colors.blue.dark,
+    pink: colors.pink.medium,
+    yellow: colors.yellow.light,
+  },
+};
+
+export const theme = { ...base, clientlist, controlcenter } as const;
 
 /**
  * Only settings that are required in beautiful to be set, should be part of this export.

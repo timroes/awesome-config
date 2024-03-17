@@ -21,10 +21,6 @@ screensaver:
 calendar:
   # Specify a path to a .desktop file to execute when clicking the clock in the bar
   action:
-  # Specify highlights in the calendar in the following format (no leading zeros for month/days)
-  # highlights:
-  #   '2018-1-17': 'label'
-
 
 # A YML list of keyboard layouts, that the user can switch through.
 # The first one in this list will be used when starting awesome.

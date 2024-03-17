@@ -32,7 +32,7 @@ declare module 'lgi' {
     Variant: {
       (type: string, value: unknown): unknown;
       new_tuple(value: unknown, length: number): unknown;
-    }
+    };
   }
 
   export const Gio: Gio;

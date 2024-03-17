@@ -3,6 +3,7 @@ import { addKey } from '../lib/keys';
 import { SUPER } from '../lib/constants';
 import { execute, isCommandAvailable, spawn } from '../lib/process';
 import { BarModal } from "../ui/bar-modal";
+import { log } from "../lib/log";
 
 const modal = new BarModal('volume.png');
 
@@ -18,7 +19,7 @@ async function showAudioState(defaultSink?: string) {
     execute(`pactl get-sink-volume ${sink}`),
   ]);
   const muted = mutedRaw?.includes('yes') ?? true;
-  const volume = volumeRaw ? Number(string.match(volumeRaw, " (%d+)%% ") ?? 0) : 0;
+  const volume = volumeRaw ? Number(string.match(volumeRaw, " (%d+)%% ")[0] ?? 0) : 0;
   modal.setIcon(muted ? "volume-off.png" : "volume.png");
   modal.setValue(volume);
   modal.show();

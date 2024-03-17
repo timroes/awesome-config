@@ -21,5 +21,6 @@ import './conf/apps/zoom';
 
 import './ui/topbar';
 import './ui/displayswitcher';
+import './ui/controlcenter';
 
 import './conf/autostart';

@@ -8,6 +8,7 @@ import { dpi } from '../lib/dpi';
 import { createClientlist } from './clientlist';
 import { theme } from '../theme/default';
 import { log } from '../lib/log';
+import { trigger } from './controlcenter/controlcenter';
 
 const BAR_HEIGHT = 32;
 
@@ -15,7 +16,6 @@ const bars = new WeakMap<Screen, awful.Wibar<AlignLayout>>();
 
 const updateTimezone = async () => {
   const clock = bars.get(screen.primary)?.widget?.third.get_children_by_id("clock")[0] as TextClock | undefined;
-  log(`Updating timezone ${inspect(clock)}`)
   if (!clock) {
     return;
   }
@@ -35,7 +35,7 @@ const createPrimaryScreenWidgets = () => {
         <wibox.widget.systray />
       </wibox.container.margin>
       <wibox.widget.textclock id="clock" format="%H:%M" buttons={clockButtons} />
-      {lunaconf.sidebar.rerender().trigger}
+      {trigger}
     </wibox.layout.fixed.horizontal>
   );
 };

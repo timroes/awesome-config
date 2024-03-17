@@ -7,6 +7,11 @@
   resolved "https://registry.yarnpkg.com/@typescript-to-lua/language-extensions/-/language-extensions-1.0.0.tgz#fad73b01c21ace67abbd1477cd2b1f8b3ce7287b"
   integrity sha512-GtmhFqyg+txpGgGLM3mlS3R6AEG9MQhKALxxcbr6SBzg9u7YAXcPKqUBaBYd6nH+Pi/eQLcWz4BNOLhz8v4TjQ==
 
+"@typescript-to-lua/language-extensions@^1.19.0":
+  version "1.19.0"
+  resolved "https://registry.yarnpkg.com/@typescript-to-lua/language-extensions/-/language-extensions-1.19.0.tgz#e7535ed343bed68580dd96e1a8101a1dbb2dc771"
+  integrity sha512-Os5wOKwviTD4LeqI29N0btYOjokSJ97iCf45EOjIABlb5IwNQy7AE/AqZJobRw3ywHH8+KzJUMkEirWPzh2tUA==
+
 enhanced-resolve@^5.8.2:
   version "5.12.0"
   resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.12.0.tgz#300e1c90228f5b570c4d35babf263f6da7155634"
@@ -38,6 +43,11 @@ is-core-module@^2.9.0:
   integrity sha512-RRjxlvLDkD1YJwDbroBHMb+cukurkDWNyHx7D3oNB5x9rb5ogcksMC5wHCadcXoo67gVr/+3GFySh3134zi6rw==
   dependencies:
     has "^1.0.3"
+
+lua-types@^2.13.1:
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/lua-types/-/lua-types-2.13.1.tgz#8df705ae47617d4a2f189d727f075ca36e690bdb"
+  integrity sha512-rRwtvX6kS+5MpuO3xpvKsnYjdSDDI064Qq1OqX8gY+r+0l7m3dFLiZPDFoHqH22jaBpEvcHcPs6+WD7qkdmFsA==
 
 path-parse@^1.0.7:
   version "1.0.7"

@@ -2,6 +2,7 @@ local awful = require('awful')
 local gears = require('gears')
 local lunaconf = require('lunaconf')
 local naughty = require('naughty')
+local notifications = require('build.lib.notifications')
 
 local theme = lunaconf.theme.get()
 
@@ -17,7 +18,7 @@ end
 -- Register a callback to preprocess all notifications
 naughty.config.notify_callback = function(args)
 	-- Cancel notifications if dnd widget is enabled
-	if lunaconf.sidebar.get():is_dnd_enabled() and not args.ignore_dnd then
+	if notifications.isDndActive() and not args.ignore_dnd then
 		return null
 	end
 
@@ -54,8 +55,6 @@ naughty.config.notify_callback = function(args)
 	return args
 end
 
-local sidebar = lunaconf.sidebar.get()
-
 -- Always show notifications on primary screen
 local function update_notification_screen()
 	local screen = lunaconf.screens.primary()
@@ -77,9 +76,9 @@ update_notification_screen()
 lunaconf.keys.globals(
 	awful.key({ lunaconf.config.MOD }, "d", function() naughty.destroy_all_notifications() end),
 	awful.key({ lunaconf.config.MOD, 'Control' }, 'd', function ()
-		sidebar:toggle_dnd()
+		notifications.toggleDnd();
 	end),
 	awful.key({ lunaconf.config.MOD , 'Shift' }, 'd', function ()
-		sidebar:toggle_dnd()
+		notifications.toggleDnd();
 	end)
 )

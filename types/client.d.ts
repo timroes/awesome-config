@@ -87,6 +87,7 @@ interface Client {
   leader_window: number | null;
   ontop: boolean;
   size_hints?: SizeHints;
+  valid: boolean;
   readonly motif_wm_hints: MotifWmHints | null;
   readonly is_fixed: () => boolean;
   set_xproperty(name: string, value: boolean | string | number): void;
@@ -103,7 +104,7 @@ type ClientSignals = 'manage' | 'unmanage' | 'focus' | `property::${ClientProper
 /** @noSelf */
 interface ClientGlobal {
   connect_signal(signal: ClientSignals, callback: (client: Client, ...args: unknown[]) => void): void;
-  focus?: Client;
+  focus?: Client | null;
   get(screenIndex?: number, stacked?: boolean): Client[];
 }
 
