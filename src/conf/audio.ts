@@ -39,18 +39,16 @@ addKey([], 'XF86AudioMute', async () => {
   showAudioState(sink);
 });
 
-isCommandAvailable('playerctl').then(() => {
-  addKey([], 'XF86AudioPlay', () => spawn('playerctl play-pause'));
-  addKey([], 'XF86AudioNext', () => spawn('playerctl next'));
-  addKey([], 'XF86AudioPrev', () => spawn('playerctl previous'));
-  addKey([ SUPER ], 'XF86AudioPlay', async () => {
-    const { stdout } = await execute(`playerctl metadata --format '{{title}} ({{artist}})'`);
-    lunaconf.notify.show_or_update('audio.show_metadata', {
-      title: 'Currently playing',
-      text: (stdout ?? "").trim(),
-      icon: 'audio-speakers',
-      timeout: 3,
-      ignore_dnd: true,
-    })
-  });
+addKey([], 'XF86AudioPlay', () => spawn('playerctl play-pause'));
+addKey([], 'XF86AudioNext', () => spawn('playerctl next'));
+addKey([], 'XF86AudioPrev', () => spawn('playerctl previous'));
+addKey([ SUPER ], 'XF86AudioPlay', async () => {
+  const { stdout } = await execute(`playerctl metadata --format '{{title}} ({{artist}})'`);
+  lunaconf.notify.show_or_update('audio.show_metadata', {
+    title: 'Currently playing',
+    text: (stdout ?? "").trim(),
+    icon: 'audio-speakers',
+    timeout: 3,
+    ignore_dnd: true,
+  })
 });
