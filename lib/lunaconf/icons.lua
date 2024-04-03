@@ -8,7 +8,6 @@ local theme = require("lunaconf.theme")
 local awful_util = require("awful.util")
 local inifile = require('inifile')
 local utils = require('lunaconf.utils')
-local strings = require('lunaconf.strings')
 local gears = require('gears')
 
 local icons = {}

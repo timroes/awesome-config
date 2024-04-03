@@ -1,6 +1,5 @@
 local awful = require('awful')
 local gears = require('gears')
-local strings = require('lunaconf.strings')
 local lfs = require('lfs')
 local io = io
 local log = require('lunaconf.log')
