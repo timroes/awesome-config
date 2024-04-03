@@ -7,4 +7,9 @@ declare interface Key {
   [UniqueKeySymbol]: void;
 }
 
-type Modifier = 'Mod1' | 'Shift' | 'Control' | 'Mod4';
+type Modifier = 
+  | 'Mod1'
+  | 'Mod2' // Num pad
+  | 'Shift'
+  | 'Control'
+  | 'Mod4';

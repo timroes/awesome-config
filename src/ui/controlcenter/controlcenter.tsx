@@ -65,6 +65,8 @@ const popup = awful.popup({
 });
 
 const keygrabber: awful.KeygrabberFn = (modifiers, key, event) => {
+  // Ignore Num Pad modifier
+  modifiers = modifiers.filter(mod => mod !== "Mod2");
   if (event === "press" && (key === "Escape" || modifiers.length === 1 && modifiers[0] === SUPER && key === "\\")) {
     hide();
   } else if (event === "press") {
