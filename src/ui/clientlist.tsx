@@ -81,7 +81,9 @@ export const createClientlist = (screen: Screen) => {
                 <wibox.widget.textbox id="clientname" />
               </wibox.container.margin>
               <wibox.container.background shape={gears.shape.circle} bg={theme.clientlist.indicators.ontop}>
-                <wibox.widget.textbox id="ontopIndicator" markup={`<span color="${theme.text.dark}" weight="500">⇧</span>`} visible={false} />
+                <wibox.container.margin margins={dpi(2, screen)} id="ontopIndicator" visible={false}>
+                  <wibox.widget.textbox markup={`<span color="${theme.text.dark}" weight="500">⇧</span>`} />
+                </wibox.container.margin>
               </wibox.container.background>
             </wibox.layout.align.horizontal>
           </wibox.container.margin>
