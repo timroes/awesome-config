@@ -18,23 +18,6 @@ addKey([SUPER], 'l', () => spawn(LOCK_COMMAND));
 // It locks the screen the same way than using the shortcut to lock it immediately.
 spawnOnce(`xautolock -time ${screensaverTimeout} -locker ${LOCK_COMMAND}`);
 
-// Start the script that will monitor the DBus for screensaver inhibit/uninhibit messages and turn them into signals
-spawnOnce(`${SCRIPT_PATH}/dbus-screensaver-monitor.sh`, '-x dbus-screensaver-monitor.sh');
-
-const inhibitingApps = new Set<string>();
-// Listen on the signals emitted by the dbus-screensaver-monitor.sh script and keep track of which senders inhibits
-// the screensaver. Prevent auto screen sleep as long as there is at least one sender still inhibiting
-dbus.session().onSignal<[sender: string]>(null, 'de.timroes.awesome.ScreenSaver', null, null, (signal) => {
-  const [sender] = signal.params;
-  log(`Screensaver ${signal.signalName} by ${sender}`, LogLevel.DEBUG);
-  if (signal.signalName === 'Inhibit') {
-    inhibitingApps.add(sender);
-  } else {
-    inhibitingApps.delete(sender);
-  }
-  lunaconf.sidebar.get().set_screensleep(inhibitingApps.size > 0);
-});
-
 // The following code handles going to sleep after locking the machine with some delay.
 let suspendTimer: gears.TimerInstance | undefined;
 

@@ -28,7 +28,7 @@ local sidebar = {}
 local instance = nil
 
 -- Resume screensaver on startup, so the icon will always be in sync over awesome restarts
-awful.spawn.spawn(lunaconf.utils.scriptpath() .. '/screensaver.sh resume')
+-- awful.spawn.spawn(lunaconf.utils.scriptpath() .. '/screensaver.sh resume')
 
 local theme = lunaconf.theme.get()
 

@@ -154,6 +154,5 @@ client.connect_signal("focus", () => {
   }
 });
 
-// TODO: screensaver triggering from screensaver.ts
 // TODO: battery widget
 // TODO: On primary change/dpi change
