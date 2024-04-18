@@ -47,7 +47,7 @@ const highlight_text_color = colors.text.dark;
 
 const base = {
   font: {
-    regular: 'Inter Light 10',
+    regular: 'Inter 10',
     bold: 'Inter Bold 10',
     large: 'Inter Regular 14',
   },
@@ -87,6 +87,7 @@ const clientlist = {
   },
   indicators: {
     ontop: colors.pink.light,
+    floating: base.text.light,
   },
 };
 

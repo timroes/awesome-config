@@ -25,6 +25,8 @@ interface Widget {
   emit_signal(signal: string, ...args: any[]): void;
   connect_signal(signal: string, callback: (...args: any[]) => void): void;
   get_children_by_id(id: string): Widget[];
+  visible?: boolean;
+  widget?: Widget;
 }
 
 interface TextBoxProps {
