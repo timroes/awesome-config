@@ -5,6 +5,7 @@ import * as lunaconf from 'lunaconf';
 import { dpi } from '../lib/dpi';
 import { theme } from '../theme/default';
 import { MouseButton } from '../lib/mouse';
+import { ICON_PATH } from '../lib/constants';
 
 const getColor = (c: Client, type: "fg" | "bg") => {
   if (c.urgent) {
@@ -18,6 +19,16 @@ const getColor = (c: Client, type: "fg" | "bg") => {
   }
   return theme.clientlist[type].normal;
 };
+
+const getLayoutIndicator = (c: Client) => {
+  if (c.ontop) {
+    return gears.color.recolor_image(`${ICON_PATH}/ontop.png`, theme.clientlist.indicators.ontop);
+  }
+  if (c.floating) {
+    return gears.color.recolor_image(`${ICON_PATH}/floating.png`, theme.clientlist.indicators.floating);
+  }
+  return null;
+}
 
 export const createClientlist = (screen: Screen) => {
   const buttons = [
@@ -44,7 +55,16 @@ export const createClientlist = (screen: Screen) => {
 
   const onUpdate = (self: Widget, c: Client) => {
     (self.get_children_by_id("clientname")[0] as TextBox).text = c.name || c.class || " ";
-    (self.get_children_by_id("ontopIndicator")[0] as TextBox).visible = c.ontop;
+
+    const layoutIndicator = self.get_children_by_id("layoutIndicator")[0] as Widget;
+    const layoutIcon = getLayoutIndicator(c);
+    if (layoutIcon) {
+      layoutIndicator.visible = true;
+      (layoutIndicator.widget as Imagebox).image = layoutIcon;
+    } else {
+      layoutIndicator.visible = false;
+    }
+
     const bg = self.get_children_by_id("background")[0] as BackgroundContainer;
     bg.bg = getColor(c, "bg");
     bg.fg = getColor(c, "fg");
@@ -80,9 +100,9 @@ export const createClientlist = (screen: Screen) => {
               <wibox.container.margin left={dpi(5, screen)} right={dpi(5, screen)}>
                 <wibox.widget.textbox id="clientname" />
               </wibox.container.margin>
-              <wibox.container.background shape={gears.shape.circle} bg={theme.clientlist.indicators.ontop}>
-                <wibox.widget.textbox id="ontopIndicator" markup={`<span color="${theme.text.dark}" weight="500">⇧</span>`} visible={false} />
-              </wibox.container.background>
+              <wibox.container.margin id="layoutIndicator" margins={dpi(2, screen)} visible={false}>
+                <wibox.widget.imagebox />
+              </wibox.container.margin>
             </wibox.layout.align.horizontal>
           </wibox.container.margin>
         </wibox.container.background>

@@ -7,7 +7,9 @@ import { theme } from "../../theme/default";
 import { ICON_PATH, SCRIPT_PATH } from "../../lib/constants";
 import { dpi } from "../../lib/dpi";
 import { isDndActive, onDndChange, toggleDnd } from "../../lib/notifications";
-import { spawn } from "../../lib/process";
+import { spawn, spawnOnce } from "../../lib/process";
+import { dbus } from "../../lib/dbus";
+import { LogLevel, log } from "../../lib/log";
 
 const dndIcon = `${ICON_PATH}/bell.png`;
 const dndActiveIcon = `${ICON_PATH}/bell-dnd.png`;
@@ -16,9 +18,10 @@ const sleepDisabledIcon = `${ICON_PATH}/sleep-disabled.png`;
 
 export class SettingsWidget extends ControlWidget {
   private sleepDisabled: boolean = false;
+  private inhibitingApps = new Set<string>();
 
-  private toggleSleep(): void {
-    this.sleepDisabled = !this.sleepDisabled;
+  private setSleep(sleepDisabled: boolean): void {
+    this.sleepDisabled = sleepDisabled;
   	spawn(`${SCRIPT_PATH}/screensaver.sh ${this.sleepDisabled ? 'pause' : 'resume'}`);
     this.handler.setTriggerColor("yellow", this.sleepDisabled);
 
@@ -26,6 +29,10 @@ export class SettingsWidget extends ControlWidget {
     (this.currentRender.get_children_by_id("sleep-icon")[0] as Imagebox).image = this.sleepDisabled 
       ? gears.color.recolor_image(sleepDisabledIcon, theme.controlcenter.settings.icon.active)
       : gears.color.recolor_image(sleepIcon, theme.controlcenter.settings.icon.disabled);
+  }
+
+  private toggleSleep(): void {
+    this.setSleep(!this.sleepDisabled);
   }
 
   private toggleDnd(): void {
@@ -55,6 +62,20 @@ export class SettingsWidget extends ControlWidget {
 
   override onInit(): void {
     onDndChange(() => { this.onDndToggle(); });
+    // Start the script that will monitor the DBus for screensaver inhibit/uninhibit messages and turn them into signals
+    spawnOnce(`${SCRIPT_PATH}/dbus-screensaver-monitor.sh`, '-x dbus-screensaver-monitor.sh');
+    // Listen on the signals emitted by the dbus-screensaver-monitor.sh script and keep track of which senders inhibits
+    // the screensaver. Prevent auto screen sleep as long as there is at least one sender still inhibiting
+    dbus.session().onSignal<[sender: string]>(null, 'de.timroes.awesome.ScreenSaver', null, null, (signal) => {
+      const [sender] = signal.params;
+      log(`Screensaver ${signal.signalName} by ${sender}`, LogLevel.DEBUG);
+      if (signal.signalName === 'Inhibit') {
+        this.inhibitingApps.add(sender);
+      } else {
+        this.inhibitingApps.delete(sender);
+      }
+      this.setSleep(this.inhibitingApps.size > 0);
+    });
   }
 
   override onKeyPress(modifiers: Modifier[], key: string): void {

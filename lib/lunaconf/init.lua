@@ -1,5 +1,4 @@
 return {
-	cairo = require('lunaconf.cairo'),
 	clients = require('lunaconf.clients'),
 	config = require('lunaconf.config'),
 	dbus = require('lunaconf.dbus'),
@@ -10,7 +9,6 @@ return {
 	log = require('lunaconf.log'),
 	notify = require('lunaconf.notify'),
 	sidebar = require('lunaconf.sidebar'),
-	strings = require('lunaconf.strings'),
 	tags = require('lunaconf.tags'),
 	theme = require('lunaconf.theme'),
 	widgets = require('lunaconf.widgets'),
