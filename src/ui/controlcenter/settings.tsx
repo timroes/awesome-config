@@ -1,6 +1,7 @@
 import * as wibox from "wibox";
 import * as gears from "gears";
 import * as awful from "awful";
+import * as lunaconf from "lunaconf";
 
 import { ControlWidget } from "./control-widget";
 import { theme } from "../../theme/default";
@@ -29,10 +30,14 @@ interface BatteryStatus {
   EnergyRate?: number;
 }
 
+const BATTERY_WARNING_TIME = 15 * 60; // 15 min
+
 const dndIcon = `${ICON_PATH}/bell.png`;
 const dndActiveIcon = `${ICON_PATH}/bell-dnd.png`;
 const sleepIcon = `${ICON_PATH}/sleep.png`;
 const sleepDisabledIcon = `${ICON_PATH}/sleep-disabled.png`;
+
+let batteryWarningShown = false;
 
 const getBatteryIcon = (status: BatteryStatus) => {
   if (status.State === BatteryState.PendingCharge || status.State === BatteryState.Charging || status.State === BatteryState.FullyCharged) {
@@ -125,15 +130,27 @@ export class SettingsWidget extends ControlWidget {
       const textbox = this.currentRender.get_children_by_id("battery")[0] as TextBox;
       textbox.markup = `${Math.round(status.Percentage)}%`;
       (this.currentRender.get_children_by_id("batteryIcon")[0] as Imagebox).image = gears.color.recolor_image(`${ICON_PATH}/${getBatteryIcon(status)}`, theme.controlcenter.settings.battery.icon);
-      if (status.TimeToFull && status.TimeToFull > 0) {
+      if (status.TimeToFull && status.TimeToFull > 60) {
         textbox.markup = `${textbox.markup} / ${formatTime(status.TimeToFull)}`;
       }
-      if (status.TimeToEmpty && status.TimeToEmpty > 0) {
-        textbox.markup = `${textbox.markup} / ${formatTime(status.TimeToEmpty)}`;
-      }
 
+      if (status.State === BatteryState.PendingCharge || status.State === BatteryState.Charging || status.State === BatteryState.FullyCharged) {
+        batteryWarningShown = false;
+      }
+      
       // Update trigger state according to the battery state
       if (status.TimeToEmpty && status.TimeToEmpty > 0) {
+        textbox.markup = `${textbox.markup} / ${formatTime(status.TimeToEmpty)}`;
+        if (status.TimeToEmpty < BATTERY_WARNING_TIME && !batteryWarningShown) {
+          lunaconf.notify.show_or_update("low_battery_warning", {
+            title: "Battery warning",
+            text: `Only ${formatTime(status.TimeToEmpty)} of battery time remaining.`,
+            icon: "battery-caution",
+            timeout: 10,
+            ignore_dnd: true,
+          });
+          batteryWarningShown = true;
+        }
         // We have a remaining time so use it over percentage for coloring
         if (status.TimeToEmpty < 30) {
           this.handler.setTriggerState({ battery: "red" });
