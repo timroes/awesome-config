@@ -7,7 +7,7 @@ const LAYOUTS = [layouts.maximized, layouts.split];
 const getFocusedCommonTags = () => {
   const focus = client.focus;
   if (focus) {
-    return focus.tags().filter((tag) => (tag as { common_tag?: boolean }).common_tag);
+    return focus.tags().filter((tag) => tag.common_tag);
   } else {
     return [];
   }

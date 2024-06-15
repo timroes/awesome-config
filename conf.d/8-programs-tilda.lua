@@ -15,7 +15,7 @@ lunaconf.clients.add_rules({
 			border_width = 0,
 			opacity = 0.9,
 			callback = function(c)
-				c.screen = lunaconf.screens.primary()
+				c.screen = screen.primary
 
 				-- Set property of tilda whenever it changes (prevent its own scaling mechanism)
 				c:connect_signal('property::geometry', set_position)

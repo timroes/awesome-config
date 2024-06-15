@@ -157,12 +157,6 @@ client.connect_signal('untagged', focus_fallback_delayed)
 client.connect_signal('property::minimized', focus_fallback_delayed)
 client.connect_signal('property::hidden', focus_fallback_delayed)
 
-
-lunaconf.keys.globals(
-	awful.key({ lunaconf.config.MOD }, 'Page_Up', function() lunaconf.clients.focus_next(-1) end),
-	awful.key({ lunaconf.config.MOD }, 'Page_Down', function() lunaconf.clients.focus_next(1) end)
-)
-
 -- Raise client when focused
 client.connect_signal("focus", function(c)
 	c:raise()

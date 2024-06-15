@@ -1,28 +1,6 @@
 local awful = require('awful')
 local lunaconf = require('lunaconf')
 
--- Focus the screen at the given position (if it's a valid screen position)
-local function focus_screen(screen_position)
-	for s in screen do
-		if s.position == screen_position then
-			if client.focus and client.focus.screen == s then
-				lunaconf.clients.focus_next(1)
-			else
-				client.focus = s.clients[1]
-			end
-			return
-		end
-	end
-end
-
--- Add hotkeys to navigate to screens between 1 and 9
-for i = 1, 9 do
-	local key = awful.key({ lunaconf.config.MOD }, '#' .. i + 9, function()
-		focus_screen(i)
-	end)
-	lunaconf.keys.globals(key)
-end
-
 -- ##################
 -- Directional moving
 -- ##################

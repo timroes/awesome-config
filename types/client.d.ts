@@ -88,6 +88,7 @@ interface Client {
   ontop: boolean;
   size_hints?: SizeHints;
   valid: boolean;
+  first_tag: Tag;
   readonly motif_wm_hints: MotifWmHints | null;
   readonly is_fixed: () => boolean;
   set_xproperty(name: string, value: boolean | string | number): void;

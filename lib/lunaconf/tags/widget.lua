@@ -6,6 +6,7 @@ local lunaconf = {
 	log = require('lunaconf.log'),
 	theme = require('lunaconf.theme')
 }
+local screens = require('lib.screens')
 
 local tagwidget = {}
 
@@ -66,7 +67,7 @@ local function new(self, screen, tags, args)
 				if i == self._selected_tag then
 					cr:save()
 					cr:translate(0.5 * height + (i-1) * height - (i-1) * height * 0.2, 0.5 * height)
-					draw_position_indicator(cr, screen, screen.position, height * 0.6 / 2)
+					draw_position_indicator(cr, screen, screens.getScreenPosition(screen) + 1, height * 0.6 / 2)
 					cr:restore()
 				end
 			end

@@ -25,7 +25,7 @@ local function unhide_all_clients()
 		if client.screen_before_hiding and client.screen_before_hiding.valid then
 			client:move_to_tag(lunaconf.tags.get_current_tag(client.screen_before_hiding))
 		else
-			client:move_to_tag(lunaconf.tags.get_current_tag(lunaconf.screens.primary()))
+			client:move_to_tag(lunaconf.tags.get_current_tag(screen.primary))
 		end
 	end
 end

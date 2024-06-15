@@ -8,6 +8,18 @@ interface Screen {
    */
   clients: Client[];
   /**
+   * All tags attached to this screen. This property is read only. Use tag.screen to alter this list.
+   */
+  tags: readonly Tag[];
+  /**
+   * A list of all selected tags on the screen.
+   */
+  selected_tags: readonly Tag[];
+  /**
+   * The first selected tag on the screen.
+   */
+  selected_tag: Tag;
+  /**
    * Get the list of visible clients for the screen.
    * @param stacked Whether the clients should be returned in stacking order (top to bottom).
    */

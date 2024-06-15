@@ -17,6 +17,7 @@ declare module 'awful' {
   /** @noSelf */
   interface ClientModule {
     object: any;
+    next: (offset: number) => Client | null;
   }
 
   /** @noSelf */

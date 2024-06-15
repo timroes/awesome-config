@@ -34,6 +34,17 @@ interface LayoutDescription {
    * moving between screens should still be performed.
    */
   moveClient?(client: Client, direction: "up" | "down" | "left" | "right"): boolean;
+  /**
+   * Optional object that can be implemented on a layout in case the layout should count
+   * as multiple screens (e.g. like a split layout). In this case the layout will get more SUPER + <number>
+   * hotkeys assigned to it than just one. It needs to then handle focusing a client via the hotkey
+   * by the `focus` method. This will get passed in the relative `index` on the layout, i.e. starting always with
+   * 1 no matter which screen the layout is on.
+   */
+  countAsMultiple?: {
+    count(): number;
+    focus(index: number): void;
+  }
 }
 
 type LayoutFactory = (tag: Tag) => (LayoutDescription & {

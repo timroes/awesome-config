@@ -4,7 +4,6 @@ local wibox = require('wibox')
 local lunaconf = {
 	dpi = require('lunaconf.dpi'),
 	icons = require('lunaconf.icons'),
-	screens = require('lunaconf.screens'),
 	theme = require('lunaconf.theme')
 }
 
@@ -15,7 +14,7 @@ local base = {}
 local last_shown_dialog
 
 function base:recalculate_sizes(callback)
-	local screen = lunaconf.screens.primary()
+	local screen = screen.primary
 	self._widget.screen = screen
 	self._widget.height = lunaconf.dpi.y(self._height, screen)
 	self._widget.width = lunaconf.dpi.x(self._width, screen)

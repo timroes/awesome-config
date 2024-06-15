@@ -1,6 +1,7 @@
 // Import the actual configuration files in the desired order.
 
-import './conf/clients';
+import './conf/clients-basic';
+import './conf/clients-focus';
 import './conf/tags';
 
 import './conf/compositor';

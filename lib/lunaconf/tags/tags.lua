@@ -1,9 +1,6 @@
 local notify = require('lunaconf.notify')
 local awful = require('awful')
 local gears = require('gears')
-local lunaconf = {
-	screens = require('lunaconf.screens')
-}
 local screen = screen
 local client = client
 local widget = require('lunaconf.tags.widget')
@@ -52,7 +49,7 @@ local function focus_client(preferred_screen)
 	if preferred_screen and focus_client_on_screen(preferred_screen) then
 		return
 	end
-	if focus_client_on_screen(lunaconf.screens.primary()) then
+	if focus_client_on_screen(screen.primary) then
 		return
 	end
 	for s in screen do
@@ -81,7 +78,7 @@ end)
 -- of the screen that tag was on.
 tag.connect_signal('removal-pending', function (t)
 	for _, c in pairs(t:clients()) do
-		c:move_to_tag(module.get_current_tag(lunaconf.screens.primary()))
+		c:move_to_tag(module.get_current_tag(screen.primary))
 	end
 end)
 

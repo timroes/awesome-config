@@ -57,7 +57,7 @@ end
 
 -- Always show notifications on primary screen
 local function update_notification_screen()
-	local screen = lunaconf.screens.primary()
+	local screen = screen.primary
 	naughty.config.defaults.screen = screen
 	naughty.config.defaults.icon_size = lunaconf.dpi.x(theme.notification_icon_size, screen)
 	naughty.config.spacing = lunaconf.dpi.y(theme.notification_spacing or 1, screen)

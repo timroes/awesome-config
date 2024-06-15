@@ -1,7 +1,6 @@
 import { dpi } from "../lib/dpi";
 import * as wibox from "wibox";
 import * as awful from "awful";
-// import * as lunaconf from 'lunaconf';
 import { maximized } from "./maximized";
 import { MouseButton, MouseButtonIndex } from "../lib/mouse";
 import { theme } from "../theme/default";
@@ -73,6 +72,26 @@ export const split: LayoutFactory = (tag) => {
   return {
     name: "Split",
     is_dynamic: true,
+    countAsMultiple: {
+      count() {
+        return 2;
+      },
+      focus(index) {
+        const focusSide = index === 1 ? "left" : "right";
+        if (client.focus?.first_tag === tag && sides.get(client.focus) === focusSide) {
+          const clients = tag.screen.get_tiled_clients(false);
+          // The current side of the tag is already focused, find the next tag 
+          // Find the index of the currently focused client
+          const clientIndex = clients.findIndex(c => c === client.focus);
+          // Shift client so that the currently focused client is on the beginning of the array
+          const shiftedClients = [...clients.slice(clientIndex), ...clients.slice(0, clientIndex)];
+          client.focus = shiftedClients.filter(c => sides.get(c) === focusSide)[1] ?? client.focus;
+        } else {
+          // The currently focused client is on another tag or in the not focused side, so we just focus the first client on the correct side in stacking order
+          client.focus = tag.screen.get_tiled_clients(true).filter(c => sides.get(c) === focusSide)[0] ?? client.focus;
+        }
+      }
+    },
     wake_up() {
        const clients = tag.screen.get_tiled_clients(true);
        if (clients[0]) {
