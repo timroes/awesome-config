@@ -21,6 +21,12 @@ const colors = {
   yellow: {
     light: '#D6BF57',
   },
+  orange: {
+    medium: '#fdba74',
+  },
+  red: {
+    medium: '#ef4444',
+  },
 
   // Legacy color definitions
   text: {
@@ -97,6 +103,9 @@ const controlcenter = {
       disabled: colors.gray.lightest,
       active: colors.blue.dark
     },
+    battery: {
+      icon: colors.gray.medium,
+    },
     disabled: colors.blue.dark,
     dnd: colors.pink.medium,
     keepAwake: colors.yellow.light,
@@ -108,8 +117,13 @@ const controlcenter = {
   },
   trigger: {
     inactive: colors.blue.dark,
-    pink: colors.pink.medium,
-    yellow: colors.yellow.light,
+    dnd: colors.pink.medium,
+    keepAwake: colors.yellow.light,
+    battery: {
+      green: colors.green.medium,
+      orange: colors.orange.medium,
+      red: colors.red.medium,
+    }
   },
 };
 

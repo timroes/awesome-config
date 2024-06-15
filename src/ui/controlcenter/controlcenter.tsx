@@ -4,7 +4,7 @@ import * as wibox from "wibox";
 
 import { SUPER } from "../../lib/constants";
 import { addKey } from "../../lib/keys";
-import { ControlWidget, TriggerColor } from "./control-widget";
+import { ControlWidget, Handler, TriggerState } from "./control-widget";
 import { SettingsWidget } from "./settings";
 import { theme } from "../../theme/default";
 import { dpi } from "../../lib/dpi";
@@ -17,11 +17,18 @@ import { log } from "../../lib/log";
 
 let previouslyFocusedClient: Client | null = null;
 
-const triggerColors: Record<TriggerColor, boolean> = { pink: false, yellow: false};
+let triggerState: TriggerState = {
+  battery: "unknown",
+  dnd: false,
+  keepAwake: false,
+};
 
-const handler = {
-  setTriggerColor(color: TriggerColor, value: boolean) {
-    triggerColors[color] = value;
+const handler: Handler = {
+  setTriggerState(state) {
+    triggerState = {
+      ...triggerState,
+      ...state,
+    };
     trigger.emit_signal("widget::redraw_needed");
   },
   requestRelayout() {
@@ -101,6 +108,13 @@ function toggle() {
   popup.visible ? hide() : show();
 }
 
+const batteryTriggerColors: Record<TriggerState["battery"], string> = {
+  unknown: theme.controlcenter.trigger.inactive,
+  green: theme.controlcenter.trigger.battery.green,
+  orange: theme.controlcenter.trigger.battery.orange,
+  red: theme.controlcenter.trigger.battery.red, 
+};
+
 const createTrigger = (s: Screen) => {
   return wibox.widget(
     <wibox.layout.fixed.horizontal buttons={awful.button([], MouseButton.PRIMARY, () => toggle())}>
@@ -112,24 +126,25 @@ const createTrigger = (s: Screen) => {
           const regularColor = theme.controlcenter.trigger.inactive;
 
           // Top left square which indicates the dnd status
-          cr.set_source_rgb(...gears.color.parse_color(triggerColors.pink ? theme.controlcenter.trigger.pink : regularColor));
+          cr.set_source_rgb(...gears.color.parse_color(triggerState.dnd ? theme.controlcenter.trigger.dnd : regularColor));
           gears.shape.transform(gears.shape.rounded_rect)
             .translate(0.15 * width, 0.15 * height)(cr, 0.3 * width, 0.3 * height, dpi(2, s));
           cr.fill();
 
           // Top right square
-          cr.set_source_rgb(...gears.color.parse_color(regularColor));
+          cr.set_source_rgb(...gears.color.parse_color(batteryTriggerColors[triggerState.battery]));
           gears.shape.transform(gears.shape.rounded_rect)
             .translate(0.55 * width, 0.15 * height)(cr, 0.3 * width, 0.3 * height, dpi(2, s));
           cr.fill();
 
           // Bottom left square
+          cr.set_source_rgb(...gears.color.parse_color(regularColor));
           gears.shape.transform(gears.shape.rounded_rect)
             .translate(0.15 * width, 0.55 * height)(cr, 0.3 * width, 0.3 * height, dpi(2, s));
           cr.fill();
 
           // Bottom right square
-          cr.set_source_rgb(...gears.color.parse_color(triggerColors.yellow ? theme.controlcenter.trigger.yellow : regularColor));
+          cr.set_source_rgb(...gears.color.parse_color(triggerState.keepAwake ? theme.controlcenter.trigger.keepAwake : regularColor));
           gears.shape.transform(gears.shape.rounded_rect)
             .translate(0.55 * width, 0.55 * height)(cr, 0.3 * width, 0.3 * height, dpi(2, s));
           cr.fill();
@@ -154,5 +169,4 @@ client.connect_signal("focus", () => {
   }
 });
 
-// TODO: battery widget
 // TODO: On primary change/dpi change

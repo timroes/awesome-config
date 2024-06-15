@@ -11,10 +11,58 @@ import { spawn, spawnOnce } from "../../lib/process";
 import { dbus } from "../../lib/dbus";
 import { LogLevel, log } from "../../lib/log";
 
+const enum BatteryState {
+  Unknown = 0,
+  Charging = 1,
+  Discharging = 2,
+  Empty = 3,
+  FullyCharged = 4,
+  PendingCharge = 5,
+  PendingDischarge = 6,
+};
+
+interface BatteryStatus {
+  Percentage: number;
+  State: BatteryState;
+  TimeToFull?: number;
+  TimeToEmpty?: number;
+  EnergyRate?: number;
+}
+
 const dndIcon = `${ICON_PATH}/bell.png`;
 const dndActiveIcon = `${ICON_PATH}/bell-dnd.png`;
 const sleepIcon = `${ICON_PATH}/sleep.png`;
 const sleepDisabledIcon = `${ICON_PATH}/sleep-disabled.png`;
+
+const getBatteryIcon = (status: BatteryStatus) => {
+  if (status.State === BatteryState.PendingCharge || status.State === BatteryState.Charging || status.State === BatteryState.FullyCharged) {
+    return "battery-charging.png";
+  }
+  
+  if (!status.Percentage) {
+    return "battery.png";
+  }
+
+  if (status.Percentage >= 85) {
+    return "battery-4.png";
+  }
+
+  if (status.Percentage >= 55) {
+    return "battery-3.png";
+  }
+  
+  if (status.Percentage >= 20) {
+    return "battery-2.png"
+  }
+
+  return "battery-1.png";
+};
+
+const formatTime = (time: number) => {
+  const hours = Math.floor(time / 3600);
+  const minutes = Math.floor((time - hours * 3600) / 60);
+  return hours > 0 ? `${hours}h ${minutes}m` : `${minutes} min`;
+};
 
 export class SettingsWidget extends ControlWidget {
   private sleepDisabled: boolean = false;
@@ -23,7 +71,7 @@ export class SettingsWidget extends ControlWidget {
   private setSleep(sleepDisabled: boolean): void {
     this.sleepDisabled = sleepDisabled;
   	spawn(`${SCRIPT_PATH}/screensaver.sh ${this.sleepDisabled ? 'pause' : 'resume'}`);
-    this.handler.setTriggerColor("yellow", this.sleepDisabled);
+    this.handler.setTriggerState({ keepAwake: this.sleepDisabled });
 
     (this.currentRender.get_children_by_id("sleep")[0] as BackgroundContainer).bg = this.sleepDisabled ? theme.controlcenter.settings.keepAwake : theme.controlcenter.settings.disabled;
     (this.currentRender.get_children_by_id("sleep-icon")[0] as Imagebox).image = this.sleepDisabled 
@@ -42,7 +90,7 @@ export class SettingsWidget extends ControlWidget {
 
   private onDndToggle() {
     const dnd = isDndActive();
-    this.handler.setTriggerColor("pink", dnd);
+    this.handler.setTriggerState({ dnd });
     (this.currentRender.get_children_by_id("dnd")[0] as BackgroundContainer).bg = dnd ? theme.controlcenter.settings.dnd : theme.controlcenter.settings.disabled;
     (this.currentRender.get_children_by_id("dnd-icon")[0] as Imagebox).image = dnd 
       ? gears.color.recolor_image(dndActiveIcon, theme.controlcenter.settings.icon.active)
@@ -58,6 +106,55 @@ export class SettingsWidget extends ControlWidget {
         </wibox.container.margin>
       </wibox.container.background>
     )
+  }
+
+  private renderBattery(s: Screen) {
+    return (
+      <wibox.layout.fixed.horizontal spacing={dpi(2, s)}>
+        <wibox.container.place valign="center">
+          <wibox.widget.imagebox id="batteryIcon" forced_width={dpi(24, s)} forced_height={dpi(24, s)} />
+        </wibox.container.place>
+        <wibox.widget.textbox id="battery" markup="" />
+      </wibox.layout.fixed.horizontal>
+    );
+  }
+
+  private updateBatteryWidget() {
+    dbus.system().call("org.freedesktop.UPower", "/org/freedesktop/UPower/devices/DisplayDevice", "org.freedesktop.DBus.Properties", "GetAll", [["s", "org.freedesktop.UPower.Device"]]).then((response) => {
+      const status: BatteryStatus = response.get_child_value(0).value;
+      const textbox = this.currentRender.get_children_by_id("battery")[0] as TextBox;
+      textbox.markup = `${Math.round(status.Percentage)}%`;
+      (this.currentRender.get_children_by_id("batteryIcon")[0] as Imagebox).image = gears.color.recolor_image(`${ICON_PATH}/${getBatteryIcon(status)}`, theme.controlcenter.settings.battery.icon);
+      if (status.TimeToFull && status.TimeToFull > 0) {
+        textbox.markup = `${textbox.markup} / ${formatTime(status.TimeToFull)}`;
+      }
+      if (status.TimeToEmpty && status.TimeToEmpty > 0) {
+        textbox.markup = `${textbox.markup} / ${formatTime(status.TimeToEmpty)}`;
+      }
+
+      // Update trigger state according to the battery state
+      if (status.TimeToEmpty && status.TimeToEmpty > 0) {
+        // We have a remaining time so use it over percentage for coloring
+        if (status.TimeToEmpty < 30) {
+          this.handler.setTriggerState({ battery: "red" });
+        } else if (status.TimeToEmpty < 120) {
+          this.handler.setTriggerState({ battery: "orange" });
+        } else {
+          this.handler.setTriggerState({ battery: "green" });
+        }
+      } else if (status.Percentage && status.Percentage > 0) {
+        // We don't have a remaining time (yet) so use percentage instead
+        if (status.Percentage < 5) {
+          this.handler.setTriggerState({ battery: "red" });
+        } else if (status.Percentage < 20) {
+          this.handler.setTriggerState({ battery: "orange" });
+        } else {
+          this.handler.setTriggerState({ battery: "green" });
+        }
+      } else {
+        this.handler.setTriggerState({ battery: "unknown" });
+      }
+    });
   }
 
   override onInit(): void {
@@ -76,6 +173,11 @@ export class SettingsWidget extends ControlWidget {
       }
       this.setSleep(this.inhibitingApps.size > 0);
     });
+    // Listen to changes with the battery state and update widget accordingly
+    dbus.system().onSignal(null, "org.freedesktop.DBus.Properties", "PropertiesChanged", "/org/freedesktop/UPower/devices/DisplayDevice", (signal) => {
+      this.updateBatteryWidget();
+    });
+    this.updateBatteryWidget();
   }
 
   override onKeyPress(modifiers: Modifier[], key: string): void {
@@ -92,12 +194,14 @@ export class SettingsWidget extends ControlWidget {
   override render(s: Screen) {
     return (
       <wibox.container.margin right={dpi(4, s)} left={dpi(4, s)}>
-        <wibox.container.place halign="right">
+        <wibox.layout.align.horizontal halign="right">
+          {null}
+          {this.renderBattery(s)}
           <wibox.layout.fixed.horizontal spacing={dpi(8, s)}>
             {this.renderSetting(s, "sleep", sleepIcon, () => { this.toggleSleep(); })}
             {this.renderSetting(s, "dnd", dndIcon, () => { this.toggleDnd(); })}
           </wibox.layout.fixed.horizontal>
-        </wibox.container.place>
+        </wibox.layout.align.horizontal>
       </wibox.container.margin>
     );
   }

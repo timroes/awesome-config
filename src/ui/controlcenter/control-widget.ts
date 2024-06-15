@@ -1,9 +1,13 @@
 import * as wibox from 'wibox';
 
-export type TriggerColor = "pink" | "yellow";
+export type TriggerState = {
+  dnd: boolean;
+  keepAwake: boolean;
+  battery: "unknown" | "green" | "orange" | "red";
+}
 
-interface Handler {
-  setTriggerColor: (color: TriggerColor, enabled: boolean) => void;
+export interface Handler {
+  setTriggerState: (state: Partial<TriggerState>) => void;
   requestRelayout: () => void;
 }
 
