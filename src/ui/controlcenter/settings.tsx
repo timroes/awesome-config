@@ -152,18 +152,18 @@ export class SettingsWidget extends ControlWidget {
           batteryWarningShown = true;
         }
         // We have a remaining time so use it over percentage for coloring
-        if (status.TimeToEmpty < 30) {
+        if (status.TimeToEmpty < 30 * 60) {
           this.handler.setTriggerState({ battery: "red" });
-        } else if (status.TimeToEmpty < 120) {
+        } else if (status.TimeToEmpty < 120 * 60) {
           this.handler.setTriggerState({ battery: "orange" });
         } else {
           this.handler.setTriggerState({ battery: "green" });
         }
       } else if (status.Percentage && status.Percentage > 0) {
         // We don't have a remaining time (yet) so use percentage instead
-        if (status.Percentage < 5) {
+        if (status.Percentage < 10) {
           this.handler.setTriggerState({ battery: "red" });
-        } else if (status.Percentage < 20) {
+        } else if (status.Percentage < 30) {
           this.handler.setTriggerState({ battery: "orange" });
         } else {
           this.handler.setTriggerState({ battery: "green" });
