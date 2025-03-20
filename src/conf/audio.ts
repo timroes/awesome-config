@@ -3,7 +3,6 @@ import { addKey } from '../lib/keys';
 import { SUPER } from '../lib/constants';
 import { execute, isCommandAvailable, spawn } from '../lib/process';
 import { BarModal } from "../ui/bar-modal";
-import { log } from "../lib/log";
 
 const modal = new BarModal('volume.png');
 

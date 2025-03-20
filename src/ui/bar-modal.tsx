@@ -4,6 +4,7 @@ import * as gears from "gears";
 import { theme } from "../theme/default";
 import { ICON_PATH } from "../lib/constants";
 import { dpi } from "../lib/dpi";
+import { transparency } from "../lib/colors";
 
 const MODAL_TIMEOUT = 1;
 
@@ -56,17 +57,17 @@ export class BarModal {
       type: "dialog",
       visible: true,
       screen: screen.primary,
-      bg: theme.bg.base,
+      bg: transparency(theme.bg.base, 0.65),
       ontop: true,
       placement: awful.placement.centered,
-      opacity: 0.9,
+      opacity: 1,
       widget: wibox.widget(
         <wibox.container.margin margins={dpi(10, screen.primary)}>
           <wibox.layout.fixed.vertical spacing={dpi(15, screen.primary)}>
             <wibox.container.place halign="center">
               <wibox.widget.imagebox id="icon" image={gears.color.recolor_image(`${ICON_PATH}/${this.icon}`, theme.highlight.regular)} forced_height={dpi(52, screen.primary)} forced_width={dpi(52, screen.primary)} />
             </wibox.container.place>
-            <wibox.widget.progressbar id="bar" value={this.value / 100} color={theme.highlight.regular} background_color={theme.bg.panel} shape={gears.shape.rounded_rect} forced_width={dpi(200, screen.primary)} forced_height={dpi(4, screen.primary)} />
+            <wibox.widget.progressbar id="bar" value={this.value / 100} color={theme.highlight.regular} background_color={transparency(theme.bg.panel, 0.5)} shape={gears.shape.rounded_rect} forced_width={dpi(200, screen.primary)} forced_height={dpi(4, screen.primary)} />
           </wibox.layout.fixed.vertical>
         </wibox.container.margin>
       ),
