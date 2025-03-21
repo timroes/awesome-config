@@ -57,7 +57,7 @@ function renderWidgets(s: Screen) {
   );
 }
 
-const placementFn = (popup: awful.Popup) => {
+const placementFn = (popup: awful.Drawable) => {
   awful.placement.align(popup, { honor_workarea: true, position: "top_right", margins: { top: dpi(10, screen.primary), right: dpi(10, screen.primary) }})
 };
 

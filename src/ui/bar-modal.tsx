@@ -59,11 +59,10 @@ export class BarModal {
       screen: screen.primary,
       bg: transparency(theme.bg.base, 0.65),
       ontop: true,
-      placement: awful.placement.centered,
-      opacity: 1,
+      placement: (c) => awful.placement.bottom(c, { margins: { bottom: dpi(60, screen.primary) } }),
       widget: wibox.widget(
-        <wibox.container.margin margins={dpi(10, screen.primary)}>
-          <wibox.layout.fixed.vertical spacing={dpi(15, screen.primary)}>
+        <wibox.container.margin top={dpi(25, screen.primary)} bottom={dpi(25, screen.primary)} left={dpi(20, screen.primary)} right={dpi(20, screen.primary)}>
+          <wibox.layout.fixed.vertical spacing={dpi(25, screen.primary)}>
             <wibox.container.place halign="center">
               <wibox.widget.imagebox id="icon" image={gears.color.recolor_image(`${ICON_PATH}/${this.icon}`, theme.highlight.regular)} forced_height={dpi(52, screen.primary)} forced_width={dpi(52, screen.primary)} />
             </wibox.container.place>

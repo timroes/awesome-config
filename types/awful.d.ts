@@ -66,9 +66,10 @@ declare module 'awful' {
     honor_workarea?: boolean;
     honor_padding?: boolean;
     margins?: number | { top?: number, right?: number, bottom?: number, left?: number };
+    offset?: number | { x?: number, y?: number };
   }
 
-  type PlacementFn = unknown;
+  type PlacementFn = (drawable: Drawable, options?: PlacementArgs) => void;
 
   type Drawable = Client | Wibox | Popup;
 
@@ -76,6 +77,7 @@ declare module 'awful' {
   interface PlacementModule {
     align(drawable: Drawable, args: PlacementArgs & { position: Position }): void;
     centered: PlacementFn;
+    bottom: PlacementFn;
   }
 
   interface KeygrabberInstance {
@@ -133,9 +135,13 @@ declare module 'awful' {
     ontop?: boolean;
     placement?: PlacementFn;
     opacity?: number;
+    offset?: number | {
+      x?: number;
+      y?: number;
+    }
   }
 
-  interface Popup extends NonNullable<PopupArgs> {}
+  interface Popup extends Required<PopupArgs> {}
 
   /** @noSelf */
   interface PopupModule {
