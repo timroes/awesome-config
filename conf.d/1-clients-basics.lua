@@ -24,7 +24,7 @@ end)
 buttons = gears.table.join(
 	awful.button({ }, 1, function(c) client.focus = c; c:raise() end),
 	awful.button({ MOD }, 1, function(c)
-		if not c.is_docked then
+		if not c.unmoveable then
 			lunaconf.clients.smart_move(c)
 		end
 	end),
@@ -74,7 +74,7 @@ keys = gears.table.join(
 
 	-- toggle client floating state
 	awful.key({ MOD }, "Return", function(c)
-		if not c.unresizeable then
+		if not c.unresizeable and not c.unmoveable then
 			c.floating = not c.floating
 			if c.floating and c.width == c.screen.workarea.width and c.height == c.screen.workarea.height and c.x == c.screen.workarea.x and c.y == c.screen.workarea.y then
 				c:geometry({

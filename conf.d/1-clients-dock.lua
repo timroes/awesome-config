@@ -4,15 +4,6 @@ local inspect = require('inspect')
 
 local DOCK_PADDING = 20
 
-function awful.client.object.set_is_docked(c, value)
-	c._is_docked = value
-	c:emit_signal('property::is_docked')
-end
-
-function awful.client.object.get_is_docked(c)
-	return c._is_docked
-end
-
 local dock_tag = awful.tag.add('Dock', {
 	screen = screen.primary,
 	layout = awful.layout.suit.max,
@@ -66,10 +57,10 @@ local function resize_to_dock(c)
 end
 
 dock_tag:connect_signal('tagged', function(t, c)
-	c.floating = true
 	c.above = true
 	c.unresizeable = true
-	c.is_docked = true
+	c.unmoveable = true
+	c.floating = true
 	resize_to_dock(c)
 	dock_tag.selected = true
 end)
@@ -77,7 +68,7 @@ end)
 dock_tag:connect_signal('untagged', function(t, c)
 	c.above = false
 	c.unresizeable = false
-	c.is_docked = false
+	c.unmoveable = false
 	c.floating = false
 	dock_tag.selected = false
 end)

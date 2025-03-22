@@ -87,20 +87,27 @@ interface Client {
   leader_window: number | null;
   ontop: boolean;
   size_hints?: SizeHints;
-  valid: boolean;
-  first_tag: Tag;
+  readonly valid: boolean;
+  readonly first_tag: Tag;
   readonly motif_wm_hints: MotifWmHints | null;
-  readonly is_fixed: () => boolean;
   set_xproperty(name: string, value: boolean | string | number): void;
   connect_signal(signal: ClientSignals, callback: (client: Client) => void): void;
+  emit_signal(signal: ClientSignals, ...args: any[]): void;
   tags(tags?: Tag[]): Tag[];
   raise(): void;
   kill(): void;
   geometry(geometry?: Partial<Geometry>): Geometry;
+
+  // Non Awesome WM properties
+  unmoveable: boolean;
+  unresizeable: boolean;
 }
 
-type ClientProperties = 'floating' | 'screen' | 'requests_no_titlebar' | 'is_docked' | 'maximized' | 'maximized_horizontal' | 'maximized_vertical';
-type ClientSignals = 'manage' | 'unmanage' | 'focus' | `property::${ClientProperties}` | "request::titlebars" | "request::geometry";
+type ModifiableClientProperties = keyof {
+  [P in keyof Client as P extends WritableKeys<Client> ? Client[P] extends Function ? never : P : never]: Client[P];
+};
+
+type ClientSignals = 'manage' | 'unmanage' | 'focus' | `property::${ModifiableClientProperties}` | "request::titlebars" | "request::geometry";
 
 /** @noSelf */
 interface ClientGlobal {

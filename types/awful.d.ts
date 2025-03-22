@@ -1,9 +1,9 @@
 declare module 'awful' {
 
-  interface SpawnArgs {
+  /** @noSelf */
+  interface SpawnArgs extends Partial<Pick<Client, ModifiableClientProperties>> {
     tag?: Tag;
-    skip_taskbar?: boolean;
-    ontop?: boolean;
+    callback?: (client: Client) => void;
   }
 
   /** @noSelf */

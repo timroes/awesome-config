@@ -2,6 +2,8 @@ import * as awful from "awful";
 
 import { config } from "../lib/config";
 import { addKey } from "../lib/keys";
+import { XProperties } from "../lib/constants";
+import { log } from "../lib/log";
 
 const isLaptop = config("laptop", false);
 
@@ -32,7 +34,22 @@ function toggleTerminal() {
     if (clients.length > 0) {
       client.focus = clients[0];
     } else {
-      awful.spawn.spawn("kitty -o background_opacity=0.7", { tag: terminalTag, skip_taskbar: true, ontop: true });
+      const workarea = terminalTag.screen.workarea;
+      awful.spawn.spawn("kitty -o background_opacity=0.7", {
+        tag: terminalTag,
+        skip_taskbar: true,
+        ontop: true,
+        floating: true,
+        x: workarea.x,
+        y: workarea.y,
+        width: workarea.width,
+        height: workarea.height,
+        unresizeable: true,
+        unmoveable: true,
+        callback: (c) => {
+          c.set_xproperty(XProperties.NO_DECORATION, true);
+        },
+      });
     }
   } else {
     if (client.focus && client.focus.first_tag === terminalTag) {

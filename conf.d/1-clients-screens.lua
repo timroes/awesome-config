@@ -8,7 +8,7 @@ local lunaconf = require('lunaconf')
 -- Moves the currently focused client into a specific direction onto the next screen
 local function move_in_direction(direction)
 	local c = client.focus
-	if c and not c.is_docked then
+	if c and not c.unmoveable then
 		local tags = c:tags()
 		for _,t in pairs(tags) do
 			-- t.selected = false
