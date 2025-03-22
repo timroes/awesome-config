@@ -1,15 +1,17 @@
+import { config } from "../lib/config";
 import { SUPER } from "../lib/constants";
 import { addKey } from "../lib/keys";
 import { MouseButtonIndex } from "../lib/mouse";
 import { isCommandAvailable, spawn } from "../lib/process";
+
+const isLaptop = config("laptop", false);
 
 // Open file exporer in home directory
 addKey([SUPER], 'e', () => spawn('xdg-open $HOME'));
 addKey([SUPER, 'Control'], 'Delete', () => awesome.restart());
 
 isCommandAvailable('flameshot').then(() => {
-  // addKey([], 'Print', () => spawn('flameshot gui -p /tmp'));
-  addKey([], 'XF86Launch2', () => spawn(`flameshot gui -p /tmp`));
+  addKey(isLaptop ? ["Control"] : [], 'Print', () => spawn('flameshot gui -p /tmp'));
   addKey([SUPER], 'Print', () => spawn(`flameshot full -p /tmp`));
 
   addKey(['Mod1'], 'Print', () => {

@@ -7,6 +7,7 @@ interface Config {
   'disable_compositor': boolean;
   'calendar.action': string;
   'dpi': { [key: string]: number | undefined };
+  'laptop': boolean;
 }
 
 export function config<K extends keyof Config>(key: K): Config[K] | undefined;

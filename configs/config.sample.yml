@@ -30,3 +30,6 @@ keyboard_layouts:
 ## Set this property to enable brightness control. You must make sure to have write permission
 ## to this file. See scripts/brightness.sh for more information.
 # brightness_device: /sys/class/backlight/intel_backlight
+
+## Whether the current device is a laptop and as such will have the Print key in place of the Menu key.
+# laptop: false | true

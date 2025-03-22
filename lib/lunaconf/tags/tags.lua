@@ -83,9 +83,16 @@ tag.connect_signal('removal-pending', function (t)
 end)
 
 -- Don't add newly created clients to all currently visible tags, only to the
--- primary tag of the screen they are created on.
+-- primary tag of the screen they are created on. Only do this is the client
+-- is on at least one common tag. If it's not, we assume this is a client handled
+-- specially by other parts of the config and don't touch its tags.
 client.connect_signal('manage', function(c)
-	c:tags({ module.get_current_tag(c.screen) })
+	for _, t in ipairs(c:tags()) do
+		if t.common_tag then
+			c:tags({ module.get_current_tag(c.screen) })
+			return
+		end
+	end
 end)
 
 -- ###########

@@ -1,5 +1,5 @@
 type TagProperties = 'layout' | 'master_width_factor' | 'selected';
-type TagSignals = `property::${TagProperties}`;
+type TagSignals = `property::${TagProperties}` | 'request::screen' | 'untagged' | 'tagged';
 
 interface Tag {
   name: string;

@@ -8,6 +8,7 @@ import './conf/compositor';
 import './conf/screensaver';
 import './conf/brightness';
 import './conf/audio';
+import './conf/terminal';
 
 // Global controls
 import './conf/misc-keys';

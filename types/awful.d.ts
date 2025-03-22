@@ -1,10 +1,17 @@
 declare module 'awful' {
+
+  interface SpawnArgs {
+    tag?: Tag;
+    skip_taskbar?: boolean;
+    ontop?: boolean;
+  }
+
   /** @noSelf */
   interface Spawn {
     with_shell(cmd: string): void;
     easy_async(cmd: string, callback: (stdout: string, stderr: string, exitreason: 'exit' | 'signal', exitcode: number) => void): void;
     // @incompleteTyping
-    spawn(cmd: string): void;
+    spawn(cmd: string, args?: SpawnArgs, callback?: (client: Client) => void): void;
   }
   export const spawn: Spawn;
 
@@ -18,6 +25,11 @@ declare module 'awful' {
   interface ClientModule {
     object: any;
     next: (offset: number) => Client | null;
+    focus: {
+      history: {
+        previous(): void;
+      }
+    }
   }
 
   /** @noSelf */
@@ -148,6 +160,31 @@ declare module 'awful' {
     (args: PopupArgs): Popup;
   }
 
+  interface Rule {
+    rule: {
+      class?: string;
+      instance?: string;
+      name?: string;
+      role?: string;
+      type?: string;
+    };
+    properties?: Partial<Pick<Client, "floating">> & {
+
+    }
+    callback?: (client: Client) => void;
+  }
+
+  /** @noSelf */
+  interface RulesModule {
+    rules: Rule[]
+  }
+
+
+  /** @noSelf */
+  interface TagModule {
+    add(name: string, args: Partial<Pick<Tag, "selected" | "index" | "screen">>): Tag;
+  }
+
   export const popup: PopupModule;
   export const keygrabber: KeygrabberModule;
   export const placement: PlacementModule;
@@ -155,5 +192,7 @@ declare module 'awful' {
   export const wibar: <T extends Widget>(args: WibarArgs<T>) => Wibar<T>;
   export const screen: ScreenModule;
   export const client: ClientModule;
+  export const rules: RulesModule;
+  export const tag: TagModule;
   export function button<T extends any[] = []>(modifiers: Modifier[], button: 1 | 2 | 3, onPress: ((...args: T) => void) | null, onRelease?: (() => void) | null): Button[];
 }
