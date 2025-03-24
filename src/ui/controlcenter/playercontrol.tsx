@@ -118,7 +118,7 @@ export class PlayerControl extends ControlWidget {
 
   override render(s: Screen): WidgetDefinition {
     return (
-      <wibox.container.background shape={gears.shape.rounded_rect} bg={theme.bg.panel}>
+      <wibox.container.background shape={gears.shape.rounded_rect} bg={theme.controlcenter.panel}>
         <wibox.container.margin margins={dpi(8, s)}>
           <wibox.layout.align.horizontal spacing={dpi(8, s)}>
             <wibox.widget.imagebox image={gears.color.recolor_image(`${ICON_PATH}/music.png`, theme.text.subdued)} forced_height={dpi(24, s)} forced_width={dpi(24, s)} />

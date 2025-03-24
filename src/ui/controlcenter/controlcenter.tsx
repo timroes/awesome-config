@@ -14,6 +14,7 @@ import { MouseButton } from "../../lib/mouse";
 import { createWidget } from "../../lib/widget";
 import { PlayerControl } from "./playercontrol";
 import { log } from "../../lib/log";
+import { transparency } from "../../lib/colors";
 
 let previouslyFocusedClient: Client | null = null;
 
@@ -65,7 +66,7 @@ const popup = awful.popup({
   type: "dialog",
   screen: screen.primary,
   visible: false,
-  bg: theme.bg.base,
+  bg: theme.controlcenter.backround,
   ontop: true,
   placement: placementFn,
   widget: wibox.widget(renderWidgets(screen.primary)),

@@ -67,8 +67,8 @@ export class BluetoothControl extends ControlWidget {
 
   override render(s: Screen) {
     return (
-      <wibox.container.background bg={theme.bg.panel} shape={gears.shape.rounded_rect}>
-        <wibox.layout.fixed.vertical id="devices" spacing={dpi(2, s)} spacing_widget={<wibox.widget.separator span_ratio={0.95} color={theme.bg.base} />} />
+      <wibox.container.background bg={theme.controlcenter.panel} shape={gears.shape.rounded_rect}>
+        <wibox.layout.fixed.vertical id="devices" spacing={dpi(2, s)} spacing_widget={<wibox.widget.separator span_ratio={0.95} color={theme.controlcenter.backround} />} />
       </wibox.container.background>
     );
   }

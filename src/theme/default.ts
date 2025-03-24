@@ -1,3 +1,4 @@
+import { transparency } from "../lib/colors";
 
 const colors = {
   blue: {
@@ -98,6 +99,8 @@ const clientlist = {
 };
 
 const controlcenter = {
+  backround: transparency(colors.blue.darkest, 0.85),
+  panel: colors.blue.dark,
   settings: {
     icon: {
       disabled: colors.gray.lightest,

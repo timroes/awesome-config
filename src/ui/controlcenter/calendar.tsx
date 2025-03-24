@@ -66,7 +66,7 @@ export class CalendarWidget extends ControlWidget {
   private renderClock(s: Screen, tz: string, label: string) {
     const clockFormat = `<span font_size="xx-large" weight="light" color="${theme.text.light}"><span weight="semibold">%H</span>:%M</span>`;
     return (
-      <wibox.container.background shape={gears.shape.rounded_rect} bg={theme.bg.panel}>
+      <wibox.container.background shape={gears.shape.rounded_rect} bg={theme.controlcenter.panel}>
         <wibox.container.margin left={dpi(8, s)} right={dpi(8, s)} top={dpi(16, s)} bottom={dpi(16, s)}>
           <wibox.layout.stack>
             <wibox.container.place halign="center">
@@ -85,7 +85,7 @@ export class CalendarWidget extends ControlWidget {
     return (
       <wibox.layout.align.horizontal spacing={dpi(8, s)}>
         {null}
-        <wibox.container.background shape={gears.shape.rounded_rect} bg={theme.bg.panel}>
+        <wibox.container.background shape={gears.shape.rounded_rect} bg={theme.controlcenter.panel}>
           <wibox.container.margin margins={dpi(8, s)} id="dates">
             {this.renderCalendar(s)}
           </wibox.container.margin>
