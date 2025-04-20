@@ -2,8 +2,6 @@ declare global {
   var _dndActive: boolean;
 }
 
-// This is only needed while this is still consumed from Lua code directly.
-// This can be a local variable once notification handling code is in TS.
 globalThis._dndActive = false;
 
 export const isDndActive = (): boolean => globalThis._dndActive;

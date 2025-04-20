@@ -1,7 +1,6 @@
 return {
 	clients = require('lunaconf.clients'),
 	config = require('lunaconf.config'),
-	dbus = require('lunaconf.dbus'),
 	dialogs = require('lunaconf.dialogs'),
 	dpi = require('lunaconf.dpi'),
 	icons = require('lunaconf.icons'),

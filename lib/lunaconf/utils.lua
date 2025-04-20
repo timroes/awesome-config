@@ -6,40 +6,11 @@ local log = require('lunaconf.log')
 
 local utils = {}
 
---- The path under which several utility scripts can be found.
-function utils.scriptpath()
-	return gears.filesystem.get_configuration_dir() .. '/scripts/'
-end
-
-local byte_units = {"", "K", "M", "G", "T", "P", "E", "Z", "Y"}
-
---- Returns a number of bytes into a human readable byte string.
--- @param bytes a number of bytes
-function utils.humanreadable_bytes(bytes)
-	local exponent = math.min(math.floor(math.log(bytes) / math.log(1024)), 8)
-	local value = bytes / math.pow(2, exponent * 10)
-	return string.format('%.1f', value) .. byte_units[exponent + 1]
-end
-
 --- A wrapper around `awful.spawn`, that spawns a process but forwards it's
 --- stdout and stderr to a logfile.
 -- @param cmd the command and all its parameters to run
 function utils.spawn(cmd)
 	awful.spawn.with_shell(cmd .. ' >> /tmp/awesome.spawn.log 2>&1')
-end
-
---- Runs a command if it's not already started
--- @param cmd the command and all its parameters to run
--- @param pidof an optional string to use in the pidof check to
---              whether the process is already running. If this
---              is not specified the first word of cmd will be used.
-function utils.run_once(cmd, pidof)
-	local pidof = pidof or cmd:match('[%w]+')
-	awful.spawn.easy_async('pidof ' .. pidof, function(pid)
-		if pid == nil or pid:len() == 0 then
-			utils.spawn(cmd)
-		end
-	end)
 end
 
 --- Merges one table into another.
@@ -54,26 +25,6 @@ function utils.merge_into_table(table_to_merge_into, merging_table, at_front_rev
 			table.insert(table_to_merge_into, v)
 		end
 	end
-end
-
---- Checks whether the specified command exists.
---- Once the check finished, it will call the passed
---- callback function, with either true (command exists)
---- or false (command doesn't exist).
-function utils.command_exists(command, callback)
-	awful.spawn.easy_async("/bin/bash -c 'command -v " .. command .. "'", function(stdout, stderr, reason, status)
-		callback(status == 0)
-	end)
-end
-
---- Checks whether the specified command exists and execute the
---- given callback only if it exists.
-function utils.only_if_command_exists(command, callback)
-	utils.command_exists(command, function(exists)
-		if exists then
-			callback()
-		end
-	end)
 end
 
 function utils.list_directories(path)
