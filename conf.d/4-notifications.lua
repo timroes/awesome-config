@@ -2,7 +2,7 @@ local awful = require('awful')
 local gears = require('gears')
 local lunaconf = require('lunaconf')
 local naughty = require('naughty')
-local notifications = require('build.lib.notifications')
+local notifications = require('build.src.lib.notifications')
 
 local theme = lunaconf.theme.get()
 

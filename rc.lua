@@ -12,7 +12,7 @@ local gears = require('gears')
 local configpath = gears.filesystem.get_configuration_dir()
 package.path = configpath .. "/lib/?.lua;" .. configpath .. "/lib/?/init.lua;" .. package.path
 -- Add TypeScript build folder to path
-package.path = configpath .. "/build/?.lua;" .. configpath .. "/build/?/index.lua;" .. package.path
+package.path = configpath .. "/build/src/?.lua;" .. configpath .. "/build/src/?/index.lua;" .. configpath .. "build/?.lua;" .. package.path
 
 local naughty = require('naughty')
 
@@ -48,7 +48,7 @@ local log = require('lunaconf.log')
 local awful = require('awful')
 
 -- Load the jsx utilities before other Lua configs, so any config file could import TS compiled files that use JSX
-require('build/jsx');
+require('build/src/jsx');
 
 -- Load theme from TS files
 local beautiful = require('beautiful')
@@ -82,5 +82,5 @@ end
 -- }}}
 
 -- {{{ Load code compiled from TypeScript
-require('build/index');
+require('build/src/index');
 -- }}}
