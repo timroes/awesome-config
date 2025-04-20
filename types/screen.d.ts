@@ -34,6 +34,13 @@ interface Screen {
    * @param stacked Whether the clients should be returned in stacking order (top to bottom).
    */
   get_tiled_clients(stacked?: boolean): Client[];
+
+  /**
+   * Find the screen next in the specified direction.
+   * @param dir The direction to search for the next screen. Can be "right", "up", "down" or "left".
+   * @returns The next screen in the specified direction, or null if no screen was found.
+   */
+  get_next_in_direction(dir: "right" | "up" | "down" | "left"): Screen | null;
 }
 
 type ScreenProperties = "geometry" | "workarea" | "index" | "outputs";

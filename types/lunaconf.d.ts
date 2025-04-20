@@ -49,6 +49,7 @@ declare module 'lunaconf' {
   /** @noSelf */
   interface Tags {
     create_widget(screen: Screen): WidgetBase;
+    get_current_tag(screen: Screen): Tag;
   }
 
   /** @noSelf */

@@ -97,6 +97,7 @@ interface Client {
   raise(): void;
   kill(): void;
   geometry(geometry?: Partial<Geometry>): Geometry;
+  move_to_tag(tag: Tag): void;
 
   // Non Awesome WM properties
   unmoveable: boolean;
