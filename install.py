@@ -15,13 +15,11 @@ PKG_DEPS = {
   'xdg-utils': 'starts files according to their extension',
   'xorg-setxkbmap': 'changes the keyboard layout',
   'xorg-xset': 'sets properties in xserver (e.g. power saving)',
-  'yarn': 'required to build typescript files',
 }
 
 # All optional dependencies. These won't be installed automatically, but information
 # will be printed out at the end of this script.
 OPT_PKG_DEPS = {
-  'cpupower': 'required to show CPU frequency information in sidebar',
   'flameshot': 'required to take screenshots',
   'numlockx': 'install to enable numlock on start',
   'picom': 'required if you want compositing effects (e.g. shadow)',

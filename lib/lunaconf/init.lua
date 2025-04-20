@@ -8,7 +8,6 @@ return {
 	keys = require('lunaconf.keys'),
 	log = require('lunaconf.log'),
 	notify = require('lunaconf.notify'),
-	sidebar = require('lunaconf.sidebar'),
 	tags = require('lunaconf.tags'),
 	theme = require('lunaconf.theme'),
 	widgets = require('lunaconf.widgets'),
