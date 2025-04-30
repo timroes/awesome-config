@@ -10,16 +10,47 @@ export class CalendarWidget extends ControlWidget {
   private monthOffset: number = 0;
 
   private renderCalendar(s: Screen) {
-    const grid = wibox.widget(<wibox.layout.grid forced_num_cols={7} forced_num_rows={8} spacing={dpi(2, s)} min_rows_size={dpi(24, s)} homogeneous={true} expand={true} />) as GridLayout;
+    const grid = wibox.widget(
+      <wibox.layout.grid
+        forced_num_cols={7}
+        forced_num_rows={8}
+        spacing={dpi(2, s)}
+        min_rows_size={dpi(24, s)}
+        homogeneous={true}
+        expand={true}
+      />
+    ) as GridLayout;
     const now = os.date("*t");
     // Render Month year header
     const monthStart = os.time({ year: now.year, month: now.month + this.monthOffset, day: 1 });
     const lastDay = os.time({ year: now.year, month: now.month + this.monthOffset + 1, day: 0 });
-    grid.add_widget_at(wibox.widget(<wibox.widget.textbox align="center" markup={`<span weight="normal" color="${theme.controlcenter.calendar.month}">${os.date("%B %Y", monthStart)}</span>`} />), 1, 1, 1, 7);
+    grid.add_widget_at(
+      wibox.widget(
+        <wibox.widget.textbox
+          align="center"
+          markup={`<span weight="normal" color="${theme.controlcenter.calendar.month}">${os.date("%B %Y", monthStart)}</span>`}
+        />
+      ),
+      1,
+      1,
+      1,
+      7
+    );
     // Weekdays
     const weekdays = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
     for (let i = 0; i < weekdays.length; i++) {
-      grid.add_widget_at(wibox.widget(<wibox.widget.textbox markup={`<span variant="small-caps" weight="ultrabold" color="${theme.controlcenter.calendar.weekdays}">${weekdays[i]}</span>`} align="center" />), 2, i + 1, 1, 1);
+      grid.add_widget_at(
+        wibox.widget(
+          <wibox.widget.textbox
+            markup={`<span variant="small-caps" weight="ultrabold" color="${theme.controlcenter.calendar.weekdays}">${weekdays[i]}</span>`}
+            align="center"
+          />
+        ),
+        2,
+        i + 1,
+        1,
+        1
+      );
     }
     // Render day grid
     const firstWeekday = Number(os.date("%w", monthStart));
@@ -30,7 +61,13 @@ export class CalendarWidget extends ControlWidget {
     for (let day = 0; day < Number(os.date("%d", lastDay)); day++) {
       const isToday = now.year === year && now.month === month && now.day === day + 1;
       const markup = isToday ? `<span weight="ultrabold" color="${theme.controlcenter.calendar.today}">${day + 1}</span>` : `${day + 1}`;
-      grid.add_widget_at(wibox.widget(<wibox.widget.textbox markup={markup} align="center" />), Math.floor((day + firstCell) / 7) + 3, (day + firstCell) % 7 + 1, 1, 1);
+      grid.add_widget_at(
+        wibox.widget(<wibox.widget.textbox markup={markup} align="center" />),
+        Math.floor((day + firstCell) / 7) + 3,
+        ((day + firstCell) % 7) + 1,
+        1,
+        1
+      );
     }
 
     return grid;
@@ -46,7 +83,6 @@ export class CalendarWidget extends ControlWidget {
   }
 
   override onKeyPress(modifiers: Modifier[], key: string): void {
-    log(`CalendarWidget.onKeyPress ${inspect(modifiers)} ${key}`);
     switch (key) {
       case "Down":
         this.monthOffset++;
@@ -73,7 +109,11 @@ export class CalendarWidget extends ControlWidget {
               <wibox.widget.textclock timezone={tz} format={clockFormat} />
             </wibox.container.place>
             <wibox.container.place valign="bottom">
-              <wibox.widget.textbox markup={`<span size="small" color="${theme.text.subdued}">${label}</span>`} align="center" color={theme.text.dark} />
+              <wibox.widget.textbox
+                markup={`<span size="small" color="${theme.text.subdued}">${label}</span>`}
+                align="center"
+                color={theme.text.dark}
+              />
             </wibox.container.place>
           </wibox.layout.stack>
         </wibox.container.margin>
