@@ -3,7 +3,6 @@ import * as awful from "awful";
 import { config } from "../lib/config";
 import { addKey } from "../lib/keys";
 import { XProperties } from "../lib/constants";
-import { log } from "../lib/log";
 
 const isLaptop = config("laptop", false);
 

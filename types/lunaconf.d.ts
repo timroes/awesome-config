@@ -1,4 +1,4 @@
-declare module 'lunaconf' {
+declare module "lunaconf" {
   /** @noSelf */
   interface Utils {
     spawn(cmd: string): void;
@@ -8,7 +8,7 @@ declare module 'lunaconf' {
   interface Config {
     get<T = unknown>(key: string, defaultValue?: T): T;
   }
-  
+
   interface BarDialogInstance {
     set_value(value: number): void;
     set_disabled(disabled: boolean): void;
@@ -33,6 +33,7 @@ declare module 'lunaconf' {
     icon?: string;
     timeout?: number;
     ignore_dnd?: boolean;
+    unlimited_content?: boolean;
   }
 
   /** @noSelf */
@@ -74,7 +75,7 @@ declare module 'lunaconf' {
   export const widgets: Widgets;
 }
 
-declare module 'lunaconf.config' {
-  import { Config } from 'lunaconf';
-  export const get: Config['get'];
+declare module "lunaconf.config" {
+  import { Config } from "lunaconf";
+  export const get: Config["get"];
 }

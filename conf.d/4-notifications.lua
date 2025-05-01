@@ -43,7 +43,7 @@ naughty.config.notify_callback = function(args)
 	end
 
 	-- Limit text of notification to max 200 chars
-	if string.len(args.text) > 200 then
+	if not args.unlimited_content and string.len(args.text) > 200 then
 		args.text = args.text:sub(0, 200) .. '…'
 	end
 

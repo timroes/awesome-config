@@ -19,7 +19,7 @@ interface MotifWmHints {
   input_mode?: string;
   status?: {
     tearoff_window?: boolean;
-  }
+  };
 }
 
 interface SizeHints {
@@ -46,7 +46,7 @@ interface SizeHints {
   win_gravity?: string;
 }
 
-type WindowType = 
+type WindowType =
   | "desktop"
   | "dock"
   | "splash"
@@ -67,7 +67,10 @@ interface Client {
    */
   readonly window: number;
   name: string;
+  type: string;
   class: string;
+  role: string;
+  instance: string;
   floating: boolean;
   x: number;
   y: number;
@@ -105,10 +108,16 @@ interface Client {
 }
 
 type ModifiableClientProperties = keyof {
-  [P in keyof Client as P extends WritableKeys<Client> ? Client[P] extends Function ? never : P : never]: Client[P];
+  [P in keyof Client as P extends WritableKeys<Client> ? (Client[P] extends Function ? never : P) : never]: Client[P];
 };
 
-type ClientSignals = 'manage' | 'unmanage' | 'focus' | `property::${ModifiableClientProperties}` | "request::titlebars" | "request::geometry";
+type ClientSignals =
+  | "manage"
+  | "unmanage"
+  | "focus"
+  | `property::${ModifiableClientProperties}`
+  | "request::titlebars"
+  | "request::geometry";
 
 /** @noSelf */
 interface ClientGlobal {

@@ -7,6 +7,7 @@ interface Mouse {
 /** @noSelf */
 interface MouseGlobal {
   current_client: Client | null;
+  current_wibox: Wibox | null;
 }
 
 declare const mouse: MouseGlobal;
