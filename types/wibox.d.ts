@@ -24,7 +24,7 @@ interface LayoutBase {
 interface Widget {
   emit_signal(signal: string, ...args: any[]): void;
   connect_signal(signal: string, callback: (...args: any[]) => void): void;
-  get_children_by_id(id: string): Widget[];
+  get_children_by_id<T extends Widget = Widget>(id: string): [T];
   visible?: boolean;
   widget?: Widget;
 }
@@ -109,9 +109,10 @@ interface Wibox extends WiboxArgs {
   connect_signal(signal: string, callback: (...args: any[]) => void): void;
   buttons(buttons: Button[]): Button[];
   set_xproperty(name: string, value: boolean | string | number): void;
+  window: number;
 }
 
-declare module 'wibox' {
+declare module "wibox" {
   /** @noSelf */
   interface WidgetModule {
     calendar: WidgetBase;
@@ -129,8 +130,8 @@ declare module 'wibox' {
     /** @noSelf */
     base: {
       make_widget: LayoutBase;
-    }
-    
+    };
+
     (declarativeWidget: WidgetDefinition): Widget;
   }
 
@@ -147,19 +148,19 @@ declare module 'wibox' {
     ratio: {
       horizontal: LayoutBase;
       vertical: LayoutBase;
-    },
+    };
     align: {
       horizontal: LayoutBase;
       vertical: LayoutBase;
-    },
+    };
     fixed: {
       horizontal: LayoutBase;
       vertical: LayoutBase;
-    },
+    };
     flex: {
       horizontal: LayoutBase;
       vertical: LayoutBase;
-    },
+    };
     grid: LayoutBase;
     stack: LayoutBase;
   }

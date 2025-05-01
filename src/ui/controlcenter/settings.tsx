@@ -86,10 +86,10 @@ export class SettingsWidget extends ControlWidget {
     spawn(`${SCRIPT_PATH}/screensaver.sh ${this.sleepDisabled ? "pause" : "resume"}`);
     this.handler.setTriggerState({ keepAwake: this.sleepDisabled });
 
-    (this.currentRender.get_children_by_id("sleep")[0] as BackgroundContainer).bg = this.sleepDisabled
+    this.currentRender.get_children_by_id<BackgroundContainer>("sleep")[0].bg = this.sleepDisabled
       ? theme.controlcenter.settings.keepAwake
       : theme.controlcenter.settings.disabled;
-    (this.currentRender.get_children_by_id("sleep-icon")[0] as Imagebox).image = this.sleepDisabled
+    this.currentRender.get_children_by_id<Imagebox>("sleep-icon")[0].image = this.sleepDisabled
       ? gears.color.recolor_image(sleepDisabledIcon, theme.controlcenter.settings.icon.active)
       : gears.color.recolor_image(sleepIcon, theme.controlcenter.settings.icon.disabled);
   }
