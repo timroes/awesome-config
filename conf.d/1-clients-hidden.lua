@@ -7,7 +7,6 @@ local wibox = require('wibox')
 
 -- The actual tag object which is used to hide clients
 local hidden_tag = awful.tag.add("Hidden Clients", {
-	invisible = true -- Mark the tag as invisible (custom flag) that will be filtered for in the tag list
 })
 
 -- Hide the currently focused client.

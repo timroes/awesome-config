@@ -7,7 +7,6 @@ local DOCK_PADDING = 20
 local dock_tag = awful.tag.add('Dock', {
 	screen = screen.primary,
 	layout = awful.layout.suit.max,
-	invisible = true, -- Mark the tag as invisible (custom flag) that will be filtered for in the tag list
 })
 
 local function dock_trigger()

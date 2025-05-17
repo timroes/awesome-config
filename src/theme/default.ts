@@ -33,7 +33,6 @@ const colors = {
   text: {
     dark: '#343741',
     gray: '#69707D',
-    light_gray: '#98A2B3'
   },
   bg: {
     green: '#54B399',
@@ -50,7 +49,6 @@ const colors = {
 
 const highlight_color = colors.bg.blue
 const highlight_text_bg = colors.bg.lightBlue;
-const highlight_text_color = colors.text.dark;
 
 const base = {
   font: {
@@ -156,13 +154,10 @@ export const beautiful = {
 
   dialog_bg: '#FFFFFF',
   dialog_fg: colors.text.dark,
-  dialog_bar_fg: highlight_color,
-  dialog_bar_disabled_fg: '#AAAAAA',
-  dialog_bar_bg: '#E0E0E0',
   dialog_chooser_highlight: highlight_text_bg,
   dialog_chooser_highlight_border: highlight_color,
 
-  notification_bg: "#FFFFFF",
+  notification_bg: "#FFFFFFCC",
   notification_fg: colors.text.dark,
   notitication_border_width: 0,
   notification_margin: 7,
@@ -179,31 +174,6 @@ export const beautiful = {
   tag_color_bg: colors.text.gray,
   tag_color_selected_bg: colors.bg.lightBlue,
 
-  sidebar_bg: theme.bg.base,
-  sidebar_shaded_text: colors.text.light_gray,
-  sidebar_trigger_color: colors.text.gray,
-  sidebar_panel_bg: colors.blue.dark,
-  sidebar_dnd_color: colors.bg.pink,
-  sidebar_screensleep_color: colors.bg.yellow,
-
-  stats_memory: colors.bg.purple,
-  stats_cpu: colors.bg.purple,
-
-  calendar_today: highlight_text_bg,
-  calendar_hover: highlight_text_bg,
-  calendar_hover_text: highlight_text_color,
-  calendar_highlight: colors.bg.rose,
-  calendar_highlight_text: highlight_text_color,
-
-  battery_charging: colors.bg.lightBlue,
-  battery_fully_charged: colors.bg.blue,
-  battery_good: colors.bg.green,
-  battery_empty: colors.bg.orange,
-  battery_critical: colors.bg.red,
-
-  switch_bg: '#98A2B3',
-  switch_bg_active: highlight_color,
-  switch_handle: '#F5F7FA',
 
   tooltip_border_width: 0,
   tooltip_bg: "#FFFFFF",

@@ -2,6 +2,7 @@
 
 import './conf/clients-basic';
 import './conf/clients-focus';
+import './conf/clients-screen-move';
 import './conf/tags';
 
 import './conf/compositor';
