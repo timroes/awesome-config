@@ -9,6 +9,7 @@ import { ControlWidget } from './control-widget';
 
 const ICON_MAP: Record<string, string> = {
   "audio-headset": "audio-headset.png",
+  "audio-card": "music.png",
 };
 
 const DEFAULT_ICON = "bluetooth.png";

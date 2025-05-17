@@ -1,5 +1,4 @@
 import * as lgi from 'lgi';
-import { log } from './log';
 
 interface SignalParams<Params = undefined> {
   sender: string;
@@ -28,30 +27,7 @@ class DBusConnection {
     );
   }
 
-  public callSync<T = any>(
-    destination: string,
-    objectPath: string,
-    interfaceName: string,
-    member: string,
-    params?: Array<[variantType: string, variantValue: unknown]>
-  ): T {
-    const args = params?.map(([type, value]) => GLib.Variant(type, value));
-
-    const resp = this.bus.call_sync(
-      destination,
-      objectPath,
-      interfaceName,
-      member,
-      args ? GLib.Variant.new_tuple(args, args.length) : null,
-      null, // Reply type (not using this)
-      Gio.DBusCallFlags.NONE,
-      -1, // Timeout
-    );
-
-    return resp;
-  }
-
-  public call<T = any>(destination: string, objectPath: string, interfaceName: string, member: string, params?: Array<[variantType: string, variantValue: unknown]>): Promise<T> {
+  public call<T = unknown>(destination: string, objectPath: string, interfaceName: string, member: string, params?: Array<[variantType: string, variantValue: unknown]>): Promise<{ value: T; type: string; get_child_value: (index: number) => any }> {
     const args = params?.map(([type, value]) => GLib.Variant(type, value));
 
     return new Promise((resolve, reject) => {
@@ -76,7 +52,7 @@ class DBusConnection {
   }
 
   public async getProperty<T = any>(destination: string, objectPath: string, interfaceName: string, property: string): Promise<T> {
-    const result = await this.call<{ value: Array<{ type: string, value: T }> }>(destination, objectPath, "org.freedesktop.DBus.Properties", "Get", [
+    const result = await this.call<[{ type: string, value: T }]>(destination, objectPath, "org.freedesktop.DBus.Properties", "Get", [
       ["s", interfaceName],
       ["s", property],
     ]);

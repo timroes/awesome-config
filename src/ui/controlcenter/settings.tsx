@@ -125,8 +125,8 @@ export class SettingsWidget extends ControlWidget {
   }
 
   private updateBatteryWidget() {
-    dbus.system().call("org.freedesktop.UPower", "/org/freedesktop/UPower/devices/DisplayDevice", "org.freedesktop.DBus.Properties", "GetAll", [["s", "org.freedesktop.UPower.Device"]]).then((response) => {
-      const status: BatteryStatus = response.get_child_value(0).value;
+    dbus.system().call<[BatteryStatus]>("org.freedesktop.UPower", "/org/freedesktop/UPower/devices/DisplayDevice", "org.freedesktop.DBus.Properties", "GetAll", [["s", "org.freedesktop.UPower.Device"]]).then((response) => {
+      const status: BatteryStatus = response.value[0];
       const textbox = this.currentRender.get_children_by_id("battery")[0] as TextBox;
       textbox.markup = `${Math.round(status.Percentage)}%`;
       (this.currentRender.get_children_by_id("batteryIcon")[0] as Imagebox).image = gears.color.recolor_image(`${ICON_PATH}/${getBatteryIcon(status)}`, theme.controlcenter.settings.battery.icon);
