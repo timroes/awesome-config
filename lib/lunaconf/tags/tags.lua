@@ -17,7 +17,7 @@ local tag_count = 1
 -- ############
 
 local function create_tag(s)
-	return awful.tag.add('🏷', {
+	return awful.tag.add('Common Screen ' .. s.index, {
 		screen = s,
 		layout = layouts.maximized,
 		common_tag = true

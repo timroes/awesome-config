@@ -1,60 +1,59 @@
 import { transparency } from "../lib/colors";
-
 const colors = {
   blue: {
-    darkest: '#0f172a',
-    dark: '#24283b',
-    medium: '#3730a3',
-    light: '#79AAD9',
+    darkest: "#0f172a",
+    dark: "#24283b",
+    medium: "#3730a3",
+    light: "#79AAD9",
   },
   gray: {
-    darkest: '#030712',
-    medium: '#6b7280',
-    lightest: '#f9fafb',
+    darkest: "#030712",
+    medium: "#6b7280",
+    lightest: "#f9fafb",
   },
   pink: {
-    medium: '#EE789D',
-    light: '#f0abfc',
+    medium: "#EE789D",
+    light: "#f0abfc",
   },
   green: {
-    medium: '#54B399',
+    medium: "#54B399",
   },
   yellow: {
-    light: '#D6BF57',
+    light: "#D6BF57",
   },
   orange: {
-    medium: '#fdba74',
+    medium: "#fdba74",
   },
   red: {
-    medium: '#ef4444',
+    medium: "#ef4444",
   },
 
   // Legacy color definitions
   text: {
-    dark: '#343741',
-    gray: '#69707D',
+    dark: "#343741",
+    gray: "#69707D",
   },
   bg: {
-    green: '#54B399',
-    blue: '#006BB4',
-    lightBlue: '#79AAD9',
-    red: '#BD271E',
-    pink: '#EE789D',
-    rose: '#E4A6C7',
-    yellow: '#D6BF57',
-    orange: '#DA8B45',
-    purple: '#A987D1'
-  }
+    green: "#54B399",
+    blue: "#006BB4",
+    lightBlue: "#79AAD9",
+    red: "#BD271E",
+    pink: "#EE789D",
+    rose: "#E4A6C7",
+    yellow: "#D6BF57",
+    orange: "#DA8B45",
+    purple: "#A987D1",
+  },
 } as const;
 
-const highlight_color = colors.bg.blue
+const highlight_color = colors.bg.blue;
 const highlight_text_bg = colors.bg.lightBlue;
 
 const base = {
   font: {
-    regular: 'Inter 10',
-    bold: 'Inter Bold 10',
-    large: 'Inter Regular 14',
+    regular: "Inter 10",
+    bold: "Inter Bold 10",
+    large: "Inter Regular 14",
   },
 
   bg: {
@@ -74,7 +73,7 @@ const base = {
     success: colors.green.medium,
   },
 
-  transparent: '#00000000',
+  transparent: "#00000000",
 } as const;
 
 const clientlist = {
@@ -102,7 +101,7 @@ const controlcenter = {
   settings: {
     icon: {
       disabled: colors.gray.lightest,
-      active: colors.blue.dark
+      active: colors.blue.dark,
     },
     battery: {
       icon: colors.gray.medium,
@@ -110,6 +109,7 @@ const controlcenter = {
     disabled: colors.blue.dark,
     dnd: colors.pink.medium,
     keepAwake: colors.yellow.light,
+    light: colors.gray.lightest,
   },
   calendar: {
     today: colors.pink.medium,
@@ -124,7 +124,7 @@ const controlcenter = {
       green: colors.green.medium,
       orange: colors.orange.medium,
       red: colors.red.medium,
-    }
+    },
   },
 };
 
@@ -137,22 +137,22 @@ export const beautiful = {
   font: theme.font.regular,
   large_font: theme.font.large,
 
-  bg_normal    : "#F5F5F5AA",
-  bg_focus     : "#BEBEBE",
-  bg_urgent    : "linear:0,0:0,28:0,#99CC00:1,#739900",
-  bg_minimize  : "#111111",
+  bg_normal: "#F5F5F5AA",
+  bg_focus: "#BEBEBE",
+  bg_urgent: "linear:0,0:0,28:0,#99CC00:1,#739900",
+  bg_minimize: "#111111",
 
-  fg_normal    : "#D3DAE6",
-  fg_focus     : "#000000",
-  fg_urgent    : "#000000",
-  fg_minimize  : "#666666",
+  fg_normal: "#D3DAE6",
+  fg_focus: "#000000",
+  fg_urgent: "#000000",
+  fg_minimize: "#666666",
 
-  border_width : "1",
+  border_width: "1",
   border_normal: "#333333",
-  border_focus : highlight_color,
+  border_focus: highlight_color,
   border_marked: "#339933",
 
-  dialog_bg: '#FFFFFF',
+  dialog_bg: "#FFFFFF",
   dialog_fg: colors.text.dark,
   dialog_chooser_highlight: highlight_text_bg,
   dialog_chooser_highlight_border: highlight_color,
@@ -174,12 +174,11 @@ export const beautiful = {
   tag_color_bg: colors.text.gray,
   tag_color_selected_bg: colors.bg.lightBlue,
 
-
   tooltip_border_width: 0,
   tooltip_bg: "#FFFFFF",
   tooltip_fg: colors.text.dark,
 
-  wallpaper: '#131b2b',
+  wallpaper: "#131b2b",
 
   icon_theme: "Paper",
 };

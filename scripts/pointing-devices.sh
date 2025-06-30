@@ -5,7 +5,7 @@ TAG='awesome(pointing-devices)'
 # This script requires xinput to be installed.
 command -v xinput >/dev/null 2>&1 || exit 1
 
-touchpad=$(xinput list --name-only | grep -i "Synaptics TouchPad")
+touchpad=$(xinput list --name-only | grep -iE "(Synaptics TouchPad|ELAN.*Touchpad)")
 
 # If this device has a Synaptics TouchPad set some reasonable values for it
 if [ "$touchpad" ]; then
@@ -21,7 +21,8 @@ fi
 # Make external mouse left handed
 xinput list | while IFS= read -r line; do
 	# Do not switch buttons for the Thinkpad TrackPoint
-	if [[ "${line,,}" == *"trackpoint"* ]]; then
+	if [[ "${line,,}" == *"trackpoint"* || "$line" =~ ^.*PS.*Logitech.* ]]; then
+		echo "Detected trackpoint: ${line}. Skipping..."
 		continue;
 	fi
 	[[ "$line" =~ "id="([0-9]+) ]]
