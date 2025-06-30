@@ -11,7 +11,7 @@ PKG_DEPS = {
   'light-locker': 'required to lock screen properly',
   'luarocks': 'installs lua dependencies',
   'playerctl': 'required for music player and media hotkeys',
-  'xautolock': 'lock screen automatically after timeout',
+  # 'xautolock': 'lock screen automatically after timeout',
   'xdg-utils': 'starts files according to their extension',
   'xorg-setxkbmap': 'changes the keyboard layout',
   'xorg-xset': 'sets properties in xserver (e.g. power saving)',
@@ -23,7 +23,7 @@ OPT_PKG_DEPS = {
   'flameshot': 'required to take screenshots',
   'numlockx': 'install to enable numlock on start',
   'picom': 'required if you want compositing effects (e.g. shadow)',
-  'rojimoji': 'optional to get an emoji picker',
+  'rofimoji': 'optional to get an emoji picker',
   'upower': 'required for battery widget',
   'xf86-input-libinput': 'required for better touchpad behavior',
   'xorg-xinput': 'required to configure mouse and trackpads',
@@ -63,10 +63,10 @@ def install_lua_deps():
     subprocess.call(['luarocks', '--local', '--lua-version', '5.3', 'install', dep])
 
 def install_yarn_deps():
-   subprocess.call(['yarn', 'install'])
+   subprocess.call(['pnpm', 'install'])
 
 def build_typescript():
-  subprocess.call(['yarn', 'build'])
+  subprocess.call(['pnpm', 'build'])
 
 def print_opt_pkg_info():
   print('{}Optional packages{}\n'.format(BLUE, RESET))

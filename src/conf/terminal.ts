@@ -21,7 +21,11 @@ terminalTag.connect_signal("untagged", () => {
 
 // If another client gains focus on the same screen that the terminal tag is, while the terminal tag is selected, unselect it
 client.connect_signal("focus", () => {
-  if (terminalTag.selected && client.focus?.screen === terminalTag.screen && client.focus.first_tag !== terminalTag) {
+  if (
+    terminalTag.selected &&
+    client.focus?.screen === terminalTag.screen &&
+    client.focus.first_tag !== terminalTag
+  ) {
     terminalTag.selected = false;
   }
 });
@@ -59,3 +63,5 @@ function toggleTerminal() {
 }
 
 addKey([], isLaptop ? "Print" : "Menu", toggleTerminal);
+// Thinkpad T14 Gen 6 keycode for "Menu" key beside space bar
+addKey(["Shift", "Mod4"], "XF86TouchpadOff", toggleTerminal);
