@@ -1,11 +1,11 @@
-import * as awful from 'awful';
-import * as wibox from 'wibox';
-import * as gears from 'gears';
-import * as lunaconf from 'lunaconf';
-import { dpi } from '../lib/dpi';
-import { theme } from '../theme/default';
-import { MouseButton } from '../lib/mouse';
-import { ICON_PATH } from '../lib/constants';
+import * as awful from "awful";
+import * as wibox from "wibox";
+import * as gears from "gears";
+import * as lunaconf from "lunaconf";
+import { dpi } from "../lib/dpi";
+import { theme } from "../theme/default";
+import { MouseButton } from "../lib/mouse";
+import { ICON_PATH } from "../lib/constants";
 
 const getColor = (c: Client, type: "fg" | "bg") => {
   if (c.urgent) {
@@ -21,6 +21,9 @@ const getColor = (c: Client, type: "fg" | "bg") => {
 };
 
 const getLayoutIndicator = (c: Client) => {
+  if (c.first_tag.name === "Dock") {
+    return gears.color.recolor_image(`${ICON_PATH}/dock-layout.png`, theme.clientlist.indicators.docked);
+  }
   if (c.ontop) {
     return gears.color.recolor_image(`${ICON_PATH}/ontop.png`, theme.clientlist.indicators.ontop);
   }
@@ -28,7 +31,7 @@ const getLayoutIndicator = (c: Client) => {
     return gears.color.recolor_image(`${ICON_PATH}/floating.png`, theme.clientlist.indicators.floating);
   }
   return null;
-}
+};
 
 export const createClientlist = (screen: Screen) => {
   const buttons = [
@@ -46,7 +49,7 @@ export const createClientlist = (screen: Screen) => {
       const tagsWithAction = c.tags().filter((t) => t.layout.clientlistAction);
       if (tagsWithAction.length > 0) {
         // If the current tags have clientlistActions, execute them instead of toggling minimization status
-        tagsWithAction.forEach(t => t.layout.clientlistAction!(c));
+        tagsWithAction.forEach((t) => t.layout.clientlistAction!(c));
       } else {
         c.minimized = !c.minimized;
       }
@@ -69,7 +72,7 @@ export const createClientlist = (screen: Screen) => {
     bg.bg = getColor(c, "bg");
     bg.fg = getColor(c, "fg");
   };
-  
+
   const onCreate = (self: Widget, c: Client) => {
     (self.get_children_by_id("clienticon")[0] as any).client = c;
     onUpdate(self, c);
@@ -79,15 +82,9 @@ export const createClientlist = (screen: Screen) => {
     screen,
     buttons,
     filter: awful.widget.tasklist.filter.currenttags,
-    layout:
-      <wibox.layout.flex.horizontal spacing={dpi(3, screen)} max_widget_size={dpi(300, screen)} />,
+    layout: <wibox.layout.flex.horizontal spacing={dpi(3, screen)} max_widget_size={dpi(300, screen)} />,
     widget_template: (
-      <wibox.container.margin
-        top={dpi(4, screen)}
-        bottom={dpi(4, screen)}
-        create_callback={onCreate}
-        update_callback={onUpdate}
-      >
+      <wibox.container.margin top={dpi(4, screen)} bottom={dpi(4, screen)} create_callback={onCreate} update_callback={onUpdate}>
         <wibox.container.background
           id="background"
           shape={gears.shape.rounded_rect}
@@ -107,7 +104,7 @@ export const createClientlist = (screen: Screen) => {
           </wibox.container.margin>
         </wibox.container.background>
       </wibox.container.margin>
-    )
+    ),
   });
   return widget;
 };

@@ -91,7 +91,8 @@ const clientlist = {
   },
   indicators: {
     ontop: colors.pink.light,
-    floating: base.text.light,
+    floating: colors.gray.lightest,
+    docked: colors.gray.lightest,
   },
 };
 
