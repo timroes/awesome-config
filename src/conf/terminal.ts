@@ -10,22 +10,46 @@ const terminalTag = awful.tag.add("Terminal", {
   screen: screen.primary,
 });
 
+function configureTerminalClient(c: Client) {
+  c.skip_taskbar = true;
+  c.ontop = true;
+  c.floating = true;
+  c.x = terminalTag.screen.workarea.x;
+  c.y = terminalTag.screen.workarea.y;
+  c.width = terminalTag.screen.workarea.width;
+  c.height = terminalTag.screen.workarea.height;
+  c.unresizeable = true;
+  c.unmoveable = true;
+  c.set_xproperty(XProperties.NO_DECORATION, true);
+}
+
 terminalTag.connect_signal("request::screen", () => {
   terminalTag.screen = screen.primary;
 });
 
+terminalTag.connect_signal("tagged", (tag: Tag, c: Client) => {
+  // Don't allow anything beside the kitty terminal on this tag
+  if (c.class !== "kitty") {
+    c.move_to_tag(c.screen.tags.find((t) => t.common_tag)!);
+  }
+});
+
+client.connect_signal("manage", (c: Client) => {
+  if (c.first_tag === terminalTag) {
+    configureTerminalClient(c);
+  }
+});
+
 // When the terminal window closes unselect (hide) the tag
 terminalTag.connect_signal("untagged", () => {
-  terminalTag.selected = false;
+  if (terminalTag.clients().length === 0) {
+    terminalTag.selected = false;
+  }
 });
 
 // If another client gains focus on the same screen that the terminal tag is, while the terminal tag is selected, unselect it
 client.connect_signal("focus", () => {
-  if (
-    terminalTag.selected &&
-    client.focus?.screen === terminalTag.screen &&
-    client.focus.first_tag !== terminalTag
-  ) {
+  if (terminalTag.selected && client.focus?.screen === terminalTag.screen && client.focus.first_tag !== terminalTag) {
     terminalTag.selected = false;
   }
 });
@@ -37,20 +61,10 @@ function toggleTerminal() {
     if (clients.length > 0) {
       client.focus = clients[0];
     } else {
-      const workarea = terminalTag.screen.workarea;
       awful.spawn.spawn("kitty -o background_opacity=0.7", {
         tag: terminalTag,
-        skip_taskbar: true,
-        ontop: true,
-        floating: true,
-        x: workarea.x,
-        y: workarea.y,
-        width: workarea.width,
-        height: workarea.height,
-        unresizeable: true,
-        unmoveable: true,
         callback: (c) => {
-          c.set_xproperty(XProperties.NO_DECORATION, true);
+          configureTerminalClient(c);
         },
       });
     }
