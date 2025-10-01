@@ -1,10 +1,10 @@
-import * as awful from 'awful';
-import { LogLevel, log } from './log';
+import * as awful from "awful";
+import { LogLevel, log } from "./log";
 
 interface ExecuteOutput {
   stdout?: string;
   stderr?: string;
-  exitReason: 'exit' | 'signal';
+  exitReason: "exit" | "signal";
   exitCodeOrSignal: number;
 }
 
@@ -18,8 +18,8 @@ export function execute(cmd: string, logging: boolean = true): Promise<ExecuteOu
         stdout,
         stderr,
         exitReason,
-        exitCodeOrSignal: exitCode
-      })
+        exitCodeOrSignal: exitCode,
+      });
     });
   });
 }
@@ -32,7 +32,7 @@ export function spawn(cmd: string): void {
   awful.spawn.with_shell(`${cmd} >> /tmp/awesome.spawn.log 2>&1`);
 }
 
-export async function spawnOnce(cmd: string, pidof: string = cmd.split(' ')[0]): Promise<void> {
+export async function spawnOnce(cmd: string, pidof: string = cmd.split(" ")[0]): Promise<void> {
   const { stdout: pid } = await execute(`pidof ${pidof}`, false);
   if (!pid || pid.length === 0) {
     spawn(cmd);

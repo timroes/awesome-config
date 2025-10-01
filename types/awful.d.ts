@@ -1,5 +1,4 @@
-declare module 'awful' {
-
+declare module "awful" {
   /** @noSelf */
   interface SpawnArgs extends Partial<Pick<Client, ModifiableClientProperties>> {
     tag?: Tag;
@@ -9,7 +8,19 @@ declare module 'awful' {
   /** @noSelf */
   interface Spawn {
     with_shell(cmd: string): void;
-    easy_async(cmd: string, callback: (stdout: string, stderr: string, exitreason: 'exit' | 'signal', exitcode: number) => void): void;
+    easy_async(
+      cmd: string,
+      callback: (stdout: string, stderr: string, exitreason: "exit" | "signal", exitcode: number) => void
+    ): number;
+    with_line_callback(
+      cmd: string,
+      callbacks: {
+        stdout?: (line: string) => void;
+        stderr?: (line: string) => void;
+        output_done?: () => void;
+        exit?: (exitreason: "exit" | "signal", exitcode: number) => void;
+      }
+    ): number;
     // @incompleteTyping
     spawn(cmd: string, args?: SpawnArgs, callback?: (client: Client) => void): void;
   }
@@ -28,8 +39,8 @@ declare module 'awful' {
     focus: {
       history: {
         previous(): void;
-      }
-    }
+      };
+    };
   }
 
   /** @noSelf */
@@ -38,7 +49,7 @@ declare module 'awful' {
   }
 
   interface Wibar<T extends Widget> {
-    position?: 'top' | 'bottom' | 'left' | 'right';
+    position?: "top" | "bottom" | "left" | "right";
     screen: Screen;
     height?: number;
     width?: number;
@@ -58,7 +69,9 @@ declare module 'awful' {
     filter: TasklistFilterFn;
     buttons?: Button[];
     layout: WidgetDefinition;
-    widget_template: WidgetDefinition & { create_callback?: (self: Widget, client: Client, index: number, clients: Client[]) => void };
+    widget_template: WidgetDefinition & {
+      create_callback?: (self: Widget, client: Client, index: number, clients: Client[]) => void;
+    };
   }
 
   /** @noSelf */
@@ -67,18 +80,27 @@ declare module 'awful' {
       (args: TasklistArgs): Widget;
       filter: {
         currenttags: TasklistFilterFn;
-      }
-    }
+      };
+    };
   }
 
-  type Position = 'top' | 'bottom' | 'left' | 'right' | 'centered' | 'top_left' | 'top_right' | 'bottom_left' | 'bottom_right';
+  type Position =
+    | "top"
+    | "bottom"
+    | "left"
+    | "right"
+    | "centered"
+    | "top_left"
+    | "top_right"
+    | "bottom_left"
+    | "bottom_right";
 
   interface PlacementArgs {
     pretend?: boolean;
     honor_workarea?: boolean;
     honor_padding?: boolean;
-    margins?: number | { top?: number, right?: number, bottom?: number, left?: number };
-    offset?: number | { x?: number, y?: number };
+    margins?: number | { top?: number; right?: number; bottom?: number; left?: number };
+    offset?: number | { x?: number; y?: number };
   }
 
   type PlacementFn = (drawable: Drawable, options?: PlacementArgs) => void;
@@ -109,8 +131,18 @@ declare module 'awful' {
     timeout?: number;
     start_callback?: () => void;
     stop_callback?: () => void;
-    keypressed_callback?: (this: KeygrabberInstance, modifiers: Modifier[], key: string, event: "press" | "release") => void;
-    keyreleased_callback?: (this: KeygrabberInstance, modifiers: Modifier[], key: string, event: "press" | "release") => void;
+    keypressed_callback?: (
+      this: KeygrabberInstance,
+      modifiers: Modifier[],
+      key: string,
+      event: "press" | "release"
+    ) => void;
+    keyreleased_callback?: (
+      this: KeygrabberInstance,
+      modifiers: Modifier[],
+      key: string,
+      event: "press" | "release"
+    ) => void;
     allowed_keys?: string[];
     /**
      * Create root (global) keybindings.
@@ -147,10 +179,12 @@ declare module 'awful' {
     ontop?: boolean;
     placement?: PlacementFn;
     opacity?: number;
-    offset?: number | {
-      x?: number;
-      y?: number;
-    }
+    offset?:
+      | number
+      | {
+          x?: number;
+          y?: number;
+        };
   }
 
   interface Popup extends Required<PopupArgs> {}
@@ -168,17 +202,14 @@ declare module 'awful' {
       role?: string;
       type?: string;
     };
-    properties?: Partial<Pick<Client, "floating">> & {
-
-    }
+    properties?: Partial<Pick<Client, "floating">> & {};
     callback?: (client: Client) => void;
   }
 
   /** @noSelf */
   interface RulesModule {
-    rules: Rule[]
+    rules: Rule[];
   }
-
 
   /** @noSelf */
   interface TagModule {
@@ -194,5 +225,10 @@ declare module 'awful' {
   export const client: ClientModule;
   export const rules: RulesModule;
   export const tag: TagModule;
-  export function button<T extends any[] = []>(modifiers: Modifier[], button: 1 | 2 | 3, onPress: ((...args: T) => void) | null, onRelease?: (() => void) | null): Button[];
+  export function button<T extends any[] = []>(
+    modifiers: Modifier[],
+    button: 1 | 2 | 3,
+    onPress: ((...args: T) => void) | null,
+    onRelease?: (() => void) | null
+  ): Button[];
 }
