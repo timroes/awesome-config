@@ -4,17 +4,15 @@ import { addKey } from "../lib/keys";
 import { MouseButtonIndex } from "../lib/mouse";
 import { isCommandAvailable, spawn } from "../lib/process";
 
-const isLaptop = config("laptop", false);
+const keyLayout = config("keyboard.key_layout", "regular");
 
 // Open file exporer in home directory
-addKey([SUPER], 'e', () => spawn('xdg-open $HOME'));
-addKey([SUPER, 'Control'], 'Delete', () => awesome.restart());
+addKey([SUPER], "e", () => spawn("xdg-open $HOME"));
+addKey([SUPER, "Control"], "Delete", () => awesome.restart());
 
-isCommandAvailable('flameshot').then(() => {
-  addKey(isLaptop ? ["Control"] : [], 'Print', () => spawn('flameshot gui -p /tmp'));
-  addKey([SUPER], 'Print', () => spawn(`flameshot full -p /tmp`));
-
-  addKey(['Mod1'], 'Print', () => {
+isCommandAvailable("flameshot").then(() => {
+  const takeScreenshot = () => spawn("flameshot gui -p /tmp");
+  const takeWindowScreenshot = () => {
     mousegrabber.run((m) => {
       if (m.buttons[MouseButtonIndex.PRIMARY]) {
         const c = mouse.current_client;
@@ -26,6 +24,20 @@ isCommandAvailable('flameshot').then(() => {
       }
       return !m.buttons[MouseButtonIndex.SECONDARY];
     }, "crosshair");
-    
-  });
+  };
+
+  const takeFullScreenshot = () => spawn("flameshot full -p /tmp");
+
+  if (keyLayout === "assistant") {
+    addKey([], "Menu", takeScreenshot);
+    // Alt + Assistant key
+    addKey(["Shift", "Mod4", "Mod1"], "XF86TouchpadOff", takeWindowScreenshot);
+  } else if (keyLayout === "print") {
+    addKey(["Control"], "Print", takeScreenshot);
+    addKey(["Mod1"], "Print", takeWindowScreenshot);
+  } else {
+    addKey([], "Print", takeScreenshot);
+    addKey(["Mod1"], "Print", takeWindowScreenshot);
+    addKey([SUPER], "Print", takeFullScreenshot);
+  }
 });

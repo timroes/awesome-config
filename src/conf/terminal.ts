@@ -4,7 +4,7 @@ import { config } from "../lib/config";
 import { addKey } from "../lib/keys";
 import { XProperties } from "../lib/constants";
 
-const isLaptop = config("laptop", false);
+const keyLayout = config("keyboard.key_layout", "regular");
 
 const terminalTag = awful.tag.add("Terminal", {
   screen: screen.primary,
@@ -76,6 +76,12 @@ function toggleTerminal() {
   }
 }
 
-addKey([], isLaptop ? "Print" : "Menu", toggleTerminal);
-// Thinkpad T14 Gen 6 keycode for "Menu" key beside space bar
-addKey(["Shift", "Mod4"], "XF86TouchpadOff", toggleTerminal);
+if (keyLayout === "assistant") {
+  // Keycode for "Assistant" key beside space bar in Awesome
+  addKey(["Shift", "Mod4"], "XF86TouchpadOff", toggleTerminal);
+  addKey([], "XF86Assistant", toggleTerminal);
+} else if (keyLayout === "print") {
+  addKey([], "Print", toggleTerminal);
+} else {
+  addKey([], "Menu", toggleTerminal);
+}
