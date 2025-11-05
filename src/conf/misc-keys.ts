@@ -11,8 +11,8 @@ addKey([SUPER], "e", () => spawn("xdg-open $HOME"));
 addKey([SUPER, "Control"], "Delete", () => awesome.restart());
 
 isCommandAvailable("flameshot").then(() => {
-  addKey(isLaptop ? ["Control"] : [], "Print", () => spawn("flameshot gui -p /tmp"));
-  addKey([SUPER], "Print", () => spawn(`flameshot full -p /tmp`));
+  addKey(isLaptop ? ["Control"] : [], "Print", () => spawn("flameshot gui -p /tmp -c"));
+  addKey([SUPER], "Print", () => spawn(`flameshot full -p /tmp -c`));
 
   addKey(["Mod1"], "Print", () => {
     mousegrabber.run((m) => {
@@ -20,7 +20,7 @@ isCommandAvailable("flameshot").then(() => {
         const c = mouse.current_client;
         if (c) {
           c.raise();
-          spawn(`flameshot gui -p /tmp --region ${c.width}x${c.height}+${c.x}+${c.y}`);
+          spawn(`flameshot gui -p /tmp -c --region ${c.width}x${c.height}+${c.x}+${c.y}`);
         }
         return false;
       }
