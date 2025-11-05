@@ -17,7 +17,7 @@ function xdg.refresh(callback)
 	apps = {}
 	apps_by_id = {}
 	for i,path in ipairs(data_dirs) do
-		menubar.utils.parse_dir(path .. 'applications', function(result)
+		menubar.utils.parse_dir(path .. '/applications', function(result)
 			for i, desktop in ipairs(result) do
 				local id = desktop.file:match('.-([^\\/]-)%.?[^%.\\/]*$')
 				apps_by_id[id] = desktop
