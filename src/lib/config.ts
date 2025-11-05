@@ -7,8 +7,8 @@ interface Config {
   disable_compositor: boolean;
   "calendar.action": string;
   dpi: { [key: string]: number | undefined };
-  laptop: boolean;
   elgato_key_light_ip: string | null;
+  "keyboard.key_layout": "regular" | "assistant" | "print";
 }
 
 export function config<K extends keyof Config>(key: K): Config[K] | undefined;

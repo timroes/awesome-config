@@ -30,8 +30,12 @@ keyboard_layouts:
 ## to this file. See scripts/brightness.sh for more information.
 # brightness_device: /sys/class/backlight/intel_backlight
 
-## Whether the current device is a laptop and as such will have the Print key in place of the Menu key.
-# laptop: false | true
+keyboard:
+  # The hardware layout of the buttons.
+  # "regular" is a regular full sized keyboard with a separate menu from print key.
+  # "assistant" is a keyboard with a dedicated assistant key (with menu as sub function) beside the space bar and no print key.
+  # "print" is a keyboard with a print key beside the space bar
+  key_layout: regular
 
 # If a Elgato key light is connected specify the IP address to control it via the control center
 # elgato_key_light_ip: <ip address>
