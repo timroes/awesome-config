@@ -2,7 +2,7 @@ import * as awful from "awful";
 import * as wibox from "wibox";
 import * as gears from "gears";
 import { theme } from "../theme/default";
-import { ICON_PATH } from "../lib/constants";
+import { ICON_PATH, XProperties } from "../lib/constants";
 import { dpi } from "../lib/dpi";
 import { transparency } from "../lib/colors";
 
@@ -26,7 +26,10 @@ export class BarModal {
   setIcon(icon: string) {
     this.icon = icon;
     if (this.popup) {
-      (this.popup.widget.get_children_by_id("icon")[0] as Imagebox).image = gears.color.recolor_image(`${ICON_PATH}/${this.icon}`, theme.highlight.regular);
+      (this.popup.widget.get_children_by_id("icon")[0] as Imagebox).image = gears.color.recolor_image(
+        `${ICON_PATH}/${this.icon}`,
+        theme.highlight.regular
+      );
     }
   }
 
@@ -61,16 +64,35 @@ export class BarModal {
       ontop: true,
       placement: (c) => awful.placement.bottom(c, { margins: { bottom: dpi(60, screen.primary) } }),
       widget: wibox.widget(
-        <wibox.container.margin top={dpi(25, screen.primary)} bottom={dpi(25, screen.primary)} left={dpi(20, screen.primary)} right={dpi(20, screen.primary)}>
+        <wibox.container.margin
+          top={dpi(25, screen.primary)}
+          bottom={dpi(25, screen.primary)}
+          left={dpi(20, screen.primary)}
+          right={dpi(20, screen.primary)}
+        >
           <wibox.layout.fixed.vertical spacing={dpi(25, screen.primary)}>
             <wibox.container.place halign="center">
-              <wibox.widget.imagebox id="icon" image={gears.color.recolor_image(`${ICON_PATH}/${this.icon}`, theme.highlight.regular)} forced_height={dpi(52, screen.primary)} forced_width={dpi(52, screen.primary)} />
+              <wibox.widget.imagebox
+                id="icon"
+                image={gears.color.recolor_image(`${ICON_PATH}/${this.icon}`, theme.highlight.regular)}
+                forced_height={dpi(52, screen.primary)}
+                forced_width={dpi(52, screen.primary)}
+              />
             </wibox.container.place>
-            <wibox.widget.progressbar id="bar" value={this.value / 100} color={theme.highlight.regular} background_color={transparency(theme.bg.panel, 0.5)} shape={gears.shape.rounded_rect} forced_width={dpi(200, screen.primary)} forced_height={dpi(4, screen.primary)} />
+            <wibox.widget.progressbar
+              id="bar"
+              value={this.value / 100}
+              color={theme.highlight.regular}
+              background_color={transparency(theme.bg.panel, 0.5)}
+              shape={gears.shape.rounded_rect}
+              forced_width={dpi(200, screen.primary)}
+              forced_height={dpi(4, screen.primary)}
+            />
           </wibox.layout.fixed.vertical>
         </wibox.container.margin>
       ),
     });
+    this.popup.set_xproperty(XProperties.ANIMATIONS.FADE_IN, true);
 
     this.timer = gears.timer.start_new(MODAL_TIMEOUT, () => {
       this.hide();

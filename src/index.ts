@@ -2,6 +2,8 @@
 
 import "./conf/debug";
 
+import "./conf/xproperties";
+
 import "./conf/clients-basic";
 import "./conf/clients-focus";
 import "./conf/clients-screen-move";

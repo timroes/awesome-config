@@ -2,7 +2,7 @@ import * as awful from "awful";
 import * as gears from "gears";
 import * as wibox from "wibox";
 
-import { SUPER } from "../../lib/constants";
+import { SUPER, XProperties } from "../../lib/constants";
 import { addKey } from "../../lib/keys";
 import { ControlWidget, Handler, TriggerState } from "./control-widget";
 import { SettingsWidget } from "./settings";
@@ -14,7 +14,6 @@ import { MouseButton } from "../../lib/mouse";
 import { createWidget } from "../../lib/widget";
 import { PlayerControl } from "./playercontrol";
 import { log } from "../../lib/log";
-import { transparency } from "../../lib/colors";
 
 let previouslyFocusedClient: Client | null = null;
 
@@ -37,8 +36,8 @@ const handler: Handler = {
     gears.timer.start_new(0.2, () => {
       log(`request relayou ${tostring((popup.widget as any).widget)}`);
       (popup.widget as any).widget.emit_signal("widget::layout_changed");
-    })
-  }
+    });
+  },
 };
 
 const widgets: ControlWidget[] = [
@@ -50,7 +49,13 @@ const widgets: ControlWidget[] = [
 
 function renderWidgets(s: Screen) {
   return (
-    <wibox.container.margin forced_width={dpi(400, s)} left={dpi(10, s)} right={dpi(10, s)} top={dpi(15, s)} bottom={dpi(15, s)}>
+    <wibox.container.margin
+      forced_width={dpi(400, s)}
+      left={dpi(10, s)}
+      right={dpi(10, s)}
+      top={dpi(15, s)}
+      bottom={dpi(15, s)}
+    >
       <wibox.layout.fixed.vertical spacing={dpi(8, s)}>
         {...widgets.map((widget) => widget.renderAndStore(s))}
       </wibox.layout.fixed.vertical>
@@ -59,7 +64,11 @@ function renderWidgets(s: Screen) {
 }
 
 const placementFn = (popup: awful.Drawable) => {
-  awful.placement.align(popup, { honor_workarea: true, position: "top_right", margins: { top: dpi(10, screen.primary), right: dpi(10, screen.primary) }})
+  awful.placement.align(popup, {
+    honor_workarea: true,
+    position: "top_right",
+    margins: { top: dpi(10, screen.primary), right: dpi(10, screen.primary) },
+  });
 };
 
 const popup = awful.popup({
@@ -72,10 +81,12 @@ const popup = awful.popup({
   widget: wibox.widget(renderWidgets(screen.primary)),
 });
 
+popup.set_xproperty(XProperties.ANIMATIONS.POP_IN, true);
+
 const keygrabber: awful.KeygrabberFn = (modifiers, key, event) => {
   // Ignore Num Pad modifier
-  modifiers = modifiers.filter(mod => mod !== "Mod2");
-  if (event === "press" && (key === "Escape" || modifiers.length === 1 && modifiers[0] === SUPER && key === "\\")) {
+  modifiers = modifiers.filter((mod) => mod !== "Mod2");
+  if (event === "press" && (key === "Escape" || (modifiers.length === 1 && modifiers[0] === SUPER && key === "\\"))) {
     hide();
   } else if (event === "press") {
     widgets.forEach((widget) => widget.onKeyPress(modifiers, key));
@@ -113,7 +124,7 @@ const batteryTriggerColors: Record<TriggerState["battery"], string> = {
   unknown: theme.controlcenter.trigger.inactive,
   green: theme.controlcenter.trigger.battery.green,
   orange: theme.controlcenter.trigger.battery.orange,
-  red: theme.controlcenter.trigger.battery.red, 
+  red: theme.controlcenter.trigger.battery.red,
 };
 
 const createTrigger = (s: Screen) => {
@@ -127,33 +138,53 @@ const createTrigger = (s: Screen) => {
           const regularColor = theme.controlcenter.trigger.inactive;
 
           // Top left square which indicates the dnd status
-          cr.set_source_rgb(...gears.color.parse_color(triggerState.dnd ? theme.controlcenter.trigger.dnd : regularColor));
-          gears.shape.transform(gears.shape.rounded_rect)
-            .translate(0.15 * width, 0.15 * height)(cr, 0.3 * width, 0.3 * height, dpi(2, s));
+          cr.set_source_rgb(
+            ...gears.color.parse_color(triggerState.dnd ? theme.controlcenter.trigger.dnd : regularColor)
+          );
+          gears.shape.transform(gears.shape.rounded_rect).translate(0.15 * width, 0.15 * height)(
+            cr,
+            0.3 * width,
+            0.3 * height,
+            dpi(2, s)
+          );
           cr.fill();
 
           // Top right square
           cr.set_source_rgb(...gears.color.parse_color(batteryTriggerColors[triggerState.battery]));
-          gears.shape.transform(gears.shape.rounded_rect)
-            .translate(0.55 * width, 0.15 * height)(cr, 0.3 * width, 0.3 * height, dpi(2, s));
+          gears.shape.transform(gears.shape.rounded_rect).translate(0.55 * width, 0.15 * height)(
+            cr,
+            0.3 * width,
+            0.3 * height,
+            dpi(2, s)
+          );
           cr.fill();
 
           // Bottom left square
           cr.set_source_rgb(...gears.color.parse_color(regularColor));
-          gears.shape.transform(gears.shape.rounded_rect)
-            .translate(0.15 * width, 0.55 * height)(cr, 0.3 * width, 0.3 * height, dpi(2, s));
+          gears.shape.transform(gears.shape.rounded_rect).translate(0.15 * width, 0.55 * height)(
+            cr,
+            0.3 * width,
+            0.3 * height,
+            dpi(2, s)
+          );
           cr.fill();
 
           // Bottom right square
-          cr.set_source_rgb(...gears.color.parse_color(triggerState.keepAwake ? theme.controlcenter.trigger.keepAwake : regularColor));
-          gears.shape.transform(gears.shape.rounded_rect)
-            .translate(0.55 * width, 0.55 * height)(cr, 0.3 * width, 0.3 * height, dpi(2, s));
+          cr.set_source_rgb(
+            ...gears.color.parse_color(triggerState.keepAwake ? theme.controlcenter.trigger.keepAwake : regularColor)
+          );
+          gears.shape.transform(gears.shape.rounded_rect).translate(0.55 * width, 0.55 * height)(
+            cr,
+            0.3 * width,
+            0.3 * height,
+            dpi(2, s)
+          );
           cr.fill();
         },
       })}
     </wibox.layout.fixed.horizontal>
   );
-}
+};
 
 export const trigger = createTrigger(screen.primary);
 

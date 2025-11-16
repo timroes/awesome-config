@@ -187,7 +187,7 @@ declare module "awful" {
         };
   }
 
-  interface Popup extends Required<PopupArgs> {}
+  interface Popup extends Required<PopupArgs>, XPropertiesObject {}
 
   /** @noSelf */
   interface PopupModule {

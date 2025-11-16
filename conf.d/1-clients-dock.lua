@@ -61,6 +61,7 @@ dock_tag:connect_signal('tagged', function(t, c)
 	c.unmoveable = true
 	c.floating = true
 	resize_to_dock(c)
+	c:set_xproperty("_AWESOMEWM_DOCK", true)
 	dock_tag.selected = true
 end)
 
@@ -69,6 +70,7 @@ dock_tag:connect_signal('untagged', function(t, c)
 	c.unresizeable = false
 	c.unmoveable = false
 	c.floating = false
+	c:set_xproperty("_AWESOMEWM_DOCK", false)
 	dock_tag.selected = false
 end)
 

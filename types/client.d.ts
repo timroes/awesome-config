@@ -61,7 +61,7 @@ type WindowType =
   | "dnd"
   | "normal";
 
-interface Client {
+interface Client extends XPropertiesObject {
   /**
    * The X window id of the client.
    */
@@ -93,7 +93,6 @@ interface Client {
   readonly valid: boolean;
   readonly first_tag: Tag;
   readonly motif_wm_hints: MotifWmHints | null;
-  set_xproperty(name: string, value: boolean | string | number): void;
   connect_signal(signal: ClientSignals, callback: (client: Client) => void): void;
   emit_signal(signal: ClientSignals, ...args: any[]): void;
   tags(tags?: Tag[]): Tag[];
