@@ -9,7 +9,7 @@ type Side = "left" | "right";
 
 const opposite = (side: Side): Side => {
   return side === "left" ? "right" : "left";
-}
+};
 
 export const split: LayoutFactory = (tag) => {
   let lastActiveSide: Side = "left";
@@ -43,8 +43,8 @@ export const split: LayoutFactory = (tag) => {
   divider.buttons([
     ...awful.button([], MouseButton.PRIMARY, () => {
       const clients = tag.screen.get_tiled_clients(true);
-      const leftMinimumSize = clients.find(clients => sides.get(clients) === "left")?.size_hints?.min_width ?? 0;
-      const rightMinimumSize = clients.find(clients => sides.get(clients) === "right")?.size_hints?.min_width ?? 0;
+      const leftMinimumSize = clients.find((clients) => sides.get(clients) === "left")?.size_hints?.min_width ?? 0;
+      const rightMinimumSize = clients.find((clients) => sides.get(clients) === "right")?.size_hints?.min_width ?? 0;
       const minimumFactor = leftMinimumSize / tag.screen.workarea.width;
       const maximumFactor = 1 - rightMinimumSize / tag.screen.workarea.width;
       mousegrabber.run((mouse) => {
@@ -77,26 +77,26 @@ export const split: LayoutFactory = (tag) => {
         const focusSide = index === 1 ? "left" : "right";
         if (client.focus?.first_tag === tag && sides.get(client.focus) === focusSide) {
           const clients = tag.screen.get_tiled_clients(false);
-          // The current side of the tag is already focused, find the next tag 
+          // The current side of the tag is already focused, find the next tag
           // Find the index of the currently focused client
-          const clientIndex = clients.findIndex(c => c === client.focus);
+          const clientIndex = clients.findIndex((c) => c === client.focus);
           // Shift client so that the currently focused client is on the beginning of the array
           const shiftedClients = [...clients.slice(clientIndex), ...clients.slice(0, clientIndex)];
-          client.focus = shiftedClients.filter(c => sides.get(c) === focusSide)[1] ?? client.focus;
+          client.focus = shiftedClients.filter((c) => sides.get(c) === focusSide)[1] ?? client.focus;
         } else {
           // The currently focused client is on another tag or in the not focused side, so we just focus the first client on the correct side in stacking order
-          client.focus = tag.screen.get_tiled_clients(true).filter(c => sides.get(c) === focusSide)[0] ?? client.focus;
+          client.focus = tag.screen.get_tiled_clients(true).filter((c) => sides.get(c) === focusSide)[0] ?? client.focus;
         }
-      }
+      },
     },
     wake_up() {
-       const clients = tag.screen.get_tiled_clients(true);
-       if (clients[0]) {
+      const clients = tag.screen.get_tiled_clients(true);
+      if (clients[0]) {
         sides.set(clients[0], "left");
-       }
-       if (clients[1]) {
+      }
+      if (clients[1]) {
         sides.set(clients[1], "right");
-       }
+      }
     },
     clientlistAction: (c: Client) => {
       sides.set(c, opposite(lastActiveSide));
@@ -140,7 +140,7 @@ export const split: LayoutFactory = (tag) => {
           sides.set(client, lastActiveSide);
           side = lastActiveSide;
         }
-        
+
         if (side === "left") {
           geometries.set(client, {
             x: workarea.x,
@@ -158,5 +158,5 @@ export const split: LayoutFactory = (tag) => {
         }
       }
     },
-  }
+  };
 };

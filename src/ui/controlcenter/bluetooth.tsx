@@ -40,11 +40,7 @@ export class BluetoothControl extends ControlWidget {
           });
       });
       const icon = ICON_MAP[info.icon] || DEFAULT_ICON;
-      const color = info.pendingAction
-        ? theme.highlight.regular
-        : info.connected
-        ? theme.highlight.success
-        : theme.highlight.disabled;
+      const color = info.pendingAction ? theme.highlight.regular : info.connected ? theme.highlight.success : theme.highlight.disabled;
       deviceList.add(
         wibox.widget(
           <wibox.container.margin margins={dpi(12, this.screen)} buttons={buttons}>
@@ -79,19 +75,13 @@ export class BluetoothControl extends ControlWidget {
           }
           dbus
             .system()
-            .onSignal<[string, { Connected?: boolean }]>(
-              null,
-              "org.freedesktop.DBus.Properties",
-              "PropertiesChanged",
-              path,
-              (event) => {
-                if (event.params[1].Connected !== undefined) {
-                  this.devices[path].pendingAction = false;
-                  this.devices[path].connected = event.params[1].Connected;
-                  this.onUpdate();
-                }
+            .onSignal<[string, { Connected?: boolean }]>(null, "org.freedesktop.DBus.Properties", "PropertiesChanged", path, (event) => {
+              if (event.params[1].Connected !== undefined) {
+                this.devices[path].pendingAction = false;
+                this.devices[path].connected = event.params[1].Connected;
+                this.onUpdate();
               }
-            );
+            });
         }
         this.onUpdate();
       });

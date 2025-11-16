@@ -28,11 +28,11 @@ const updateScreenPositions = () => {
 
 export const getOrderedScreens = (): Screen[] => {
   return orderedScreens;
-}
+};
 
 export const getScreenPosition = (screen: Screen): number => {
   return orderedScreens.indexOf(screen);
-}
+};
 
 screen.connect_signal("list", updateScreenPositions);
 screen.connect_signal("property::geometry", updateScreenPositions);

@@ -128,18 +128,8 @@ function createLayoutItem(s: Screen, layout: ScreenLayout, focused: boolean, dis
           {null}
           <wibox.widget.textbox text={layout.name} />
           <wibox.layout.fixed.horizontal spacing={dpi(3, s)}>
-            <wibox.widget.imagebox
-              image={laptopImage}
-              forced_height={24}
-              forced_width={24}
-              opacity={layout.icons.internal ? 1 : 0.5}
-            />
-            <wibox.widget.imagebox
-              image={externalImage}
-              forced_height={24}
-              forced_width={24}
-              opacity={layout.icons.external ? 1 : 0.5}
-            />
+            <wibox.widget.imagebox image={laptopImage} forced_height={24} forced_width={24} opacity={layout.icons.internal ? 1 : 0.5} />
+            <wibox.widget.imagebox image={externalImage} forced_height={24} forced_width={24} opacity={layout.icons.external ? 1 : 0.5} />
           </wibox.layout.fixed.horizontal>
         </wibox.layout.align.horizontal>
       </wibox.container.margin>
@@ -151,9 +141,7 @@ function createWidget(screen: Screen) {
   return wibox.widget(
     <wibox.container.margin left={dpi(8, screen)} right={dpi(8, screen)} top={dpi(10, screen)} bottom={dpi(10, screen)}>
       <wibox.layout.fixed.vertical spacing={dpi(8, screen)} forced_width={dpi(200, screen)}>
-        {...screenLayouts.map((layout, i) =>
-          createLayoutItem(screen, layout, focusedOption === i, !isMultiScreen && i !== 0)
-        )}
+        {...screenLayouts.map((layout, i) => createLayoutItem(screen, layout, focusedOption === i, !isMultiScreen && i !== 0))}
       </wibox.layout.fixed.vertical>
     </wibox.container.margin>
   );

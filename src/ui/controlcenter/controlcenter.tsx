@@ -49,16 +49,8 @@ const widgets: ControlWidget[] = [
 
 function renderWidgets(s: Screen) {
   return (
-    <wibox.container.margin
-      forced_width={dpi(400, s)}
-      left={dpi(10, s)}
-      right={dpi(10, s)}
-      top={dpi(15, s)}
-      bottom={dpi(15, s)}
-    >
-      <wibox.layout.fixed.vertical spacing={dpi(8, s)}>
-        {...widgets.map((widget) => widget.renderAndStore(s))}
-      </wibox.layout.fixed.vertical>
+    <wibox.container.margin forced_width={dpi(400, s)} left={dpi(10, s)} right={dpi(10, s)} top={dpi(15, s)} bottom={dpi(15, s)}>
+      <wibox.layout.fixed.vertical spacing={dpi(8, s)}>{...widgets.map((widget) => widget.renderAndStore(s))}</wibox.layout.fixed.vertical>
     </wibox.container.margin>
   );
 }
@@ -138,47 +130,23 @@ const createTrigger = (s: Screen) => {
           const regularColor = theme.controlcenter.trigger.inactive;
 
           // Top left square which indicates the dnd status
-          cr.set_source_rgb(
-            ...gears.color.parse_color(triggerState.dnd ? theme.controlcenter.trigger.dnd : regularColor)
-          );
-          gears.shape.transform(gears.shape.rounded_rect).translate(0.15 * width, 0.15 * height)(
-            cr,
-            0.3 * width,
-            0.3 * height,
-            dpi(2, s)
-          );
+          cr.set_source_rgb(...gears.color.parse_color(triggerState.dnd ? theme.controlcenter.trigger.dnd : regularColor));
+          gears.shape.transform(gears.shape.rounded_rect).translate(0.15 * width, 0.15 * height)(cr, 0.3 * width, 0.3 * height, dpi(2, s));
           cr.fill();
 
           // Top right square
           cr.set_source_rgb(...gears.color.parse_color(batteryTriggerColors[triggerState.battery]));
-          gears.shape.transform(gears.shape.rounded_rect).translate(0.55 * width, 0.15 * height)(
-            cr,
-            0.3 * width,
-            0.3 * height,
-            dpi(2, s)
-          );
+          gears.shape.transform(gears.shape.rounded_rect).translate(0.55 * width, 0.15 * height)(cr, 0.3 * width, 0.3 * height, dpi(2, s));
           cr.fill();
 
           // Bottom left square
           cr.set_source_rgb(...gears.color.parse_color(regularColor));
-          gears.shape.transform(gears.shape.rounded_rect).translate(0.15 * width, 0.55 * height)(
-            cr,
-            0.3 * width,
-            0.3 * height,
-            dpi(2, s)
-          );
+          gears.shape.transform(gears.shape.rounded_rect).translate(0.15 * width, 0.55 * height)(cr, 0.3 * width, 0.3 * height, dpi(2, s));
           cr.fill();
 
           // Bottom right square
-          cr.set_source_rgb(
-            ...gears.color.parse_color(triggerState.keepAwake ? theme.controlcenter.trigger.keepAwake : regularColor)
-          );
-          gears.shape.transform(gears.shape.rounded_rect).translate(0.55 * width, 0.55 * height)(
-            cr,
-            0.3 * width,
-            0.3 * height,
-            dpi(2, s)
-          );
+          cr.set_source_rgb(...gears.color.parse_color(triggerState.keepAwake ? theme.controlcenter.trigger.keepAwake : regularColor));
+          gears.shape.transform(gears.shape.rounded_rect).translate(0.55 * width, 0.55 * height)(cr, 0.3 * width, 0.3 * height, dpi(2, s));
           cr.fill();
         },
       })}

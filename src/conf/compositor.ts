@@ -35,16 +35,12 @@ if (!config("disable_compositor", false)) {
   // This will restart picom in all cases when we switch the active login session, but that's fine since locking/unlocking is the primary way this happens for us.
   dbus
     .system()
-    .onSignal<[string, { ActiveSession?: [sessionId: string, unknown] }]>(
-      null,
-      "org.freedesktop.DBus.Properties",
-      "PropertiesChanged",
-      "/org/freedesktop/login1/seat/seat0",
-      (signal) => {
-        if (signal.params[1].ActiveSession && signal.params[1].ActiveSession[0] === os.getenv("XDG_SESSION_ID")) {
-          log("Restarting picom due to current session becoming active again.", LogLevel.DEBUG);
-          restartPicom();
-        }
+    .onSignal<
+      [string, { ActiveSession?: [sessionId: string, unknown] }]
+    >(null, "org.freedesktop.DBus.Properties", "PropertiesChanged", "/org/freedesktop/login1/seat/seat0", (signal) => {
+      if (signal.params[1].ActiveSession && signal.params[1].ActiveSession[0] === os.getenv("XDG_SESSION_ID")) {
+        log("Restarting picom due to current session becoming active again.", LogLevel.DEBUG);
+        restartPicom();
       }
-    );
+    });
 }

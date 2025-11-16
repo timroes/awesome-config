@@ -6,8 +6,8 @@ export const maximized: LayoutDescription = {
         x: workarea.x,
         y: workarea.y,
         height: workarea.height,
-        width: workarea.width
+        width: workarea.width,
       });
     }
   },
-}
+};

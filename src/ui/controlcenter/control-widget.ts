@@ -1,10 +1,10 @@
-import * as wibox from 'wibox';
+import * as wibox from "wibox";
 
 export type TriggerState = {
   dnd: boolean;
   keepAwake: boolean;
   battery: "unknown" | "green" | "orange" | "red";
-}
+};
 
 export interface Handler {
   setTriggerState: (state: Partial<TriggerState>) => void;
@@ -17,9 +17,9 @@ export abstract class ControlWidget {
 
   constructor(protected handler: Handler) {}
 
-  onInit(): void {};
-  onShow(): void {};
-  onHide(): void {};
+  onInit(): void {}
+  onShow(): void {}
+  onHide(): void {}
   onKeyPress(modifiers: Modifier[], key: string): void {}
 
   renderAndStore(s: Screen): Widget {
@@ -28,5 +28,5 @@ export abstract class ControlWidget {
     return this.currentRender;
   }
 
-  abstract render(s: Screen):  WidgetDefinition;
+  abstract render(s: Screen): WidgetDefinition;
 }

@@ -19,7 +19,7 @@ function updateDpis() {
     if (output && DPI_OVERWRITES[output]) {
       // Use screen specific dpi from config.yml
       dpi = Number(DPI_OVERWRITES[output]);
-    } else if (!!outputSize){
+    } else if (!!outputSize) {
       // Calculate dpi from screen dimensions/resolutions
       dpi = (s.geometry.width * 25.4) / outputSize.mm_width;
     }

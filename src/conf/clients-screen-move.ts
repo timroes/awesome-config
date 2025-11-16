@@ -1,8 +1,8 @@
-import * as lunaconf from 'lunaconf';
-import { addKey } from '../lib/keys';
-import { SUPER } from '../lib/constants';
+import * as lunaconf from "lunaconf";
+import { addKey } from "../lib/keys";
+import { SUPER } from "../lib/constants";
 
-const moveInDirection = (dir: 'right' | 'up' | 'down' | 'left'): void => {
+const moveInDirection = (dir: "right" | "up" | "down" | "left"): void => {
   const c = client.focus;
   if (c && !c.unmoveable) {
     for (const tag of c.tags()) {
@@ -21,7 +21,7 @@ const moveInDirection = (dir: 'right' | 'up' | 'down' | 'left'): void => {
   }
 };
 
-addKey([SUPER], 'Right', () => moveInDirection('right'));
-addKey([SUPER], 'Up', () => moveInDirection('up'));
-addKey([SUPER], 'Down', () => moveInDirection('down'));
-addKey([SUPER], 'Left', () => moveInDirection('left'));
+addKey([SUPER], "Right", () => moveInDirection("right"));
+addKey([SUPER], "Up", () => moveInDirection("up"));
+addKey([SUPER], "Down", () => moveInDirection("down"));
+addKey([SUPER], "Left", () => moveInDirection("left"));

@@ -1,4 +1,4 @@
-import * as lgi from 'lgi';
+import * as lgi from "lgi";
 
 interface SignalParams<Params = undefined> {
   sender: string;
@@ -18,16 +18,28 @@ class DBusConnection {
     interfaceName: string | null,
     signalName: string | null,
     objectPath: string | null,
-    callback: (signal: SignalParams<T>) => void,
+    callback: (signal: SignalParams<T>) => void
   ): number {
-    return this.bus.signal_subscribe(sender, interfaceName, signalName, objectPath, null, Gio.DBusSignalFlags.NONE,
+    return this.bus.signal_subscribe(
+      sender,
+      interfaceName,
+      signalName,
+      objectPath,
+      null,
+      Gio.DBusSignalFlags.NONE,
       (connection: unknown, sender: string, objectPath: string, interfaceName: string, signalName: string, args?: any) => {
         callback({ sender, objectPath, interfaceName, signalName, params: args.value });
       }
     );
   }
 
-  public call<T = unknown>(destination: string, objectPath: string, interfaceName: string, member: string, params?: Array<[variantType: string, variantValue: unknown]>): Promise<{ value: T; type: string; get_child_value: (index: number) => any }> {
+  public call<T = unknown>(
+    destination: string,
+    objectPath: string,
+    interfaceName: string,
+    member: string,
+    params?: Array<[variantType: string, variantValue: unknown]>
+  ): Promise<{ value: T; type: string; get_child_value: (index: number) => any }> {
     const args = params?.map(([type, value]) => GLib.Variant(type, value));
 
     return new Promise((resolve, reject) => {
@@ -52,7 +64,7 @@ class DBusConnection {
   }
 
   public async getProperty<T = any>(destination: string, objectPath: string, interfaceName: string, property: string): Promise<T> {
-    const result = await this.call<[{ type: string, value: T }]>(destination, objectPath, "org.freedesktop.DBus.Properties", "Get", [
+    const result = await this.call<[{ type: string; value: T }]>(destination, objectPath, "org.freedesktop.DBus.Properties", "Get", [
       ["s", interfaceName],
       ["s", property],
     ]);
@@ -91,5 +103,5 @@ export const dbus = {
       session = new DBusConnection(Gio.bus_get_sync(Gio.BusType.SESSION));
     }
     return session;
-  }
+  },
 };

@@ -1,3 +1,3 @@
-import { isCommandAvailable, spawn } from '../lib/process';
+import { isCommandAvailable, spawn } from "../lib/process";
 
-isCommandAvailable('numlockx').then(() => spawn('numlockx on'));
+isCommandAvailable("numlockx").then(() => spawn("numlockx on"));
