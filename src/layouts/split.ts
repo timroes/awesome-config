@@ -58,6 +58,10 @@ export const split: LayoutFactory = (tag) => {
     }),
   ]);
 
+  tag.connect_signal("property::selected", () => {
+    divider.visible = tag.selected;
+  })
+
   tag.connect_signal("property::layout", () => {
     divider.visible = tag.layout.name === "Split";
   });
